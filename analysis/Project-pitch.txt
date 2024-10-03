@@ -1,0 +1,4 @@
+RateMyKot.be
+On RateMyKot students who have a kot can share images/reviews of their kot and rate/review images of others people's kot. 
+Users can make a profile, add posts, and look at other users posts.Kot-owners can also posts their avaiable koten up for rent and promote their koten.
+Moderators can remove posts and temporarily ban users, admins have the same priviliges but can perma-ban and manage users.
