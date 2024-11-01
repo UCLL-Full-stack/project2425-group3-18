@@ -58,3 +58,4 @@ test("given: a Comment, when: setting empty text, then: Comment text is updated 
 
     expect(comment.getText()).toEqual("");
 });
+
