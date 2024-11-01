@@ -1,127 +1,90 @@
-import { Kot } from "../../model/kot";
-import { Profile } from "../../model/profile";
-import { User } from "../../model/user";
+import { Post } from "../../model/post"; // Adjust the import path as necessary
+import { Comment } from "../../model/comment"; // Adjust the import path as necessary
 
-const profile1 = new Profile({
-    firstName: "John",
-    lastName: "Doe",
-    bio: "Student at KU Leuven",
-    role: "student",
-    user: {} as User,
-    posts: [],
-    koten: []
-});
+const validDescription = "This is a valid description.";
+const validImage = "http://example.com/image.jpg";
+const validComments: Array<Comment> = []; // You can replace this with actual Comment instances if necessary
 
-const profile2 = new Profile({
-    firstName: "Jane",
-    lastName: "Smith",
-    bio: "Researcher in Leuven",
-    role: "researcher",
-    user: {} as User,
-    posts: [],
-    koten: []
-});
-
-const profilesArray = [profile1, profile2];
-
-test("given valid values for Kot, when Kot is created, then Kot is created with those values", () => {
-    
-    const location = "Leuven City Center";
-    const price = 500;
-    const surfaceSpace = 30;
-    
-    const kot = new Kot({
-        location,
-        price,
-        surfaceSpace,
-        profiles: profilesArray
+test("given valid values for Post, when Post is created, then Post is created with those values", () => {
+    const post = new Post({
+        description: validDescription,
+        image: validImage,
+        comments: validComments
     });
 
-    expect(kot.getLocation()).toEqual(location);
-    expect(kot.getPrice()).toEqual(price);
-    expect(kot.getSurfaceSpace()).toEqual(surfaceSpace);
-    expect(kot.getProfiles()).toEqual(profilesArray);
+    expect(post.getDescription()).toEqual(validDescription);
+    expect(post.getImage()).toEqual(validImage);
+    expect(post.getComments()).toEqual(validComments);
 });
 
-test("given a Kot, when setting a new location, then location is updated correctly", () => {
-
-    const kot = new Kot({
-        location: "Old Location",
-        price: 400,
-        surfaceSpace: 25,
-        profiles: profilesArray
+test("given a Post, when setting a new description, then description is updated", () => {
+    const post = new Post({
+        description: validDescription,
+        image: validImage,
+        comments: validComments
     });
 
-    const newLocation = "New Leuven Center";
-
-    kot.setLocation(newLocation);
-    expect(kot.getLocation()).toEqual(newLocation);
+    const newDescription = "Updated description.";
+    post.setDescription(newDescription);
+    expect(post.getDescription()).toEqual(newDescription);
 });
 
-test("given a Kot, when setting a new price, then price is updated correctly", () => {
-
-    const kot = new Kot({
-        location: "Leuven Suburbs",
-        price: 300,
-        surfaceSpace: 20,
-        profiles: profilesArray
+test("given a Post, when setting a new image, then image is updated", () => {
+    const post = new Post({
+        description: validDescription,
+        image: validImage,
+        comments: validComments
     });
 
-    const newPrice = 350;
-
-    kot.setPrice(newPrice);
-    expect(kot.getPrice()).toEqual(newPrice);
+    const newImage = "http://example.com/new-image.jpg";
+    post.setImage(newImage);
+    expect(post.getImage()).toEqual(newImage);
 });
 
-test("given a Kot, when setting a new surface space, then surface space is updated correctly", () => {
-
-    const kot = new Kot({
-        location: "Leuven Outskirts",
-        price: 250,
-        surfaceSpace: 15,
-        profiles: profilesArray
+test("given an empty description for Post, when setDescription is called, then it throws an error 'Description cannot be empty'", () => {
+    const post = new Post({
+        description: validDescription,
+        image: validImage,
+        comments: validComments
     });
 
-    const newSurfaceSpace = 22;
-
-    kot.setSurfaceSpace(newSurfaceSpace);
-    expect(kot.getSurfaceSpace()).toEqual(newSurfaceSpace);
+    expect(() => {
+        post.setDescription("");
+    }).toThrow("Description cannot be empty");
 });
 
-test("given a Kot, when setting a new profiles array, then profiles are updated correctly", () => {
-
-    const kot = new Kot({
-        location: "Quiet Neighborhood",
-        price: 550,
-        surfaceSpace: 35,
-        profiles: []
+test("given an empty image for Post, when setImage is called, then it throws an error 'Image cannot be empty'", () => {
+    const post = new Post({
+        description: validDescription,
+        image: validImage,
+        comments: validComments
     });
 
-    kot.setProfiles(profilesArray);
-    expect(kot.getProfiles()).toEqual(profilesArray);
+    expect(() => {
+        post.setImage("");
+    }).toThrow("Image cannot be empty");
 });
 
-test("given an empty location for Kot, when Kot is created, then location should be an empty string", () => {
-
-    const kot = new Kot({
-        location: "",
-        price: 400,
-        surfaceSpace: 20,
-        profiles: profilesArray
+test("given an empty description when using setDescription, then it throws an error 'Description cannot be empty'", () => {
+    const post = new Post({
+        description: validDescription,
+        image: validImage,
+        comments: validComments
     });
 
-    expect(kot.getLocation()).toEqual("");
+    expect(() => {
+        post.setDescription("");
+    }).toThrow("Description cannot be empty");
 });
 
-test("given a Kot, when profiles array is set to an empty array, then profiles should be updated correctly", () => {
-    
-    const kot = new Kot({
-        location: "Leuven Center",
-        price: 600,
-        surfaceSpace: 40,
-        profiles: profilesArray
+test("given an empty image when using setImage, then it throws an error 'Image cannot be empty'", () => {
+    const post = new Post({
+        description: validDescription,
+        image: validImage,
+        comments: validComments
     });
 
-    kot.setProfiles([]);
-    expect(kot.getProfiles()).toEqual([]);
+    expect(() => {
+        post.setImage("");
+    }).toThrow("Image cannot be empty");
 });

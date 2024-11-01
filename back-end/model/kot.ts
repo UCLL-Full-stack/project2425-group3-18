@@ -18,7 +18,7 @@ export class Kot {
     }
 
     setLocation(location: string): void {
-        if (!location) {
+        if (!location || location.trim() === "") {
             throw new Error("Location cannot be empty");
         }
         this.location = location;
