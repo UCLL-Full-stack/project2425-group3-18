@@ -13,6 +13,8 @@ const post = new Post({
     comments: [],
 });
 
+//happy tests
+
 test('given: valid values for Comment, when: Comment is created, then: Comment is created with those values', () => {
     //given
     const commentText = 'This is a stunning view!';
@@ -47,7 +49,7 @@ test('given: an existing Comment, when: setting new text, then: text is updated'
 test('given: a Comment, when: retrieving post, then: associated post is returned', () => {
     //given
     const commentText = 'What a view!';
-    
+
     //when
     const comment = new Comment({
         text: commentText,

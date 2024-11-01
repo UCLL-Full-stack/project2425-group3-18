@@ -1,4 +1,4 @@
-import { Profile } from "./profile";
+import { Profile } from './profile';
 
 export class Kot {
     private location: string;
@@ -6,7 +6,12 @@ export class Kot {
     private surfaceSpace: number;
     private profiles: Array<Profile>;
 
-    constructor(kot: { location: string; price: number; surfaceSpace: number; profiles: Array<Profile> }) {
+    constructor(kot: {
+        location: string;
+        price: number;
+        surfaceSpace: number;
+        profiles: Array<Profile>;
+    }) {
         this.location = kot.location;
         this.price = kot.price;
         this.surfaceSpace = kot.surfaceSpace;
@@ -18,8 +23,8 @@ export class Kot {
     }
 
     setLocation(location: string): void {
-        if (!location || location.trim() === "") {
-            throw new Error("Location cannot be empty");
+        if (!location || location.trim() === '') {
+            throw new Error('Location cannot be empty');
         }
         this.location = location;
     }
@@ -30,7 +35,7 @@ export class Kot {
 
     setPrice(price: number): void {
         if (price <= 0) {
-            throw new Error("Price must be greater than zero");
+            throw new Error('Price must be greater than zero');
         }
         this.price = price;
     }
@@ -41,7 +46,7 @@ export class Kot {
 
     setSurfaceSpace(surfaceSpace: number): void {
         if (surfaceSpace <= 0) {
-            throw new Error("Surface space must be greater than zero");
+            throw new Error('Surface space must be greater than zero');
         }
         this.surfaceSpace = surfaceSpace;
     }

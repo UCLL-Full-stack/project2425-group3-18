@@ -6,11 +6,36 @@ export class User {
     private password: string;
     private profile: Profile | null;
 
-    constructor(user: { userName: string; email: string; password: string; }) {
-        this.userName = user.userName;
-        this.email = user.email;
-        this.password = user.password;
-        this.profile = null;
+    constructor(user: { userName: string, email: string, password: string }) {
+        this.userName = this.validateUserName(user.userName);
+        this.email = this.validateEmail(user.email);
+        this.password = this.validatePassword(user.password);
+        this.profile = null; 
+    }
+
+    private validateUserName(userName: string): string {
+        if (!userName || userName.trim() === '') {
+            throw new Error('UserName cannot be empty');
+        }
+        return userName;
+    }
+
+    private validateEmail(email: string): string {
+        if (!email || email.trim() === '') {
+            throw new Error('Email cannot be empty');
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]*\.[^\s@]+$/;
+        if (!emailRegex.test(email.trim())) {
+            throw new Error('Email is not valid');
+        }
+        return email;
+    }
+
+    private validatePassword(password: string): string {
+        if (!password || password.trim() === '') {
+            throw new Error('Password cannot be empty');
+        }
+        return password;
     }
 
     getUserName(): string {
@@ -18,7 +43,7 @@ export class User {
     }
 
     setUserName(userName: string): void {
-        this.userName = userName;
+        this.userName = this.validateUserName(userName);
     }
 
     getEmail(): string {
@@ -26,7 +51,7 @@ export class User {
     }
 
     setEmail(email: string): void {
-        this.email = email;
+        this.email = this.validateEmail(email);
     }
 
     getPassword(): string {
@@ -34,7 +59,7 @@ export class User {
     }
 
     setPassword(password: string): void {
-        this.password = password;
+        this.password = this.validatePassword(password);
     }
 
     getProfile(): Profile | null {
@@ -42,6 +67,9 @@ export class User {
     }
 
     setProfile(newProfile: Profile): void {
+        if (!newProfile) {
+            throw new Error('Profile cannot be empty');
+        }
         this.profile = newProfile;
     }
 }

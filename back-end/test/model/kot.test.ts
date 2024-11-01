@@ -30,6 +30,8 @@ const profile2 = new Profile({
 
 const profilesArray = [profile1, profile2];
 
+//happy tests
+
 test('given valid values for Kot, when Kot is created, then Kot is created with those values', () => {
     //given
     const location = 'Leuven City Center';
@@ -117,6 +119,8 @@ test('given a Kot, when setting new profiles, then profiles are updated', () => 
     //then
     expect(kot.getProfiles()).toEqual(profilesArray);
 });
+
+//unhappy tests
 
 test("given an empty location for Kot, when setLocation is called, then it throws an error 'Location cannot be empty'", () => {
     //given

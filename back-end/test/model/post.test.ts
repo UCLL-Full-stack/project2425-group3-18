@@ -11,6 +11,8 @@ const validDescription = 'This is a valid description.';
 const validImage = 'http://example.com/image.jpg';
 const validComments: Array<Comment> = [];
 
+//happy tests
+
 test('given valid values for Post, when Post is created, then Post is created with those values', () => {
     //given
 
@@ -58,6 +60,8 @@ test('given a Post, when setting a new image, then image is updated', () => {
     //then
     expect(post.getImage()).toEqual(newImage);
 });
+
+//unhappy tests
 
 test("given an empty description for Post, when setDescription is called, then it throws an error 'Description cannot be empty'", () => {
     //given

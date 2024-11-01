@@ -1,4 +1,4 @@
-import { Comment } from "./comment";
+import { Comment } from './comment';
 
 export class Post {
     private description: string;
@@ -17,7 +17,7 @@ export class Post {
 
     setDescription(description: string): void {
         if (!description) {
-            throw new Error("Description cannot be empty");
+            throw new Error('Description cannot be empty');
         }
         this.description = description;
     }
@@ -28,7 +28,7 @@ export class Post {
 
     setImage(image: string): void {
         if (!image) {
-            throw new Error("Image cannot be empty");
+            throw new Error('Image cannot be empty');
         }
         this.image = image;
     }
