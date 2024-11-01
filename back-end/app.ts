@@ -31,7 +31,7 @@ const swaggerOpts = {
             version: '1.0.0',
         },
     },
-    apis: ['./controller/*.routes.ts'],
+    apis: ['./controller/*.ts'],
 };
 const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

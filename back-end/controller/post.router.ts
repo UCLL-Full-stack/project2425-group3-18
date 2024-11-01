@@ -3,6 +3,21 @@ import postService from "../service/post.service";
 
 const postRouter = express.Router();
 
+/**
+ * @swagger
+ * /posts:
+ *  get:
+ *      summary: Get all posts.
+ *      responses:
+ *          200:
+ *              description: An array of post objects.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Post'
+ */
 postRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const post = await postService.getAllPosts();
