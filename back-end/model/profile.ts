@@ -1,9 +1,8 @@
-import { Kot } from "./kot";
-import { Post } from "./post";
-import { User } from "./user";
+import { Kot } from './kot';
+import { Post } from './post';
+import { User } from './user';
 
 export class Profile {
-
     private firstName: string;
     private lastName: string;
     private bio: string;
@@ -12,7 +11,15 @@ export class Profile {
     private posts: Array<Post>;
     private koten: Array<Kot>;
 
-    constructor( profile: {firstName: string; lastName: string; bio: string; role: string; user: User, posts: Array<Post>, koten: Array<Kot> }) {
+    constructor(profile: {
+        firstName: string;
+        lastName: string;
+        bio: string;
+        role: string;
+        user: User;
+        posts: Array<Post>;
+        koten: Array<Kot>;
+    }) {
         this.firstName = profile.firstName;
         this.lastName = profile.lastName;
         this.bio = profile.bio;
@@ -54,11 +61,15 @@ export class Profile {
         this.role = role;
     }
 
-    getUser(): User {
+    getUser(): User | null {
         return this.user;
     }
 
-    getPosts(): Array<Post>{
+    setUser(newUser: User): void {
+        this.user = newUser;
+    }
+
+    getPosts(): Array<Post> {
         return this.posts;
     }
 
