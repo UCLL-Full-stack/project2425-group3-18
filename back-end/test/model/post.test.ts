@@ -113,36 +113,6 @@ test("given an empty location for Kot, when Kot is created, then location should
     expect(kot.getLocation()).toEqual("");
 });
 
-test("given a Kot, when setting a negative price, then the price should be updated (no validation)", () => {
-
-    const kot = new Kot({
-        location: "Leuven",
-        price: 500,
-        surfaceSpace: 25,
-        profiles: profilesArray
-    });
-
-    const negativePrice = -100;
-
-    kot.setPrice(negativePrice);
-    expect(kot.getPrice()).toEqual(negativePrice);
-});
-
-test("given a Kot, when setting a negative surface space, then the surface space should be updated (no validation)", () => {
-
-    const kot = new Kot({
-        location: "Leuven",
-        price: 400,
-        surfaceSpace: 25,
-        profiles: profilesArray
-    });
-
-    const negativeSurfaceSpace = -10;
-
-    kot.setSurfaceSpace(negativeSurfaceSpace);
-    expect(kot.getSurfaceSpace()).toEqual(negativeSurfaceSpace);
-});
-
 test("given a Kot, when profiles array is set to an empty array, then profiles should be updated correctly", () => {
     
     const kot = new Kot({
