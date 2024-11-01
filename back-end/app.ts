@@ -6,7 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { commentRouter } from './controller/comment.router';
 import { kotRouter } from './controller/kot.router';
-
+import { postRouter } from './controller/post.router';
 
 const app = express();
 dotenv.config();
@@ -14,6 +14,7 @@ const port = process.env.APP_PORT || 3000;
 
 app.use('/comments', commentRouter);
 app.use('/koten', kotRouter);
+app.use('/posts', postRouter);
 
 app.use(cors());
 app.use(bodyParser.json());

@@ -1,14 +1,14 @@
 import { Comment } from "./comment";
-export class Post {
 
+export class Post {
     private description: string;
     private image: string;
-    private comments: Array<Comment>
+    private comments: Array<Comment>;
 
-    constructor(post: { description: string; image: string, comments: Array<Comment> }) {
+    constructor(post: { description: string; image: string; comments: Array<Comment> }) {
         this.description = post.description;
         this.image = post.image;
-        this.comments = post.comments;
+        this.comments = post.comments || [];
     }
 
     getDescription(): string {
@@ -35,5 +35,9 @@ export class Post {
 
     getComments(): Array<Comment> {
         return this.comments;
+    }
+
+    setComments(comments: Array<Comment>): void {
+        this.comments = comments;
     }
 }
