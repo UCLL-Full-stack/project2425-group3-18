@@ -1,9 +1,9 @@
-import { Post } from "../../model/post"; // Adjust the import path as necessary
-import { Comment } from "../../model/comment"; // Adjust the import path as necessary
+import { Post } from "../../model/post";
+import { Comment } from "../../model/comment";
 
 const validDescription = "This is a valid description.";
 const validImage = "http://example.com/image.jpg";
-const validComments: Array<Comment> = []; // You can replace this with actual Comment instances if necessary
+const validComments: Array<Comment> = [];
 
 test("given valid values for Post, when Post is created, then Post is created with those values", () => {
     const post = new Post({
