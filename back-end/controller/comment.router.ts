@@ -1,4 +1,3 @@
-import { Comment } from "../model/comment";
 import express, { NextFunction, Request, Response } from 'express';
 import commentService from "../service/comment.service";
 

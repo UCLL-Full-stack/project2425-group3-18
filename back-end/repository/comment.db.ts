@@ -1,6 +1,5 @@
 import { Post } from "../model/post";
 import { Comment } from "../model/comment";
-import exp from "constants";
 
 const post = new Post({
     description: "This is a sample post.",
