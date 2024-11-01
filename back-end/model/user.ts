@@ -1,26 +1,25 @@
-import  { Profile } from './profile';
+import { Profile } from './profile';
 
 export class User {
-
     private userName: string;
     private email: string;
     private password: string;
-    private profile: Profile;
+    private profile: Profile | null;
 
-    constructor(user: { userName: string; email: string; password: string; profile: Profile }) {
+    constructor(user: { userName: string; email: string; password: string; }) {
         this.userName = user.userName;
         this.email = user.email;
         this.password = user.password;
-        this.profile = user.profile;
+        this.profile = null;
     }
 
     getUserName(): string {
         return this.userName;
-      }
+    }
 
     setUserName(userName: string): void {
         this.userName = userName;
-      }
+    }
 
     getEmail(): string {
         return this.email;
@@ -38,7 +37,11 @@ export class User {
         this.password = password;
     }
 
-    getProfile(): Profile {
+    getProfile(): Profile | null {
         return this.profile;
+    }
+
+    setProfile(newProfile: Profile): void {
+        this.profile = newProfile;
     }
 }
