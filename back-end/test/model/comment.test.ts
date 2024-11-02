@@ -60,7 +60,7 @@ test('given: a Comment, when: retrieving post, then: associated post is returned
     expect(comment.getPost()).toEqual(post);
 });
 
-test('given: a Comment, when: setting empty text, then: Comment text is updated to empty', () => {
+test('given: a Comment, when: setting empty text, then: an error is thrown', () => {
     //given
     const initialText = 'Beautiful scenery!';
     const comment = new Comment({
@@ -68,9 +68,7 @@ test('given: a Comment, when: setting empty text, then: Comment text is updated 
         post: post,
     });
 
-    //when
-    comment.setText('');
-
-    //then
-    expect(comment.getText()).toEqual('');
+    //when & then
+    expect(() => comment.setText('')).toThrowError('Text cannot be empty');
 });
+

@@ -11,15 +11,26 @@ export class Post {
         this.comments = post.comments || [];
     }
 
+    private validateDescription(description: string): string {
+        if (!description || description.trim() === '') {
+            throw new Error('Description cannot be empty');
+        }
+        return description;
+    }
+
+    private validateImage(image: string): string {
+        if (!image || image.trim() === '') {
+            throw new Error('Image cannot be empty');
+        }
+        return image;
+    }
+
     getDescription(): string {
         return this.description;
     }
 
     setDescription(description: string): void {
-        if (!description) {
-            throw new Error('Description cannot be empty');
-        }
-        this.description = description;
+        this.description = this.validateDescription(description);
     }
 
     getImage(): string {
@@ -27,10 +38,7 @@ export class Post {
     }
 
     setImage(image: string): void {
-        if (!image) {
-            throw new Error('Image cannot be empty');
-        }
-        this.image = image;
+        this.image = this.validateImage(image);
     }
 
     getComments(): Array<Comment> {

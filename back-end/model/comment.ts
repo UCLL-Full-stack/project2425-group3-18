@@ -9,12 +9,19 @@ export class Comment {
         this.post = comment.post;
     }
 
+    private validateText(text: string): string {
+        if (!text || text.trim() === '') {
+            throw new Error('Text cannot be empty');
+        }
+        return text;
+    }
+
     getText(): string {
         return this.text;
     }
 
     setText(text: string): void {
-        this.text = text;
+        this.text = this.validateText(text);
     }
 
     getPost(): Post {

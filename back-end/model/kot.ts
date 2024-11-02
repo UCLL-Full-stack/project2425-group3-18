@@ -18,15 +18,33 @@ export class Kot {
         this.profiles = kot.profiles;
     }
 
+    private validateLocation(location: string): string {
+        if (!location || location.trim() === '') {
+            throw new Error('Location cannot be empty');
+        }
+        return location;
+    }
+
+    private validatePrice(price: number): number {
+        if (price <= 0) {
+            throw new Error('Price must be greater than zero');
+        }
+        return price;
+    }
+
+    private validateSurfaceSpace(surfaceSpace: number): number {
+        if (surfaceSpace <= 0) {
+            throw new Error('Surface space must be greater than zero');
+        }
+        return surfaceSpace;
+    }
+
     getLocation(): string {
         return this.location;
     }
 
     setLocation(location: string): void {
-        if (!location || location.trim() === '') {
-            throw new Error('Location cannot be empty');
-        }
-        this.location = location;
+        this.location = this.validateLocation(location);
     }
 
     getPrice(): number {
@@ -34,10 +52,7 @@ export class Kot {
     }
 
     setPrice(price: number): void {
-        if (price <= 0) {
-            throw new Error('Price must be greater than zero');
-        }
-        this.price = price;
+        this.price = this.validatePrice(price);
     }
 
     getSurfaceSpace(): number {
@@ -48,7 +63,7 @@ export class Kot {
         if (surfaceSpace <= 0) {
             throw new Error('Surface space must be greater than zero');
         }
-        this.surfaceSpace = surfaceSpace;
+        this.surfaceSpace = this.validateSurfaceSpace(surfaceSpace);
     }
 
     getProfiles(): Array<Profile> {
