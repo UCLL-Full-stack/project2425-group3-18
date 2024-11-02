@@ -1,10 +1,10 @@
 import { Profile } from '../model/profile';
 import profileDb from '../repository/profile.db';
 
-const getAllServices = (): Profile[] => {
+const getAllProfiles = (): Profile[] => {
     return profileDb.getAllProfiles();
 };
 
 export default {
-    getAllServices,
+    getAllProfiles,
 };
