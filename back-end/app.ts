@@ -14,6 +14,7 @@ import { profileRouter } from './controller/profile.router';
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
+app.use(bodyParser.json());
 
 app.use('/comments', commentRouter);
 app.use('/koten', kotRouter);
@@ -22,7 +23,6 @@ app.use('/users', userRouter)
 app.use('/profiles', profileRouter)
 
 app.use(cors());
-app.use(bodyParser.json());
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });

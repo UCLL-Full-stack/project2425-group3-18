@@ -71,6 +71,7 @@
  */
 import express, { Request, Response, NextFunction } from "express";
 import profileService from "../service/profile.service";
+import { ProfileInput } from "../types";
 
 const profileRouter = express.Router();
 

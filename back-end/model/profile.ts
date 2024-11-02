@@ -82,7 +82,7 @@ export class Profile {
         this.role = this.validateRole(role);
     }
 
-    getUser(): User | null {
+    getUser(): User {
         return this.user;
     }
 
