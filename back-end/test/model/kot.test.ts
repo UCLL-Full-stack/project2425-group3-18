@@ -8,12 +8,17 @@ test('given:; when:; then:;', () => {
 })
 */
 
+const userName: string = 'TestUser';
+const email: string = 'test.user@gmail.com';
+const password: string = 'test123?';
+const testUser: User = new User({ userName, email, password });
+
 const profile1 = new Profile({
     firstName: 'John',
     lastName: 'Doe',
     bio: 'Student at KU Leuven',
-    role: 'student',
-    user: {} as User,
+    role: 'User',
+    user: testUser,
     posts: [],
     koten: [],
 });
@@ -22,8 +27,8 @@ const profile2 = new Profile({
     firstName: 'Jane',
     lastName: 'Smith',
     bio: 'Researcher in Leuven',
-    role: 'researcher',
-    user: {} as User,
+    role: 'User',
+    user: testUser,
     posts: [],
     koten: [],
 });
@@ -166,7 +171,7 @@ test("given zero price for Kot, when setPrice is called, then it throws an error
     });
 
     //when
-    
+
     //then
     expect(() => {
         kot.setPrice(0);

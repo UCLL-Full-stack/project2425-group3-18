@@ -43,7 +43,7 @@ test('given: a user; when: profile is updated; then: profile is;', () => {
         firstName: 'test',
         lastName: 'user',
         bio: 'I am a test user',
-        role: 'user',
+        role: 'User',
         user: testUser,
         posts: posts,
         koten: koten,

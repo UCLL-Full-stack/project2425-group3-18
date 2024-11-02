@@ -157,7 +157,153 @@ test('given: a profile; when: updating user field with valid user; then: user is
     expect(profile.getUser()).toEqual(newUser);
 });
 
-//test for adding new post to posts
+test('given: a profile; when:adding a new valid post; then:post is added to posts;', () => {
+    //given
+    const firstName: string = 'Test';
+    const lastName: string = 'Profile';
+    const bio: string = 'I am a test Profile';
+    const role: string = 'User';
+    const user: User = new User({
+        userName: 'testProfile',
+        email: 'test.profile@gmail.com',
+        password: 'test123?',
+    });
+    const posts: Array<Post> = [];
+    const koten: Array<Kot> = [];
+    const profile = new Profile({ firstName, lastName, bio, role, user, posts, koten });
+
+    //when
+    const post = new Post({
+        description: 'a new post',
+        image: 'http://example.com/image.jpg',
+        comments: [],
+    });
+    profile.addPost(post);
+
+    //then
+    expect(profile.getPosts()).toContain(post);
+});
+
 //test for adding new kot to koten
+test('given: a profile; when:adding a new valid kot; then:kot is added to koten;', () => {
+    //given
+    const firstName: string = 'Test';
+    const lastName: string = 'Profile';
+    const bio: string = 'I am a test Profile';
+    const role: string = 'User';
+    const user: User = new User({
+        userName: 'testProfile',
+        email: 'test.profile@gmail.com',
+        password: 'test123?',
+    });
+    const posts: Array<Post> = [];
+    const koten: Array<Kot> = [];
+    const profile = new Profile({ firstName, lastName, bio, role, user, posts, koten });
+
+    //when
+    const kot = new Kot({
+        location: 'teststreet 54 3000 Leuven',
+        price: 300,
+        surfaceSpace: 19,
+        profiles: [],
+    });
+    kot.addProfile(profile);
+    profile.addKot(kot);
+
+    //then
+    expect(profile.getKoten()).toContain(kot);
+});
 
 //unhappy test (add validation)
+
+test('given: all field valid except firstName; when: profile is created; then: error is thrown', () => {
+    //given
+    const firstName: string = '         ';
+    const lastName: string = 'Profile';
+    const bio: string = 'I am a test Profile';
+    const role: string = 'User';
+    const user: User = new User({
+        userName: 'testProfile',
+        email: 'test.profile@gmail.com',
+        password: 'test123?',
+    });
+    const posts: Array<Post> = [];
+    const koten: Array<Kot> = [];
+
+    //when
+    const createNewProfile = () => {
+        new Profile({ firstName, lastName, bio, role, user, posts, koten });
+    };
+
+    //then
+    expect(createNewProfile).toThrow('Name cannot be empty');
+});
+
+test('given: all field valid except username; when: profile is created; then: error is thrown', () => {
+    //given
+    const firstName: string = 'Test';
+    const lastName: string = '                      ';
+    const bio: string = 'I am a test Profile';
+    const role: string = 'User';
+    const user: User = new User({
+        userName: 'testProfile',
+        email: 'test.profile@gmail.com',
+        password: 'test123?',
+    });
+    const posts: Array<Post> = [];
+    const koten: Array<Kot> = [];
+
+    //when
+    const createNewProfile = () => {
+        new Profile({ firstName, lastName, bio, role, user, posts, koten });
+    };
+
+    //then
+    expect(createNewProfile).toThrow('Name cannot be empty');
+});
+
+test('given: all field valid except role (empty); when: profile is created; then: error is thrown', () => {
+    //given
+    const firstName: string = 'Test';
+    const lastName: string = 'Profile';
+    const bio: string = 'I am a test Profile';
+    const role: string = '              ';
+    const user: User = new User({
+        userName: 'testProfile',
+        email: 'test.profile@gmail.com',
+        password: 'test123?',
+    });
+    const posts: Array<Post> = [];
+    const koten: Array<Kot> = [];
+
+    //when
+    const createNewProfile = () => {
+        new Profile({ firstName, lastName, bio, role, user, posts, koten });
+    };
+
+    //then
+    expect(createNewProfile).toThrow('Role cannot be empty');
+});
+
+test('given: all field valid except role (wrong); when: profile is created; then: error is thrown', () => {
+    //given
+    const firstName: string = 'Test';
+    const lastName: string = 'Profile';
+    const bio: string = 'I am a test Profile';
+    const role: string = 'TESTINGLOVERSUNITE';
+    const user: User = new User({
+        userName: 'testProfile',
+        email: 'test.profile@gmail.com',
+        password: 'test123?',
+    });
+    const posts: Array<Post> = [];
+    const koten: Array<Kot> = [];
+
+    //when
+    const createNewProfile = () => {
+        new Profile({ firstName, lastName, bio, role, user, posts, koten });
+    };
+
+    //then
+    expect(createNewProfile).toThrow('Role needs to be either User, Admin or Moderator');
+});

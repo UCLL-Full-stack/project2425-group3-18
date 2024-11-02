@@ -69,6 +69,6 @@ test('given: a Comment, when: setting empty text, then: an error is thrown', () 
     });
 
     //when & then
-    expect(() => comment.setText('')).toThrowError('Text cannot be empty');
+    expect(() => comment.setText('')).toThrow('Text cannot be empty');
 });
 

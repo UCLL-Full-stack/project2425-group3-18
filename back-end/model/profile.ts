@@ -20,13 +20,34 @@ export class Profile {
         posts: Array<Post>;
         koten: Array<Kot>;
     }) {
-        this.firstName = profile.firstName;
-        this.lastName = profile.lastName;
-        this.bio = profile.bio;
-        this.role = profile.role;
+        this.firstName = this.validateName(profile.firstName);
+        this.lastName = this.validateName(profile.lastName);
+        this.bio = this.validateBio(profile.bio);
+        this.role = this.validateRole(profile.role);
         this.user = profile.user;
         this.posts = profile.posts;
         this.koten = profile.koten;
+    }
+
+    private validateName(name: string): string {
+        if (!name || name.trim() === '') {
+            throw new Error('Name cannot be empty');
+        }
+        return name;
+    }
+
+    private validateBio(bio: string): string {
+        return bio;
+    }
+
+    private validateRole(role: string): string {
+        if (!role || role.trim() === '') {
+            throw new Error('Role cannot be empty');
+        }
+        if (!['User', 'Admin', 'Moderator'].includes(role)) {
+            throw new Error('Role needs to be either User, Admin or Moderator');
+        }
+        return role;
     }
 
     getFirstName(): string {
@@ -34,7 +55,7 @@ export class Profile {
     }
 
     setFirstName(firstName: string): void {
-        this.firstName = firstName;
+        this.firstName = this.validateName(firstName);
     }
 
     getLastName(): string {
@@ -42,7 +63,7 @@ export class Profile {
     }
 
     setLastName(lastName: string): void {
-        this.lastName = lastName;
+        this.lastName = this.validateName(lastName);
     }
 
     getBio(): string {
@@ -50,7 +71,7 @@ export class Profile {
     }
 
     setBio(bio: string): void {
-        this.bio = bio;
+        this.bio = this.validateBio(bio);
     }
 
     getRole(): string {
@@ -58,7 +79,7 @@ export class Profile {
     }
 
     setRole(role: string): void {
-        this.role = role;
+        this.role = this.validateRole(role);
     }
 
     getUser(): User | null {
@@ -73,7 +94,15 @@ export class Profile {
         return this.posts;
     }
 
+    addPost(post: Post): void {
+        this.posts.push(post);
+    }
+
     getKoten(): Array<Kot> {
         return this.koten;
+    }
+
+    addKot(kot: Kot): void {
+        this.koten.push(kot);
     }
 }

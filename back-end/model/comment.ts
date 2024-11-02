@@ -5,7 +5,7 @@ export class Comment {
     private post: Post;
 
     constructor(comment: { text: string; post: Post }) {
-        this.text = comment.text;
+        this.text = this.validateText(comment.text);
         this.post = comment.post;
     }
 

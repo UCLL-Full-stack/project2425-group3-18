@@ -6,8 +6,8 @@ export class Post {
     private comments: Array<Comment>;
 
     constructor(post: { description: string; image: string; comments: Array<Comment> }) {
-        this.description = post.description;
-        this.image = post.image;
+        this.description = this.validateDescription(post.description);
+        this.image = this.validateImage(post.image);
         this.comments = post.comments || [];
     }
 

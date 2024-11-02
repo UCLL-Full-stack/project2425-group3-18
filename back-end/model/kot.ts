@@ -12,9 +12,9 @@ export class Kot {
         surfaceSpace: number;
         profiles: Array<Profile>;
     }) {
-        this.location = kot.location;
-        this.price = kot.price;
-        this.surfaceSpace = kot.surfaceSpace;
+        this.location = this.validateLocation(kot.location);
+        this.price = this.validatePrice(kot.price);
+        this.surfaceSpace = this.validateSurfaceSpace(kot.surfaceSpace);
         this.profiles = kot.profiles;
     }
 
@@ -72,5 +72,9 @@ export class Kot {
 
     setProfiles(profiles: Array<Profile>): void {
         this.profiles = profiles;
+    }
+
+    addProfile(profile: Profile): void {
+        this.profiles.push(profile);
     }
 }
