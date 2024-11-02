@@ -1,6 +1,6 @@
-// pages/login.tsx
 import { useState, ChangeEvent, FormEvent } from 'react';
-import styles from "@/styles/login/Login.module.css"
+import styles from "@/styles/login/Login.module.css";
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [username, setUsername] = useState<string>('');
@@ -12,15 +12,14 @@ export default function LoginPage() {
     console.log({ username, email, password });
   };
 
-  const handleInputChange = (
-    setter: React.Dispatch<React.SetStateAction<string>>
-  ) => (e: ChangeEvent<HTMLInputElement>) => {
-    setter(e.target.value);
-  };
+  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setter(e.target.value);
+    };
 
   return (
     <div className={styles.container}>
-      <h1>Login</h1>
+      <h1 className={styles.title}>Login</h1>
       <form onSubmit={handleLogin} className={styles.form}>
         <div className={styles.inputGroup}>
           <label>Username</label>
@@ -29,6 +28,7 @@ export default function LoginPage() {
             value={username}
             onChange={handleInputChange(setUsername)}
             className={styles.input}
+            placeholder="Enter your username"
             required
           />
         </div>
@@ -39,6 +39,7 @@ export default function LoginPage() {
             value={email}
             onChange={handleInputChange(setEmail)}
             className={styles.input}
+            placeholder="Enter your email"
             required
           />
         </div>
@@ -49,10 +50,16 @@ export default function LoginPage() {
             value={password}
             onChange={handleInputChange(setPassword)}
             className={styles.input}
+            placeholder="Enter your password"
             required
           />
         </div>
         <button type="submit" className={styles.button}>Login</button>
+        <div className={styles.registerLink}>
+          <Link href="/register">
+            Don't Have An Account? Sign Up
+          </Link>
+        </div>
       </form>
     </div>
   );
