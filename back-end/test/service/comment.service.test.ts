@@ -1,5 +1,5 @@
-import { Post } from "../../model/post";
-import { Comment } from "../../model/comment";
+import { Post } from '../../model/post';
+import { Comment } from '../../model/comment';
 import commentService from '../../service/comment.service';
 import commentDb from '../../repository/comment.db';
 
@@ -7,12 +7,12 @@ import commentDb from '../../repository/comment.db';
 const mockPost = new Post({
     description: 'Sample post description',
     image: 'sample-image-url.jpg',
-    comments: []
+    comments: [],
 });
 
 const mockComments: Comment[] = [
     new Comment({ text: 'Great post!', post: mockPost }),
-    new Comment({ text: 'Very helpful, thanks!', post: mockPost })
+    new Comment({ text: 'Very helpful, thanks!', post: mockPost }),
 ];
 
 // Setup Mocks

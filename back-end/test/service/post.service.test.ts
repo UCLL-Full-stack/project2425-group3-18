@@ -1,18 +1,18 @@
-import { Post } from "../../model/post";
-import postDb from "../../repository/post.db";
-import postService from "../../service/post.service";
+import { Post } from '../../model/post';
+import postDb from '../../repository/post.db';
+import postService from '../../service/post.service';
 
 // Mock Data
 const mockPost1 = new Post({
     description: 'Sample post description 1',
     image: 'sample-image-url-1.jpg',
-    comments: []
+    comments: [],
 });
 
 const mockPost2 = new Post({
     description: 'Sample post description 2',
     image: 'sample-image-url-2.jpg',
-    comments: []
+    comments: [],
 });
 
 const mockPosts: Post[] = [mockPost1, mockPost2];

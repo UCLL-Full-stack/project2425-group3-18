@@ -3,7 +3,9 @@ import { Post } from '../../model/post';
 import { Profile } from '../../model/profile';
 import { User } from '../../model/user';
 import kotDb from '../../repository/kot.db';
+import profileDb from '../../repository/profile.db';
 import kotService from '../../service/kot.service';
+import profileService from '../../service/profile.service';
 
 // Mock Data
 const mockUser = new User({
@@ -54,24 +56,22 @@ const mockKoten: Kot[] = [
     }),
 ];
 
+const mockProfilesDB: Profile[] = [mockProfile];
+
 // Setup Mocks
 beforeEach(() => {
-    jest.spyOn(kotDb, 'getAllKoten').mockReturnValue(mockKoten);
+    jest.spyOn(profileDb, 'getAllProfiles').mockReturnValue(mockProfilesDB);
 });
 
 afterEach(() => {
     jest.clearAllMocks();
 });
 
-test('given: Koten exist in database; when: getAllKoten is called; then: all Koten are returned;', () => {
+test('given: Profiles exist in database; when: getAllProfiles is called; then: all Profiles are returned;', () => {
     // Act
-    const result = kotService.getAllKoten();
+    const result = profileService.getAllProfiles();
 
     // Assert
-    expect(kotDb.getAllKoten).toHaveBeenCalledTimes(1);
-    expect(result).toEqual(mockKoten);
-    expect(result[0].getLocation()).toBe('Brussels');
-    expect(result[0].getPrice()).toBe(450);
-    expect(result[0].getSurfaceSpace()).toBe(25);
-    expect(result[0].getProfiles()[0].getFirstName()).toBe('John');
+    expect(profileDb.getAllProfiles).toHaveBeenCalledTimes(1);
+    expect(result).toEqual(mockProfilesDB);
 });
