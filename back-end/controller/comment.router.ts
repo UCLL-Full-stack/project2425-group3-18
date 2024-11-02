@@ -1,3 +1,23 @@
+/**
+ * @swagger
+ *   components:
+ *    securitySchemes:
+ *     bearerAuth:
+ *      type: http
+ *      scheme: bearer
+ *      bearerFormat: JWT
+ *    schemas:
+ *      Comment:
+ *          type: object
+ *          properties:
+ *            text:
+ *              type: string
+ *              description: The content of the comment.
+ *            post:
+ *              $ref: '#/components/schemas/Post'
+ *              description: The post associated with this comment.
+ *          
+ */
 import express, { NextFunction, Request, Response } from 'express';
 import commentService from "../service/comment.service";
 
@@ -7,7 +27,11 @@ const commentRouter = express.Router();
  * @swagger
  * /comments:
  *  get:
- *      summary: Get all comments.
+ *      summary: Retrieve a list of comments.
+ *      security:
+ *        - bearerAuth: []
+ *      tags:
+ *        - Comments
  *      responses:
  *          200:
  *              description: An array of comment objects.
