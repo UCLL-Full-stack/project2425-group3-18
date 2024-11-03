@@ -67,12 +67,12 @@
     text-align: center;
   }
   
-  .loginLink a {
+.loginLink a {
     color: #0070f3;
     text-decoration: none;
     font-size: 14px;
   }
   
-  .loginLink a:hover {
+.loginLink a:hover {
     text-decoration: underline;
   }
