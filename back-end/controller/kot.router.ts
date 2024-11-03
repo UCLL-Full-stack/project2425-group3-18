@@ -1,77 +1,88 @@
 /**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         userName:
- *           type: string
- *           description: The user's name.
- *         email:
- *           type: string
- *           description: The user's email address.
- *         password:
- *           type: string
- *           description: The user's password.
- *         profile:
- *           $ref: '#/components/schemas/Profile'
- *           nullable: true
- *           description: The profile associated with the user.
- *
- *     Profile:
- *       type: object
- *       properties:
- *         firstName:
- *           type: string
- *           description: First name of the profile user.
- *         lastName:
- *           type: string
- *           description: Last name of the profile user.
- *         bio:
- *           type: string
- *           description: Bio of the profile user.
- *         role:
- *           type: string
- *           description: Role of the user in the platform.
- *         user:
- *           $ref: '#/components/schemas/User'
- *           description: The user associated with this profile.
- *         posts:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               description:
- *                 type: string
- *                 description: Description of the post.
- *               image:
- *                 type: string
- *                 description: Image URL associated with the post.
- *           description: List of posts made by the user.
- *         koten:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Kot'
- *           description: List of koten associated with the profile.
- *
- *     Kot:
- *       type: object
- *       properties:
- *         location:
- *           type: string
- *           description: The location of the kot.
- *         price:
- *           type: number
- *           description: The price of the kot.
- *         surfaceSpace:
- *           type: number
- *           description: The surface space of the kot in square meters.
- *         profiles:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Profile'
- *           description: List of profiles associated with the kot.
+* @swagger
+ *   components:
+ *    schemas:
+ *      User:
+ *          type: object
+ *          properties:
+ *            userName:
+ *              type: string
+ *              description: The user's name.
+ *            email:
+ *              type: string
+ *              description: The user's email address.
+ *            password:
+ *              type: string
+ *              description: The user's password.
+ *            profile:
+ *              $ref: '#/components/schemas/Profile'
+ *              nullable: true
+ *              description: The profile associated with the user.
+ * 
+ *      Profile:
+ *          type: object
+ *          properties:
+ *            firstName:
+ *              type: string
+ *              description: First name of the profile user.
+ *            lastName:
+ *              type: string
+ *              description: Last name of the profile user.
+ *            bio:
+ *              type: string
+ *              description: Bio of the profile user.
+ *            role:
+ *              type: string
+ *              description: Role of the user in the platform.
+ *            user:
+ *              $ref: '#/components/schemas/User'
+ *              description: The user associated with this profile.
+ *            posts:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  description:
+ *                    type: string
+ *                    description: Description of the post.
+ *                  image:
+ *                    type: string
+ *                    description: Image URL associated with the post.
+ *                  comments:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        text:
+ *                          type: string
+ *                          description: Text content of the comment.
+ *                        post:
+ *                          type: string
+ *                          description: Associated post.
+ *              description: List of posts made by the user.
+ *            koten:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Kot'
+ *              description: List of koten associated with the profile.
+ * 
+ *      Kot:
+ *          type: object
+ *          properties:
+ *            location:
+ *              type: string
+ *              description: The location of the kot.
+ *            price:
+ *              type: number
+ *              description: The price of the kot.
+ *            surfaceSpace:
+ *              type: number
+ *              description: The surface space of the kot in square meters.
+ *            profiles:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Profile'
+ *              description: List of profiles associated with the kot.
  */
 import express, { NextFunction, Request, Response } from 'express';
 import kotService from "../service/kot.service";
@@ -81,8 +92,8 @@ const kotRouter = express.Router();
 
 /**
  * @swagger
- * /koten:
- *  get:
+/koten:
+ *   get:
  *      summary: Retrieve a list of koten.
  *      tags:
  *        - Koten
@@ -95,6 +106,22 @@ const kotRouter = express.Router();
  *                          type: array
  *                          items:
  *                              $ref: '#/components/schemas/Kot'
+ *                      example:
+ *                        - location: "Downtown Leuven"
+ *                          price: 600
+ *                          surfaceSpace: 25
+ *                          profiles:
+ *                            - firstName: "joe"
+ *                              lastName: "Johnson"
+ *                              bio: "Graduate student at KU Leuven"
+ *                              role: "User"
+ *                              user:
+ *                                userName: "alice123"
+ *                                email: "joe@example.com"
+ *                                password: "securePassword123"
+ *                                profile: null
+ *                              posts: []
+ *                              koten: []
  */
 kotRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
