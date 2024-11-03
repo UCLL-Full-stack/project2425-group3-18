@@ -7,6 +7,17 @@ const getAllUsers = (): User[] => {
 };
 
 const createUser = (userInput: UserInput): User => {
+    try {
+        const existingUser = userDb.getUserByEmail(userInput.email);
+        if (existingUser) {
+            throw new Error('User already exists');
+        }
+    } catch (error) {
+        if (error instanceof Error && error.message !== 'user not found') {
+            throw error;
+        }
+    }
+
     const newUser = new User({
         userName: userInput.userName,
         email: userInput.email,
@@ -14,6 +25,8 @@ const createUser = (userInput: UserInput): User => {
     });
     return userDb.createUser(newUser);
 };
+
+
 
 export default {
     getAllUsers,
