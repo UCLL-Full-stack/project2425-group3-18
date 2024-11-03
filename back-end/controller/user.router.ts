@@ -104,9 +104,9 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                      type: object
  *                      properties:
  *                          user:
- *                              $ref: '#/components/schemas/UserInput'
+ *                              $ref: '#/components/schemas/User'
  *                          profile:
- *                              $ref: '#/components/schemas/ProfileInput'
+ *                              $ref: '#/components/schemas/Profile'
  *                  example:
  *                      user:
  *                          userName: "john_doe"
@@ -131,9 +131,9 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                                  type: string
  *                                  example: "User and profile created successfully"
  *                              user:
- *                                  $ref: '#/components/schemas/UserInput'
+ *                                  $ref: '#/components/schemas/User'
  *                              profile:
- *                                  $ref: '#/components/schemas/ProfileInput'
+ *                                  $ref: '#/components/schemas/Profile'
  *          400:
  *              description: Bad client request.
  *              content:
