@@ -24,6 +24,13 @@ const createUser = (userData: User): User => {
     return newUser;
 };
 
+const defaultUser = new User({
+    userName: 'testUser',
+    email: 'test@example.com',
+    password: 'password123',
+});
+createUser(defaultUser);
+
 export default {
     getAllUsers,
     getUserByEmail,
