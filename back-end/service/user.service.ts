@@ -26,8 +26,6 @@ const createUser = (userInput: UserInput): User => {
     return userDb.createUser(newUser);
 };
 
-
-
 export default {
     getAllUsers,
     createUser,
