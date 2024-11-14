@@ -1,0 +1,47 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Comment {
+    id          Int         @id @default(autoincrement())
+    text        String
+    post        Post
+}
+
+model Kot {
+    id          Int         @id @default(autoincrement())
+    location    String
+    price       Int
+    surfaceSpace Int
+    profiles    Profile[] 
+}
+
+model Post {
+    id          Int         @id @default(autoincrement())
+    description String 
+    image       String
+    comments    Comment[]
+}
+
+model Profile {
+    id          Int         @id @default(autoincrement())
+    firstName   String
+    lastName    String
+    bio         String
+    role        String
+    user        User
+    posts       Post[]
+    koten       Kot[]
+}
+
+model User {
+    id          Int         @id @default(autoincrement())
+    userName    String
+    email       String
+    profile     Profile
+}

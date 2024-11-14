@@ -2,24 +2,33 @@ import { Kot } from './kot';
 import { Post } from './post';
 import { User } from './user';
 
+enum role {
+    user = 'User',
+    moderator = 'Moderator',
+    admin = 'Admin',
+}
+
 export class Profile {
+    private id?: number;
     private firstName: string;
     private lastName: string;
     private bio: string;
-    private role: string;
+    private role: role;
     private user: User;
     private posts: Array<Post>;
     private koten: Array<Kot>;
 
     constructor(profile: {
+        id?: number;
         firstName: string;
         lastName: string;
         bio: string;
-        role: string;
+        role: role;
         user: User;
         posts: Array<Post>;
         koten: Array<Kot>;
     }) {
+        this.id = profile.id;
         this.firstName = this.validateName(profile.firstName);
         this.lastName = this.validateName(profile.lastName);
         this.bio = this.validateBio(profile.bio);
@@ -40,7 +49,7 @@ export class Profile {
         return bio;
     }
 
-    private validateRole(role: string): string {
+    private validateRole(role: role): role {
         if (!role || role.trim() === '') {
             throw new Error('Role cannot be empty');
         }
@@ -48,6 +57,10 @@ export class Profile {
             throw new Error('Role needs to be either User, Admin or Moderator');
         }
         return role;
+    }
+
+    getId(): number | undefined {
+        return this.id;
     }
 
     getFirstName(): string {
@@ -74,11 +87,11 @@ export class Profile {
         this.bio = this.validateBio(bio);
     }
 
-    getRole(): string {
+    getRole(): role {
         return this.role;
     }
 
-    setRole(role: string): void {
+    setRole(role: role): void {
         this.role = this.validateRole(role);
     }
 
@@ -104,5 +117,20 @@ export class Profile {
 
     addKot(kot: Kot): void {
         this.koten.push(kot);
+    }
+
+    equals(profile: Profile): boolean {
+        return (
+            this.id === profile.getId() &&
+            this.firstName === profile.getFirstName() &&
+            this.lastName === profile.getLastName() &&
+            this.bio === profile.getBio() &&
+            this.role === profile.getRole() &&
+            this.user.equals(profile.getUser()) &&
+            this.posts.length === profile.getPosts().length &&
+            this.posts.every((post, index) => post.equals(profile.getPosts()[index])) &&
+            this.koten.length === profile.getKoten().length &&
+            this.koten.every((kot, index) => kot.equals(profile.getKoten()[index]))
+        );
     }
 }

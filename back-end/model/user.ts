@@ -1,16 +1,18 @@
 import { Profile } from './profile';
 
 export class User {
-    private userName: string;
+    private id?: number;
+    private username: string;
     private email: string;
     private password: string;
     private profile: Profile | null;
 
-    constructor(user: { userName: string, email: string, password: string }) {
-        this.userName = this.validateUserName(user.userName);
+    constructor(user: { id?: number; userName: string; email: string; password: string }) {
+        this.id = user.id;
+        this.username = this.validateUserName(user.userName);
         this.email = this.validateEmail(user.email);
         this.password = this.validatePassword(user.password);
-        this.profile = null; 
+        this.profile = null;
     }
 
     private validateUserName(userName: string): string {
@@ -38,12 +40,16 @@ export class User {
         return password;
     }
 
-    getUserName(): string {
-        return this.userName;
+    getId(): number | undefined {
+        return this.id;
+    }
+
+    getUsername(): string {
+        return this.username;
     }
 
     setUserName(userName: string): void {
-        this.userName = this.validateUserName(userName);
+        this.username = this.validateUserName(userName);
     }
 
     getEmail(): string {
@@ -71,5 +77,14 @@ export class User {
             throw new Error('Profile cannot be empty');
         }
         this.profile = newProfile;
+    }
+
+    equals(user: User): boolean {
+        return (
+            this.id === user.getId() &&
+            this.username === user.getUsername() &&
+            this.email === user.getEmail() &&
+            this.password === user.getPassword()
+        );
     }
 }

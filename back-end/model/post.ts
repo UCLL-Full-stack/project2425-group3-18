@@ -1,11 +1,18 @@
 import { Comment } from './comment';
 
 export class Post {
+    private id?: number;
     private description: string;
     private image: string;
     private comments: Array<Comment>;
 
-    constructor(post: { description: string; image: string; comments: Array<Comment> }) {
+    constructor(post: {
+        id?: number;
+        description: string;
+        image: string;
+        comments: Array<Comment>;
+    }) {
+        this.id = post.id;
         this.description = this.validateDescription(post.description);
         this.image = this.validateImage(post.image);
         this.comments = post.comments || [];
@@ -23,6 +30,10 @@ export class Post {
             throw new Error('Image cannot be empty');
         }
         return image;
+    }
+
+    getId(): number | undefined {
+        return this.id;
     }
 
     getDescription(): string {
@@ -48,4 +59,16 @@ export class Post {
     setComments(comments: Array<Comment>): void {
         this.comments = comments;
     }
+
+    equals(post: Post): boolean {
+        return (
+            this.id === post.getId() &&
+            this.description === post.getDescription() &&
+            this.image === post.getImage() &&
+            this.comments.length === post.getComments().length && 
+            this.comments.every((comment, index) => comment.equals(post.getComments()[index]))
+        )
+    }
 }
+
+

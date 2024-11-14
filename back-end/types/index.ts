@@ -25,7 +25,7 @@ type ProfileInput = {
 };
 
 type UserInput = {
-    userName: string;
+    username: string;
     email: string;
     password: string;
 };

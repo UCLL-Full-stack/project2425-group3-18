@@ -1,28 +1,25 @@
+import { Location } from './location';
 import { Profile } from './profile';
 
 export class Kot {
-    private location: string;
+    private id?: number;
+    private location: Location;
     private price: number;
     private surfaceSpace: number;
     private profiles: Array<Profile>;
 
     constructor(kot: {
-        location: string;
+        id?: number;
+        location: Location;
         price: number;
         surfaceSpace: number;
         profiles: Array<Profile>;
     }) {
-        this.location = this.validateLocation(kot.location);
+        this.id = kot.id;
+        this.location = kot.location;
         this.price = this.validatePrice(kot.price);
         this.surfaceSpace = this.validateSurfaceSpace(kot.surfaceSpace);
         this.profiles = kot.profiles;
-    }
-
-    private validateLocation(location: string): string {
-        if (!location || location.trim() === '') {
-            throw new Error('Location cannot be empty');
-        }
-        return location;
     }
 
     private validatePrice(price: number): number {
@@ -39,12 +36,16 @@ export class Kot {
         return surfaceSpace;
     }
 
-    getLocation(): string {
+    getId(): number | undefined {
+        return this.id;
+    }
+
+    getLocation(): Location {
         return this.location;
     }
 
-    setLocation(location: string): void {
-        this.location = this.validateLocation(location);
+    setLocation(location: Location): void {
+        this.location = location;
     }
 
     getPrice(): number {
@@ -76,5 +77,15 @@ export class Kot {
 
     addProfile(profile: Profile): void {
         this.profiles.push(profile);
+    }
+
+    equals(kot: Kot): boolean {
+        return (
+            this.id === kot.getId() &&
+            this.location.equals(kot.getLocation()) &&
+            this.price === kot.getPrice() &&
+            this.profiles.length === kot.getProfiles().length &&
+            this.profiles.every((profile, index) => profile.equals(kot.getProfiles()[index]))
+        );
     }
 }
