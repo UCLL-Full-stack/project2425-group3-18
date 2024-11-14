@@ -1,15 +1,15 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import styles from "@/styles/register/Register.module.css";
-import Link from 'next/link';
+import Link from "next/link";
 
 const Register: React.FC = () => {
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [bio, setBio] = useState<string>('');
-  const [role, setRole] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
+  const [role, setRole] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const handleRegister = (e: FormEvent) => {
     e.preventDefault();
@@ -24,7 +24,8 @@ const Register: React.FC = () => {
     });
   };
 
-  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
+  const handleInputChange =
+    (setter: React.Dispatch<React.SetStateAction<string>>) =>
     (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setter(e.target.value);
     };
@@ -66,17 +67,6 @@ const Register: React.FC = () => {
           />
         </div>
         <div className={styles.inputGroup}>
-          <label>Role</label>
-          <input
-            type="text"
-            value={role}
-            onChange={handleInputChange(setRole)}
-            className={styles.input}
-            placeholder="Enter your role (e.g., lecturer, student)"
-            required
-          />
-        </div>
-        <div className={styles.inputGroup}>
           <label>Username</label>
           <input
             type="text"
@@ -109,11 +99,11 @@ const Register: React.FC = () => {
             required
           />
         </div>
-        <button type="submit" className={styles.button}>Register</button>
+        <button type="submit" className={styles.button}>
+          Register
+        </button>
         <div className={styles.loginLink}>
-          <Link href="/login">
-            Back to Login
-          </Link>
+          <Link href="/login">Back to Login</Link>
         </div>
       </form>
     </div>
