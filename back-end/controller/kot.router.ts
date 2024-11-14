@@ -1,5 +1,5 @@
 /**
- * @swagger
+* @swagger
  *   components:
  *    schemas:
  *      User:
@@ -15,7 +15,7 @@
  *              type: string
  *              description: The user's password.
  *            profile:
- *              type: object
+ *              $ref: '#/components/schemas/Profile'
  *              nullable: true
  *              description: The profile associated with the user.
  * 
@@ -44,8 +44,21 @@
  *                properties:
  *                  description:
  *                    type: string
+ *                    description: Description of the post.
  *                  image:
  *                    type: string
+ *                    description: Image URL associated with the post.
+ *                  comments:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        text:
+ *                          type: string
+ *                          description: Text content of the comment.
+ *                        post:
+ *                          type: string
+ *                          description: Associated post.
  *              description: List of posts made by the user.
  *            koten:
  *              type: array
@@ -79,8 +92,8 @@ const kotRouter = express.Router();
 
 /**
  * @swagger
- * /koten:
- *  get:
+/koten:
+ *   get:
  *      summary: Retrieve a list of koten.
  *      tags:
  *        - Koten
@@ -93,6 +106,22 @@ const kotRouter = express.Router();
  *                          type: array
  *                          items:
  *                              $ref: '#/components/schemas/Kot'
+ *                      example:
+ *                        - location: "Downtown Leuven"
+ *                          price: 600
+ *                          surfaceSpace: 25
+ *                          profiles:
+ *                            - firstName: "joe"
+ *                              lastName: "Johnson"
+ *                              bio: "Graduate student at KU Leuven"
+ *                              role: "User"
+ *                              user:
+ *                                userName: "alice123"
+ *                                email: "joe@example.com"
+ *                                password: "securePassword123"
+ *                                profile: null
+ *                              posts: []
+ *                              koten: []
  */
 kotRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {

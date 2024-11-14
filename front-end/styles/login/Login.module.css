@@ -10,7 +10,7 @@
 .title {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #0070f3;
+  color: #000000;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -29,6 +29,7 @@
 
 .inputGroup {
   margin-bottom: 15px;
+  margin-right: 1.5rem;
 }
 
 .input {
@@ -61,17 +62,17 @@
   background-color: #005bb5;
 }
 
-.registerLink {
+.signupLink {
   margin-top: 10px;
   text-align: center;
 }
 
-.registerLink a {
+.signupLink a {
   color: #0070f3;
   text-decoration: none;
   font-size: 14px;
 }
 
-.registerLink a:hover {
+.signupLink a:hover {
   text-decoration: underline;
 }
