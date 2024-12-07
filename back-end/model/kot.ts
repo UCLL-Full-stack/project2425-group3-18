@@ -1,6 +1,10 @@
 import { Location } from './location';
 import { Profile } from './profile';
-
+import {
+    Kot as KotPrisma,
+    Location as LocationPrisma,
+    Profile as ProfilePrisma,
+} from '@prisma/client';
 export class Kot {
     private id?: number;
     private location: Location;
@@ -87,5 +91,21 @@ export class Kot {
             this.profiles.length === kot.getProfiles().length &&
             this.profiles.every((profile, index) => profile.equals(kot.getProfiles()[index]))
         );
+    }
+
+    static from({
+        id,
+        location,
+        price,
+        surfaceSpace,
+        profiles,
+    }: KotPrisma & { location: LocationPrisma; profiles: ProfilePrisma[] }): Kot {
+        return new Kot({
+            id,
+            location: Location.from(location),
+            price,
+            surfaceSpace,
+            profiles: profiles.map((profile) => Profile.from(profile)),
+        });
     }
 }

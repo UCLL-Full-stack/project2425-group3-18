@@ -1,23 +1,26 @@
 import { Profile } from '../model/profile';
+import database from './prisma/database';
 
-const profiles: Profile[] = [];
-
-const getAllProfiles = (): Profile[] => {
-    return profiles;
+const getAllProfiles = async (): Promise<Profile[]> => {
+    try {
+        const profilesPrisma = await database.profile.findMany({
+            include: {
+                posts: true,
+                koten: true,
+            },
+        });
+        return profilesPrisma.map((profilePrisma) => Profile.from(profilePrisma))
+    } catch (error) {
+        throw new Error('Database error, see server log for more information.')
+    }
 };
 
-const createProfile = (profileData: Profile): Profile => {
-    const newProfile = new Profile({
-        firstName: profileData.getFirstName(),
-        lastName: profileData.getLastName(),
-        bio: profileData.getBio(),
-        role: profileData.getRole(),
-        user: profileData.getUser(),
-        posts: profileData.getPosts(),
-        koten: profileData.getKoten(),
-    });
-    profiles.push(newProfile);
-    return newProfile;
+const createProfile = async (profileData: Profile) => {
+    try {
+        await database.profile.create(profileData)
+    } catch (error) {
+        throw new Error('Database error, see server log for more information.')
+    }
 };
 
 export default {

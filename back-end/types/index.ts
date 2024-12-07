@@ -1,6 +1,13 @@
+enum role {
+    user = 'User',
+    moderator = 'Moderator',
+    admin = 'Admin',
+}
+
 type CommentInput = {
     text: string;
-    postId: number;
+    post: PostInput;
+    profile: ProfileInput;
 };
 
 type PostInput = {
@@ -10,25 +17,34 @@ type PostInput = {
 };
 
 type KotInput = {
-    location: string;
+    location: LocationInput;
     price: number;
     surfaceSpace: number;
-    profiles?: number[];
+    profiles?: ProfileInput[];
 };
 
 type ProfileInput = {
     firstName: string;
     lastName: string;
     bio: string;
-    role: string;
-    user: UserInput;
+    role: role;
+    posts: PostInput[];
+    koten: KotInput[];
 };
 
 type UserInput = {
     username: string;
     email: string;
     password: string;
+    profile?: ProfileInput;
 };
+
+type LocationInput = {
+    city: string;
+    street: string;
+    housenumber: number;
+    kot: KotInput;
+}
 
 export {
     CommentInput,

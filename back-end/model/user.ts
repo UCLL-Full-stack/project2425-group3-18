@@ -1,4 +1,5 @@
 import { Profile } from './profile';
+import { User as UserPrisma, Profile as ProfilePrisma } from '@prisma/client';
 
 export class User {
     private id?: number;
@@ -86,5 +87,21 @@ export class User {
             this.email === user.getEmail() &&
             this.password === user.getPassword()
         );
+    }
+
+    static from({
+        id,
+        username,
+        email,
+        password,
+        profile,
+    }: UserPrisma & { profile: ProfilePrisma }) {
+        return new User({
+            id,
+            username,
+            email,
+            password,
+            profile: Profile.from(profile),
+        });
     }
 }

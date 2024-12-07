@@ -1,22 +1,17 @@
 import { Post } from '../model/post';
-import { Comment } from '../model/comment';
+import database from './prisma/database';
 
-const post1 = new Post({
-    description: 'This is the first post.',
-    image: 'https://example.com/image1.jpg',
-    comments: [],
-});
-
-const post2 = new Post({
-    description: 'This is the second post.',
-    image: 'https://example.com/image2.jpg',
-    comments: [],
-});
-
-const posts: Post[] = [post1, post2];
-
-const getAllPosts = (): Post[] => {
-    return posts;
+const getAllPosts = async (): Promise<Post[]> => {
+    try {
+        const postsPrisma = await database.post.findMany({
+            include: {
+                comments: true,
+            },
+        });
+        return postsPrisma.map((postPrisma) => Post.from(postPrisma));
+    } catch (error) {
+        throw new Error('Database error, see server log for more information.');
+    }
 };
 
 export default {

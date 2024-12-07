@@ -1,4 +1,5 @@
 import { Comment } from './comment';
+import { Post as PostPrisma, Comment as CommentPrisma } from '@prisma/client';
 
 export class Post {
     private id?: number;
@@ -65,10 +66,16 @@ export class Post {
             this.id === post.getId() &&
             this.description === post.getDescription() &&
             this.image === post.getImage() &&
-            this.comments.length === post.getComments().length && 
+            this.comments.length === post.getComments().length &&
             this.comments.every((comment, index) => comment.equals(post.getComments()[index]))
-        )
+        );
+    }
+    static from({ id, description, image, comments }: PostPrisma & { comments: CommentPrisma[] }) {
+        return new Post({
+            id,
+            description,
+            image,
+            comments: comments.map((comment) => Comment.from(comment)),
+        });
     }
 }
-
-

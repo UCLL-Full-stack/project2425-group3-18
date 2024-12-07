@@ -1,4 +1,5 @@
 import { Kot } from './kot';
+import { Location as LocationPrisma, Kot as Kotprisma } from '@prisma/client';
 
 export class Location {
     private id?: number;
@@ -79,5 +80,15 @@ export class Location {
             this.housenumber === location.getHousenumber() &&
             this.kot.equals(location.getKot())
         );
+    }
+
+    static from({ id, city, street, housenumber, kot }: LocationPrisma & { kot: Kotprisma }) {
+        return new Location({
+            id,
+            city,
+            street,
+            housenumber,
+            kot: Kot.from(kot),
+        });
     }
 }

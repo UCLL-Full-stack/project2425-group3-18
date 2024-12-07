@@ -1,5 +1,10 @@
 import { Post } from './post';
 import { Profile } from './profile';
+import {
+    Comment as CommentPrisma,
+    Post as PostPrisma,
+    Profile as ProfilePrisma,
+} from '@prisma/client';
 
 export class Comment {
     private id?: number;
@@ -47,5 +52,19 @@ export class Comment {
             this.text === comment.getText() &&
             this.post.equals(comment.post)
         );
+    }
+
+    static from({
+        id,
+        text,
+        post,
+        profile,
+    }: CommentPrisma & { post: PostPrisma } & { profile: ProfilePrisma }): Comment {
+        return new Comment({
+            id,
+            text,
+            post: Post.from(post),
+            profile: Profile.from(profile),
+        });
     }
 }

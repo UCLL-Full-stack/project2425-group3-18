@@ -1,6 +1,12 @@
 import { Kot } from './kot';
 import { Post } from './post';
 import { User } from './user';
+import {
+    Profile as Profileprisma,
+    Kot as KotPrisma,
+    Post as PostPrisma,
+    User as UserPrisma,
+} from '@prisma/client';
 
 enum role {
     user = 'User',
@@ -14,7 +20,6 @@ export class Profile {
     private lastName: string;
     private bio: string;
     private role: role;
-    private user: User;
     private posts: Array<Post>;
     private koten: Array<Kot>;
 
@@ -24,7 +29,6 @@ export class Profile {
         lastName: string;
         bio: string;
         role: role;
-        user: User;
         posts: Array<Post>;
         koten: Array<Kot>;
     }) {
@@ -33,7 +37,6 @@ export class Profile {
         this.lastName = this.validateName(profile.lastName);
         this.bio = this.validateBio(profile.bio);
         this.role = this.validateRole(profile.role);
-        this.user = profile.user;
         this.posts = profile.posts;
         this.koten = profile.koten;
     }
@@ -95,14 +98,6 @@ export class Profile {
         this.role = this.validateRole(role);
     }
 
-    getUser(): User {
-        return this.user;
-    }
-
-    setUser(newUser: User): void {
-        this.user = newUser;
-    }
-
     getPosts(): Array<Post> {
         return this.posts;
     }
@@ -126,11 +121,30 @@ export class Profile {
             this.lastName === profile.getLastName() &&
             this.bio === profile.getBio() &&
             this.role === profile.getRole() &&
-            this.user.equals(profile.getUser()) &&
             this.posts.length === profile.getPosts().length &&
             this.posts.every((post, index) => post.equals(profile.getPosts()[index])) &&
             this.koten.length === profile.getKoten().length &&
             this.koten.every((kot, index) => kot.equals(profile.getKoten()[index]))
         );
+    }
+
+    static from({
+        id,
+        firstName,
+        lastName,
+        bio,
+        role,
+        posts,
+        koten,
+    }: Profileprisma & { user: UserPrisma } & { posts: PostPrisma[] } & { koten: KotPrisma[] }) {
+        return new Profile({
+            id,
+            firstName,
+            lastName,
+            bio,
+            role: role as role,
+            posts: posts.map((post) => Post.from(post)),
+            koten: koten.map((kot) => Kot.from(kot)),
+        });
     }
 }
