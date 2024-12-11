@@ -46,7 +46,6 @@ const PostDetail: React.FC = () => {
         <div className={styles.detailView}>
             {post && (
                 <div className={styles.postDetail_mainContent__N4m_W}>
-                    {/* Left Panel (Post Content) */}
                     <div
                         className={`${styles.leftPanel} ${showComments ? styles.shifted : ''}`}
                     >
@@ -70,7 +69,6 @@ const PostDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Right Panel (Comments) */}
                     {showComments && (
                         <div className={styles.rightPanel}>
                             <CommentSection

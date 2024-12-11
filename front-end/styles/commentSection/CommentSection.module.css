@@ -1,22 +1,22 @@
 .commentSection {
-    width: 90%; /* Take up the full width of the right panel */
+    width: 90%;
     margin-top: 10px;
-    margin-right: 2rem; /* Increased right margin */
+    margin-right: 2rem;
     padding: 1rem;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     animation: fadeIn 0.3s ease-in-out;
     display: flex;
-    flex-direction: column; /* Stack the content vertically */
-    max-height: 80vh; /* Limit the height to 80% of the viewport height */
+    flex-direction: column;
+    max-height: 80vh;
 }
 
 .commentList {
-    flex-grow: 1; /* Allow the comment list to take remaining space */
+    flex-grow: 1;
     margin-bottom: 1rem;
-    overflow-y: auto; /* Enable vertical scrolling */
-    max-height: 400px; /* Set a max height */
+    overflow-y: auto;
+    max-height: 400px;
 }
 
 .commentItem {
