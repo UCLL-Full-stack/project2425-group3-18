@@ -10,20 +10,17 @@ export class Kot {
     private location: Location;
     private price: number;
     private surfaceSpace: number;
-    private profiles: Array<Profile>;
 
     constructor(kot: {
         id?: number;
         location: Location;
         price: number;
         surfaceSpace: number;
-        profiles: Array<Profile>;
     }) {
         this.id = kot.id;
         this.location = kot.location;
         this.price = this.validatePrice(kot.price);
         this.surfaceSpace = this.validateSurfaceSpace(kot.surfaceSpace);
-        this.profiles = kot.profiles;
     }
 
     private validatePrice(price: number): number {
@@ -71,25 +68,11 @@ export class Kot {
         this.surfaceSpace = this.validateSurfaceSpace(surfaceSpace);
     }
 
-    getProfiles(): Array<Profile> {
-        return this.profiles;
-    }
-
-    setProfiles(profiles: Array<Profile>): void {
-        this.profiles = profiles;
-    }
-
-    addProfile(profile: Profile): void {
-        this.profiles.push(profile);
-    }
-
     equals(kot: Kot): boolean {
         return (
             this.id === kot.getId() &&
             this.location.equals(kot.getLocation()) &&
-            this.price === kot.getPrice() &&
-            this.profiles.length === kot.getProfiles().length &&
-            this.profiles.every((profile, index) => profile.equals(kot.getProfiles()[index]))
+            this.price === kot.getPrice()
         );
     }
 
@@ -98,14 +81,12 @@ export class Kot {
         location,
         price,
         surfaceSpace,
-        profiles,
-    }: KotPrisma & { location: LocationPrisma; profiles: ProfilePrisma[] }): Kot {
+    }: KotPrisma & { location: LocationPrisma;}) {
         return new Kot({
             id,
             location: Location.from(location),
             price,
             surfaceSpace,
-            profiles: profiles.map((profile) => Profile.from(profile)),
         });
     }
 }

@@ -8,15 +8,15 @@ export class User {
     private password: string;
     private profile: Profile | null;
 
-    constructor(user: { id?: number; userName: string; email: string; password: string }) {
+    constructor(user: { id?: number; username: string; email: string; password: string; profile: Profile | null }) {
         this.id = user.id;
-        this.username = this.validateUserName(user.userName);
+        this.username = this.validateUsername(user.username);
         this.email = this.validateEmail(user.email);
         this.password = this.validatePassword(user.password);
-        this.profile = null;
+        this.profile = user.profile;
     }
 
-    private validateUserName(userName: string): string {
+    private validateUsername(userName: string): string {
         if (!userName || userName.trim() === '') {
             throw new Error('UserName cannot be empty');
         }
@@ -49,8 +49,8 @@ export class User {
         return this.username;
     }
 
-    setUserName(userName: string): void {
-        this.username = this.validateUserName(userName);
+    setUsername(userName: string): void {
+        this.username = this.validateUsername(userName);
     }
 
     getEmail(): string {
@@ -95,13 +95,13 @@ export class User {
         email,
         password,
         profile,
-    }: UserPrisma & { profile: ProfilePrisma }) {
+    }: UserPrisma & { profile: ProfilePrisma | null }) {
         return new User({
             id,
             username,
             email,
             password,
-            profile: Profile.from(profile),
+            profile: profile ? Profile.from(profile) : null,
         });
     }
 }

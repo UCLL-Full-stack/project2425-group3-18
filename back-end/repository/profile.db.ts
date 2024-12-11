@@ -5,16 +5,25 @@ const getAllProfiles = async (): Promise<Profile[]> => {
     try {
         const profilesPrisma = await database.profile.findMany({
             include: {
-                posts: true,
-                koten: true,
+                posts: {
+                    include: {
+                        comments: true,
+                    },
+                },
+                koten: {
+                    include: {
+                        location: true,
+                    },
+                },
             },
         });
-        return profilesPrisma.map((profilePrisma) => Profile.from(profilePrisma))
+        return profilesPrisma.map((profilePrisma) => Profile.from(profilePrisma));
     } catch (error) {
-        throw new Error('Database error, see server log for more information.')
+        throw new Error('Database error, see server log for more information.');
     }
 };
 
+/*
 const createProfile = async (profileData: Profile) => {
     try {
         await database.profile.create(profileData)
@@ -22,8 +31,9 @@ const createProfile = async (profileData: Profile) => {
         throw new Error('Database error, see server log for more information.')
     }
 };
+*/
 
 export default {
     getAllProfiles,
-    createProfile,
+    //createProfile,
 };

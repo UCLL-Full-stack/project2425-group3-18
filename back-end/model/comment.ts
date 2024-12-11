@@ -9,14 +9,10 @@ import {
 export class Comment {
     private id?: number;
     private text: string;
-    private post: Post;
-    private profile: Profile;
 
-    constructor(comment: { id?: number; text: string; post: Post; profile: Profile }) {
+    constructor(comment: { id?: number; text: string;}) {
         this.id = comment.id;
         this.text = this.validateText(comment.text);
-        this.post = comment.post;
-        this.profile = comment.profile;
     }
 
     private validateText(text: string): string {
@@ -38,33 +34,20 @@ export class Comment {
         this.text = this.validateText(text);
     }
 
-    getPost(): Post {
-        return this.post;
-    }
-
-    getProfile(): Profile {
-        return this.profile;
-    }
-
     equals(comment: Comment): boolean {
         return (
             this.id === comment.getId() &&
-            this.text === comment.getText() &&
-            this.post.equals(comment.post)
+            this.text === comment.getText() 
         );
     }
 
     static from({
         id,
         text,
-        post,
-        profile,
-    }: CommentPrisma & { post: PostPrisma } & { profile: ProfilePrisma }): Comment {
+    }: CommentPrisma) {
         return new Comment({
             id,
             text,
-            post: Post.from(post),
-            profile: Profile.from(profile),
         });
     }
 }

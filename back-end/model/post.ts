@@ -70,7 +70,8 @@ export class Post {
             this.comments.every((comment, index) => comment.equals(post.getComments()[index]))
         );
     }
-    static from({ id, description, image, comments }: PostPrisma & { comments: CommentPrisma[] }) {
+    
+    static from({ id, description, image, comments}: PostPrisma & { comments: CommentPrisma[] }) {
         return new Post({
             id,
             description,

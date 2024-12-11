@@ -5,7 +5,8 @@ import {
     Profile as Profileprisma,
     Kot as KotPrisma,
     Post as PostPrisma,
-    User as UserPrisma,
+    Location as LocationPrisma,
+    Comment as CommentPrisma,
 } from '@prisma/client';
 
 enum role {
@@ -136,14 +137,14 @@ export class Profile {
         role,
         posts,
         koten,
-    }: Profileprisma & { user: UserPrisma } & { posts: PostPrisma[] } & { koten: KotPrisma[] }) {
+    }: Profileprisma & { posts: PostPrisma[] & {comments: CommentPrisma[]}; koten: KotPrisma[] & {location: LocationPrisma}}) {
         return new Profile({
             id,
             firstName,
             lastName,
             bio,
             role: role as role,
-            posts: posts.map((post) => Post.from(post)),
+            posts: posts.map((post) => Post.from(post, post.comments)),
             koten: koten.map((kot) => Kot.from(kot)),
         });
     }

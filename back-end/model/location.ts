@@ -1,25 +1,21 @@
-import { Kot } from './kot';
-import { Location as LocationPrisma, Kot as Kotprisma } from '@prisma/client';
+import { Location as LocationPrisma} from '@prisma/client';
 
 export class Location {
     private id?: number;
     private city: string;
     private street: string;
     private housenumber: number;
-    private kot: Kot;
 
     constructor(location: {
         id?: number;
         city: string;
         street: string;
         housenumber: number;
-        kot: Kot;
     }) {
         this.id = location.id;
         this.city = this.validateCity(location.city);
         this.street = this.validateStreet(location.street);
         this.housenumber = location.housenumber;
-        this.kot = location.kot;
     }
 
     private validateCity(city: string): string {
@@ -64,31 +60,21 @@ export class Location {
         this.housenumber = housenumber;
     }
 
-    getKot(): Kot {
-        return this.kot;
-    }
-
-    setKot(kot: Kot): void {
-        this.kot = kot;
-    }
-
     equals(location: Location): boolean {
         return (
             this.id === location.getId() &&
             this.city === location.getCity() &&
             this.street === location.getStreet() &&
-            this.housenumber === location.getHousenumber() &&
-            this.kot.equals(location.getKot())
+            this.housenumber === location.getHousenumber()
         );
     }
 
-    static from({ id, city, street, housenumber, kot }: LocationPrisma & { kot: Kotprisma }) {
+    static from({ id, city, street, housenumber}: LocationPrisma) {
         return new Location({
             id,
             city,
             street,
             housenumber,
-            kot: Kot.from(kot),
         });
     }
 }
