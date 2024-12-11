@@ -16,19 +16,21 @@ const ContentGrid: React.FC = () => {
     return (
         <div style={styles.grid}>
             {examplePosts.map((post) => (
-                <div key={post.postId} style={styles.card}>
+                <div
+                    key={post.postId}
+                    style={styles.card}
+                    onDoubleClick={() => viewDetails(post.postId)} // Double-click event on the entire card
+                >
                     <img
                         src={post.images[0]}
                         alt={post.title}
                         style={styles.image}
-                        onClick={(e) => e.stopPropagation()}
-                        onDoubleClick={() => viewDetails(post.postId)}
+                        onClick={(e) => e.stopPropagation()} // Prevent triggering the card double-click from the image
                     />
                     <h3>{post.title}</h3>
                     <p>{post.description}</p>
 
-                    <div style={styles.iconContainer}>
-                    </div>
+                    <div style={styles.iconContainer}></div>
                 </div>
             ))}
         </div>
@@ -48,7 +50,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         padding: "1rem",
         textAlign: "center",
         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-        cursor: "pointer",
+        cursor: "pointer", // This cursor applies when hovering over the entire card (including text)
     },
     image: {
         width: "100%",
@@ -56,6 +58,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         objectFit: "cover",
         borderRadius: "8px",
         marginBottom: "1rem",
+        cursor: "default", // No cursor change for the image itself
     },
     iconContainer: {
         display: "flex",
