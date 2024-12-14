@@ -1,0 +1,120 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .modal {
+    background-color: #fff;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.4s ease-out;
+    position: relative;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .header h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #999;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .closeButton:hover {
+    color: #007bff;
+  }
+  
+  .socialButtons {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .socialButton {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45%;
+    max-width: 120px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .socialButton:hover {
+    background-color: #f7f7f7;
+    transform: scale(1.05);
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+  
+  .socialButton span {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .socialButton:hover .icon {
+    filter: brightness(1.2);
+  }
+  
+  @media (max-width: 768px) {
+    .socialButton {
+      width: 48%;
+      margin-bottom: 10px;
+    }
+  }
+  
