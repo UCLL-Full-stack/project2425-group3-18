@@ -1,0 +1,21 @@
+GET /users
+GET /users/{userId}
+GET /users/{userEmail}
+POST /users
+DELETE /users/{userId}
+
+GET /profile/{userId}
+POST /profile/{userId} (Voeg profiel toe aan user)
+
+GET /kot
+POST /kot
+
+GET /comments/{postId} (Krijg comments van een post)
+POST /comments/{postId} (Post comment bij een post)
+DELETE /comments/{commentId} (eigen comment / admin kan comment verwijderen)
+
+GET /posts
+POST /post
+DELETE /post/{postId} (eigen post / admin kan posts verwijderen)
+optioneel: UPDATE /post/{postId}
+
