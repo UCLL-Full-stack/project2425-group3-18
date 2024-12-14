@@ -6,7 +6,8 @@
     "license": "ISC",
     "main": "app.ts",
     "prisma": {
-        "schema": "repository/prisma/schema.prisma"
+        "schema": "repository/prisma/schema.prisma",
+        "seed": "ts-node ./util/seed.ts"
     },
     "scripts": {
         "test": "jest",

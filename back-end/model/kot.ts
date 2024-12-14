@@ -1,5 +1,4 @@
 import { Location } from './location';
-import { Profile } from './profile';
 import { Kot as KotPrisma, Location as LocationPrisma } from '@prisma/client';
 export class Kot {
     private id?: number;
