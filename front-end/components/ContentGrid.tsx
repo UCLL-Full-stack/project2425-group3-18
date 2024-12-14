@@ -1,62 +1,36 @@
-import React, { useState } from "react";
-import CommentSection from "./CommentSection";
+import React from "react";
+import { useRouter } from "next/router";
 
 const ContentGrid: React.FC = () => {
-    const [comments, setComments] = useState<{ [key: number]: string[] }>({});
-    const [openPostId, setOpenPostId] = useState<number | null>(null);
-
     const examplePosts = [
-        { postId: 1, title: "Post 1", image: "/img/posts/kot1.jpg", description: "Example description 1" },
-        { postId: 2, title: "Post 2", image: "/img/posts/kot2.jpg", description: "Example description 2" },
+        { postId: 1, title: "Post 1", images: ["/img/posts/kot1.jpg", "/img/posts/kot1-2.jpg"], description: "Example description 1" },
+        { postId: 2, title: "Post 2", images: ["/img/posts/kot2.jpg", "/img/posts/kot2-2.jpg"], description: "Example description 2" },
     ];
 
-    const handleAddComment = (postId: number, newComment: string) => {
-        setComments((prevComments) => {
-            const updatedComments = { ...prevComments };
-            if (updatedComments[postId]) {
-                updatedComments[postId].push(newComment);
-            } else {
-                updatedComments[postId] = [newComment];
-            }
-            return updatedComments;
-        });
-    };
+    const router = useRouter();
 
-    const toggleCommentSection = (postId: number) => {
-        setOpenPostId(openPostId === postId ? null : postId);
+    const viewDetails = (postId: number) => {
+        router.push(`/post/${postId}`);
     };
 
     return (
         <div style={styles.grid}>
             {examplePosts.map((post) => (
-                <div key={post.postId} style={styles.card}>
-                    <img src={post.image} alt={post.title} style={styles.image} />
+                <div
+                    key={post.postId}
+                    style={styles.card}
+                    onDoubleClick={() => viewDetails(post.postId)} // Double-click event on the entire card
+                >
+                    <img
+                        src={post.images[0]}
+                        alt={post.title}
+                        style={styles.image}
+                        onClick={(e) => e.stopPropagation()} // Prevent triggering the card double-click from the image
+                    />
                     <h3>{post.title}</h3>
                     <p>{post.description}</p>
 
-                    <div style={styles.iconContainer}>
-                        <button style={styles.iconButton}>
-                            <img src="/img/like.png" alt="Like" style={styles.icon} />
-                        </button>
-                        <button
-                            style={styles.iconButton}
-                            onClick={() => toggleCommentSection(post.postId)}
-                        >
-                            <img
-                                src="/img/comment.png"
-                                alt="Comment"
-                                style={styles.icon}
-                            />
-                        </button>
-                    </div>
-
-                    {openPostId === post.postId && (
-                        <CommentSection
-                            postId={post.postId}
-                            onAddComment={handleAddComment}
-                            comments={comments[post.postId] || []}
-                        />
-                    )}
+                    <div style={styles.iconContainer}></div>
                 </div>
             ))}
         </div>
@@ -76,6 +50,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         padding: "1rem",
         textAlign: "center",
         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+        cursor: "pointer", // This cursor applies when hovering over the entire card (including text)
     },
     image: {
         width: "100%",
@@ -83,6 +58,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         objectFit: "cover",
         borderRadius: "8px",
         marginBottom: "1rem",
+        cursor: "default", // No cursor change for the image itself
     },
     iconContainer: {
         display: "flex",

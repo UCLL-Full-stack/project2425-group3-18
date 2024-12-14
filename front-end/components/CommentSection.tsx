@@ -1,29 +1,50 @@
 import React, { useState } from "react";
+import styles from "@/styles/commentSection/CommentSection.module.css";
 
 interface CommentSectionProps {
     postId: number;
-    comments: string[];
-    onAddComment: (postId: number, newComment: string) => void;
+    comments: { text: string; rating: number }[];
+    onAddComment: (postId: number, newComment: { text: string; rating: number }) => void;
 }
 
 const CommentSection: React.FC<CommentSectionProps> = ({ postId, comments, onAddComment }) => {
     const [newComment, setNewComment] = useState<string>("");
+    const [rating, setRating] = useState<number>(0);
 
     const handleAddComment = () => {
-        if (newComment.trim() !== "") {
-            onAddComment(postId, newComment);
+        if (newComment.trim() !== "" && rating > 0) {
+            onAddComment(postId, { text: newComment, rating });
             setNewComment("");
+            setRating(0);
+        }
+    };
+
+    const handleStarClick = (index: number) => {
+        if (rating === index + 1) {
+            setRating(0);
+        } else {
+            setRating(index + 1);
         }
     };
 
     return (
-        <div style={styles.commentSection}>
+        <div className={styles.commentSection}>
             <h4>Comments</h4>
-            <div style={styles.commentList}>
+            <div className={styles.commentList}>
                 {comments.length > 0 ? (
                     comments.map((comment, index) => (
-                        <div key={index} style={styles.commentItem}>
-                            <p>{comment}</p>
+                        <div key={index} className={styles.commentItem}>
+                            <p>{comment.text}</p>
+                            <div className={styles.rating}>
+                                {[...Array(5)].map((_, i) => (
+                                    <img
+                                        key={i}
+                                        src="/img/star.webp"
+                                        alt={`Star ${i + 1}`}
+                                        className={i < comment.rating ? styles.filledStar : styles.emptyStar}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     ))
                 ) : (
@@ -34,49 +55,24 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, comments, onAdd
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Add a comment..."
-                style={styles.commentInput}
+                className={styles.commentInput}
             />
-            <button onClick={handleAddComment} style={styles.addButton}>
+            <div className={styles.ratingContainer}>
+                {[...Array(5)].map((_, i) => (
+                    <img
+                        key={i}
+                        src="/img/star.webp"
+                        alt={`Star ${i + 1}`}
+                        className={i < rating ? styles.filledStar : styles.emptyStar}
+                        onClick={() => handleStarClick(i)}
+                    />
+                ))}
+            </div>
+            <button onClick={handleAddComment} className={styles.addButton}>
                 Add Comment
             </button>
         </div>
     );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-    commentSection: {
-        marginTop: "10px",
-        padding: "1rem",
-        backgroundColor: "#f9f9f9",
-        borderRadius: "8px",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    },
-    commentList: {
-        marginBottom: "1rem",
-        maxHeight: "200px",
-        overflowY: "auto",
-    },
-    commentItem: {
-        padding: "0.5rem",
-        borderBottom: "1px solid #ddd",
-    },
-    commentInput: {
-        width: "100%",
-        height: "50px",
-        padding: "0.5rem",
-        borderRadius: "8px",
-        border: "1px solid #ddd",
-        resize: "none",
-    },
-    addButton: {
-        marginTop: "10px",
-        padding: "0.5rem 1rem",
-        backgroundColor: "#007bff",
-        color: "#fff",
-        border: "none",
-        borderRadius: "4px",
-        cursor: "pointer",
-    },
 };
 
 export default CommentSection;
