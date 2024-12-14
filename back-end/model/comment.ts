@@ -1,9 +1,5 @@
-import { Post } from './post';
-import { Profile } from './profile';
 import {
     Comment as CommentPrisma,
-    Post as PostPrisma,
-    Profile as ProfilePrisma,
 } from '@prisma/client';
 
 export class Comment {

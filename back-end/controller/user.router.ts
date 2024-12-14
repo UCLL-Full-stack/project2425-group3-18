@@ -148,6 +148,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                                  type: string
  *                                  example: "Bad Client Request"
  */
+/*
 userRouter.post('/', (req: Request, res: Response) => {
     console.log('Request Method:', req.method);
     console.log('Request Headers:', req.headers);
@@ -175,5 +176,5 @@ userRouter.post('/', (req: Request, res: Response) => {
         res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
     }
 });
-
+*/
 export { userRouter };

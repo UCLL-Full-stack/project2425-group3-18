@@ -71,7 +71,7 @@ export class Post {
         );
     }
     
-    static from({ id, description, image, comments}: PostPrisma & { comments: CommentPrisma[] }) {
+    static from({ id, description, image, comments = []}: PostPrisma & { comments?: CommentPrisma[] }) {
         return new Post({
             id,
             description,

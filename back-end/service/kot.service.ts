@@ -1,7 +1,7 @@
 import { Kot } from '../model/kot';
 import kotDb from '../repository/kot.db';
 
-const getAllKoten = (): Kot[] => {
+const getAllKoten = (): Promise<Kot[]> => {
     return kotDb.getAllKoten();
 };
 

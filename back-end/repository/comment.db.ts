@@ -5,7 +5,6 @@ const getAllComments = async (): Promise<Comment[]> => {
     try {
         const commentsPrisma = await database.comment.findMany({
             include: {
-                post: true,
                 profile: true,
             },
         });

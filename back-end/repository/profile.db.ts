@@ -5,16 +5,8 @@ const getAllProfiles = async (): Promise<Profile[]> => {
     try {
         const profilesPrisma = await database.profile.findMany({
             include: {
-                posts: {
-                    include: {
-                        comments: true,
-                    },
-                },
-                koten: {
-                    include: {
-                        location: true,
-                    },
-                },
+                posts: true,
+                koten: true,
             },
         });
         return profilesPrisma.map((profilePrisma) => Profile.from(profilePrisma));
