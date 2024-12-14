@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
+import styles from "@/styles/contentGrid/contentGrid.module.css";
 
 const ContentGrid: React.FC = () => {
     const examplePosts = [
@@ -14,67 +15,27 @@ const ContentGrid: React.FC = () => {
     };
 
     return (
-        <div style={styles.grid}>
+        <div className={styles.grid}>
             {examplePosts.map((post) => (
                 <div
                     key={post.postId}
-                    style={styles.card}
-                    onDoubleClick={() => viewDetails(post.postId)} // Double-click event on the entire card
+                    className={styles.card}
+                    onClick={() => viewDetails(post.postId)}
                 >
                     <img
                         src={post.images[0]}
                         alt={post.title}
-                        style={styles.image}
-                        onClick={(e) => e.stopPropagation()} // Prevent triggering the card double-click from the image
+                        className={styles.image}
+                        onClick={(e) => viewDetails(post.postId)}
                     />
                     <h3>{post.title}</h3>
                     <p>{post.description}</p>
 
-                    <div style={styles.iconContainer}></div>
+                    <div className={styles.iconContainer}></div>
                 </div>
             ))}
         </div>
     );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-    grid: {
-        display: "grid",
-        gap: "1rem",
-        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-    },
-    card: {
-        backgroundColor: "#fff",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "1rem",
-        textAlign: "center",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-        cursor: "pointer", // This cursor applies when hovering over the entire card (including text)
-    },
-    image: {
-        width: "100%",
-        height: "200px",
-        objectFit: "cover",
-        borderRadius: "8px",
-        marginBottom: "1rem",
-        cursor: "default", // No cursor change for the image itself
-    },
-    iconContainer: {
-        display: "flex",
-        gap: "10px",
-        justifyContent: "center",
-        marginBottom: "1rem",
-    },
-    iconButton: {
-        background: "transparent",
-        border: "none",
-        cursor: "pointer",
-    },
-    icon: {
-        width: "24px",
-        height: "24px",
-    },
 };
 
 export default ContentGrid;
