@@ -1,19 +1,15 @@
 import { Location } from './location';
 import { Profile } from './profile';
-import {
-    Kot as KotPrisma,
-    Location as LocationPrisma,
-    Profile as ProfilePrisma,
-} from '@prisma/client';
+import { Kot as KotPrisma, Location as LocationPrisma } from '@prisma/client';
 export class Kot {
     private id?: number;
-    private location: Location;
+    private location: Location | null;
     private price: number;
     private surfaceSpace: number;
 
     constructor(kot: {
         id?: number;
-        location: Location;
+        location: Location | null;
         price: number;
         surfaceSpace: number;
     }) {
@@ -41,7 +37,7 @@ export class Kot {
         return this.id;
     }
 
-    getLocation(): Location {
+    getLocation(): Location | null {
         return this.location;
     }
 
@@ -69,22 +65,13 @@ export class Kot {
     }
 
     equals(kot: Kot): boolean {
-        return (
-            this.id === kot.getId() &&
-            this.location.equals(kot.getLocation()) &&
-            this.price === kot.getPrice()
-        );
+        return this.id === kot.getId() && this.price === kot.getPrice();
     }
 
-    static from({
-        id,
-        location,
-        price,
-        surfaceSpace,
-    }: KotPrisma & { location: LocationPrisma;}) {
+    static from({ id, location, price, surfaceSpace }: KotPrisma & { location?: LocationPrisma }) {
         return new Kot({
             id,
-            location: Location.from(location),
+            location: location ? Location.from(location) : null,
             price,
             surfaceSpace,
         });

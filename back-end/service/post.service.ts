@@ -1,7 +1,7 @@
 import { Post } from '../model/post';
 import postDb from '../repository/post.db';
 
-const getAllPosts = (): Post[] => {
+const getAllPosts = (): Promise<Post[]> => {
     return postDb.getAllPosts();
 };
 
