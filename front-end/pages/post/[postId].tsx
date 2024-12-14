@@ -16,14 +16,25 @@ const PostDetail: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log("PostId:", postId);  // Log the postId to check if it is coming from the URL
+
     if (postIdAsNumber) {
+      // Simulate fetching a post (this can be replaced with real API fetching logic)
       const fetchedPost = {
         postId: postIdAsNumber,
         title: "Social Media Post",
         images: ["/img/posts/kot1.jpg"],
         description: "A detailed description of the post content goes here. A few lines of text to explain the image."
       };
+      console.log("Fetched Post:", fetchedPost);  // Log the fetched post details
       setPost(fetchedPost);
+
+      // Load comments from sessionStorage if available
+      const storedComments = sessionStorage.getItem(`comments-${postIdAsNumber}`);
+      console.log("Stored comments:", storedComments);  // Log the retrieved comments from sessionStorage
+      if (storedComments) {
+        setComments(JSON.parse(storedComments));
+      }
     }
   }, [postIdAsNumber]);
 
@@ -35,28 +46,43 @@ const PostDetail: React.FC = () => {
       } else {
         updatedComments[postId] = [newComment];
       }
+
+      // Log the updated comments before saving to sessionStorage
+      console.log("Saving comments to sessionStorage:", updatedComments);
+
+      // Save the updated comments to sessionStorage
+      sessionStorage.setItem(`comments-${postId}`, JSON.stringify(updatedComments));
+
       return updatedComments;
     });
   };
 
   const toggleComments = () => {
     setShowComments((prev) => !prev);
+    console.log("Comments visibility toggled:", !showComments);  // Log the comment visibility state
   };
 
   const handleShareClick = () => {
     setShowModal(true);
+    console.log("Share modal opened.");  // Log when the share modal is opened
   };
 
   const closeModal = () => {
     setShowModal(false);
+    console.log("Share modal closed.");  // Log when the share modal is closed
   };
 
+  // Calculate average rating
   const calculateAverageRating = (comments: { text: string; rating: number }[]) => {
+    if (!comments.length) return 0; // Ensure no division by zero
     const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
-    return comments.length ? totalRating / comments.length : 0;
+    return totalRating / comments.length;
   };
 
-  const averageRating = comments[postIdAsNumber] ? calculateAverageRating(comments[postIdAsNumber]) : 0;
+  // Get the comments for the current postId
+  const currentPostComments = comments[postIdAsNumber] || [];
+  console.log("Current Post Comments:", currentPostComments);  // Log the current post's comments
+  const averageRating = calculateAverageRating(currentPostComments);
 
   return (
     <div className={styles.detailView}>
@@ -67,17 +93,17 @@ const PostDetail: React.FC = () => {
               <img src={post.images[0]} alt={post.title} className={styles.detailImage} />
             </div>
             <div className={styles.imageDescription}>
-                <h1 className={styles.title}>{post.title}</h1>
-                <div className={styles.ratingContainer}>
-                    {[...Array(5)].map((_, i) => (
-                        <img
-                        key={i}
-                        src="/img/star.webp"
-                        alt={`Star ${i + 1}`}
-                        className={i < Math.round(averageRating) ? styles.filledStar : styles.emptyStar}
-                        />
-                    ))}
-                </div>
+              <h1 className={styles.title}>{post.title}</h1>
+              <div className={styles.ratingContainer}>
+                {[...Array(5)].map((_, i) => (
+                  <img
+                    key={i}
+                    src="/img/star.webp"
+                    alt={`Star ${i + 1}`}
+                    className={i < Math.round(averageRating) ? styles.filledStar : styles.emptyStar}
+                  />
+                ))}
+              </div>
               <p className={styles.description}>{post.description}</p>
             </div>
 
@@ -96,7 +122,7 @@ const PostDetail: React.FC = () => {
               <CommentSection
                 postId={post.postId}
                 onAddComment={handleAddComment}
-                comments={comments[post.postId] || []}
+                comments={currentPostComments}
               />
             </div>
           )}
