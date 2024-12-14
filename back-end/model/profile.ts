@@ -144,7 +144,7 @@ export class Profile {
             lastName,
             bio,
             role: role as role,
-            posts: posts.map((post) => Post.from(post, post.comments)),
+            posts: posts.map((post) => Post.from(post)),
             koten: koten.map((kot) => Kot.from(kot)),
         });
     }
