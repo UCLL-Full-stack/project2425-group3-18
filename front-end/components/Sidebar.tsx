@@ -1,12 +1,16 @@
 import React from "react";
+import Link from "next/link";
+import styles from '@/styles/sidebar/sidebar.module.css';
 
 const Sidebar: React.FC = () => {
     return (
-        <nav style={styles.sidebar}>
-            <div style={styles.logo}>
-                <img src="/img/logo.png" alt="Rate My Kot Logo" style={styles.logoImage} />
+        <nav className={styles.sidebar}>
+            <div className={styles.logo}>
+                <Link href="/">
+                    <img src="/img/logo.png" alt="Rate My Kot Logo" className={styles.logoImage} />
+                </Link>
             </div>
-            <ul style={styles.navList}>
+            <ul className={styles.navList}>
                 <li>navlink1</li>
                 <li>navlink2</li>
                 <li>navlink3</li>
@@ -14,33 +18,6 @@ const Sidebar: React.FC = () => {
             </ul>
         </nav>
     );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-    sidebar: {
-        width: "150px",
-        backgroundColor: "#fff",
-        borderRight: "1px solid #ddd",
-        padding: "1rem",
-        display: "flex",
-        flexDirection: "column",
-    },
-    logo: {
-        marginBottom: "2rem",
-        textAlign: "center",
-    },
-    logoImage: {
-        maxWidth: "120px",
-        height: "auto",
-    },
-    navList: {
-        listStyle: "none",
-        padding: 0,
-        lineHeight: "2rem",
-        fontSize: "1rem",
-        fontWeight: "500",
-        color: "#555",
-    },
 };
 
 export default Sidebar;

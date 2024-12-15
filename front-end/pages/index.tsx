@@ -3,24 +3,21 @@ import Head from "next/head";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import ContentGrid from "@/components/ContentGrid";
+import Layout from "@/components/Layoutwrapper";
 
 const App: React.FC = () => {
     return (
-        <>
-            <Head>
-                <link rel="icon" href="/img/logo2.png" />
-                <title>Rate My Kot</title>
-            </Head>
-            <div style={styles.container}>
-                <Sidebar />
-                <div style={styles.mainContent}>
-                    <Header />
-                    <ContentGrid />
-                </div>
-            </div>
-        </>
+      <>
+        <Head>
+          <link rel="icon" href="/img/logo2.png" />
+          <title>Rate My Kot</title>
+        </Head>
+        <Layout>
+          <ContentGrid />
+        </Layout>
+      </>
     );
-};
+  };
 
 const styles: { [key: string]: React.CSSProperties } = {
     container: {
