@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import styles from '@/styles/header/header.module.css';
+import postButtonStyles from '@/styles/buttons/AddPostButton.module.css';
 
 const Header: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -16,13 +17,22 @@ const Header: React.FC = () => {
 
     return (
         <header className={styles.header}>
+            <div className={styles.leftSection}>
+                {/* Make a Post Button */}
+                <Link href="/addpost">
+                    <button className={`${styles.sharedButton} ${postButtonStyles.makePostButton}`}>
+                        Make a Post
+                    </button>
+                </Link>
+            </div>
+            
             <div className={styles.searchBarContainer}>
                 <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        placeholder="Search..."
+                        placeholder="Search a post..."
                         className={styles.searchInput}
                     />
                     <button type="submit" className={styles.searchButton}>
@@ -30,6 +40,7 @@ const Header: React.FC = () => {
                     </button>
                 </form>
             </div>
+
             <div className={styles.userMenu}>
                 <ul className={styles.navList}>
                     <li>Profile</li>

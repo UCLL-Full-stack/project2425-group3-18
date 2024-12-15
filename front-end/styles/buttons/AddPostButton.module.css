@@ -1,0 +1,25 @@
+.sharedButton {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+}
+
+.makePostButton {
+    background: rgb(0, 90, 224);
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.4s ease, color 0.4s ease, border 0.4s ease, text-decoration-color 0.4s ease;
+    margin-right: 1rem;
+}
+
+.makePostButton:hover {
+    background: rgb(85, 170, 255);
+    color: black;
+    border-radius: 4px;
+}
+
