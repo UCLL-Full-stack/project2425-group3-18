@@ -1,9 +1,10 @@
 .detailView {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
     font-family: 'Arial', sans-serif;
     background-color: #fff;
@@ -13,24 +14,21 @@
 
 .postDetail_mainContent__N4m_W {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: flex-start;
     width: 100%;
+    max-width: 900px;
     transition: transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
-    max-width: 900px;
-}
-
-.postDetail_mainContent__N4m_W.shifted {
-    transform: translateX(-40px);
-    justify-content: flex-start;
+    gap: 20px;
 }
 
 .leftPanel {
+    flex: 3;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
+    gap: 20px;
     width: 100%;
     transition: transform 0.5s ease-in-out;
 }
@@ -44,7 +42,6 @@
     background-color: #f4f4f4;
     position: relative;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
 }
 
 .detailImage {
@@ -56,7 +53,6 @@
 
 .imageDescription {
     width: 100%;
-    padding: 10px 20px;
     text-align: center;
 }
 
@@ -69,51 +65,48 @@
     transition: color 0.3s ease;
 }
 
-.postDetail_ratingContainer__Py6I_ {
-    display: flex;
-    margin-top: 10px;
-    flex-wrap: nowrap;
-    justify-content: center;
-    flex-direction: row;
-}
-
-.filledStar {
-    width: 18px;
-    height: 18px;
-    margin-right: 2px;
-    filter: brightness(1);
-    width: 2rem;
-    height: 2rem;
-}
-
-.emptyStar {
-    width: 18px;
-    height: 18px;
-    margin-right: 2px;
-    filter: brightness(0.5);
-    width: 2rem;
-    height: 2rem;
-}
-
 .title:hover {
     color: #007bff;
 }
 
+.ratingContainer {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.filledStar,
+.emptyStar {
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    transition: filter 0.3s ease;
+}
+
+.filledStar {
+    filter: brightness(1);
+}
+
+.emptyStar {
+    filter: brightness(0.5);
+}
+
 .description {
-    font-size: 14px;
-    color: #777;
+    font-size: 16px;
+    color: #555;
     line-height: 1.6;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .iconContainer {
-    width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    width: 100%;
     margin-top: 15px;
     padding-top: 10px;
-    border-top: 2px solid #eaeaea;
+    border-top: 1px solid #eaeaea;
+    gap: 10px;
 }
 
 .iconButton {
@@ -123,11 +116,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    transition: transform 0.6s ease, background-color 0.6s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .iconButton:hover {
@@ -136,8 +129,9 @@
 }
 
 .icon {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
+    transition: filter 0.3s ease;
 }
 
 .iconButton:hover .icon {
@@ -145,14 +139,13 @@
 }
 
 .rightPanel {
-    width: 100%;
+    flex: 1;
+    max-width: 350px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    transition: width 0.5s ease-in-out;
-    max-width: 350px;
-    margin-left: 20px;
+    gap: 20px;
 }
 
 .commentSection {
@@ -163,12 +156,6 @@
     background-color: #f9f9f9;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-    transition: max-height 0.3s ease, padding 0.3s ease;
-}
-
-.commentSection {
-    margin-top: 20px;
 }
 
 .commentItem {
@@ -180,6 +167,8 @@
     padding: 10px;
     margin-top: 10px;
     font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
 .addButton {
@@ -189,6 +178,8 @@
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
 .addButton:hover {
@@ -199,6 +190,7 @@
     .postDetail_mainContent__N4m_W {
         flex-direction: column;
         align-items: center;
+        gap: 20px;
     }
 
     .leftPanel {
@@ -207,10 +199,15 @@
 
     .rightPanel {
         width: 100%;
-        margin-left: 0;
+        max-width: none;
     }
 
     .imageContainer {
         max-width: 100%;
+    }
+
+    .iconContainer {
+        justify-content: center;
+        gap: 15px;
     }
 }

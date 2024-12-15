@@ -1,0 +1,33 @@
+.sidebar {
+    width: 200px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.logoImage {
+    max-width: 100px;
+    height: auto;
+}
+
+.navList {
+    list-style: none;
+    padding: 0;
+    line-height: 2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555;
+    justify-items: center;
+}

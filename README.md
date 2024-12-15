@@ -5,4 +5,11 @@ To get started, open the Readme.md files in the analysis, back-end and front-end
 
 Change this readme file to describe your project, change the title and fill in your name below.
 
-### \<Student 1 name\> / \<Student 2 name\>
+### \Daan Hoeven\> / \<Thomas Van den houdt\>
+
+Om de backend te runnen:
+
+-npm i
+-npx prisma migrate dev
+-npx prisma db seed
+-npm start

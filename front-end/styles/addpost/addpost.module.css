@@ -1,0 +1,115 @@
+/* Container styles for the form */
+.container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styles */
+.title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Form styles */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Field styles for inputs */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Textarea styles */
+.textarea {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* File input styles */
+.fileInput {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+/* Submit button styles */
+.submitButton {
+    padding: 0.8rem 1.5rem;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.submitButton:hover {
+    background-color: #0056b3;
+}
+
+/* Image preview container: flex display with centered alignment */
+.imagePreviewContainer {
+    display: flex;
+    justify-content: center; /* Center images horizontally */
+    flex-wrap: wrap; /* Allow images to wrap to the next line */
+    gap: 1rem; /* Space between images */
+    margin-top: 1rem;
+}
+
+/* Styles for each added image */
+.addedImage {
+    width: 50px;
+    height: 50px;
+    object-fit: cover; /* Ensure images maintain their aspect ratio */
+    border-radius: 4px; /* Rounded corners for images */
+    border: 1px solid #ccc; /* Light border around the images */
+}
+
+/* Button styles */
+.sharedButton {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+}
+
+/* Styles for image preview item */
+.imagePreviewItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center align image and file name */
+}
+
+/* Image preview styles */
+.imagePreview {
+    width: 100px; /* Set width of preview image */
+    height: 100px; /* Set height of preview image */
+    object-fit: cover; /* Ensures aspect ratio is maintained */
+    margin-bottom: 5px;
+}
+
+/* Image name link styles */
+.imageName {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 14px;
+}
+
+.imageName:hover {
+    text-decoration: underline;
+}
