@@ -11,13 +11,13 @@ async function main() {
 
     const user1 = await prisma.user.create({
         data: {
-            username: 'Buuuldog',
             email: 'thomas.vandenhoudt@gmail.com',
+            firstName: 'Thomas',
+            lastName: 'Van den houdt',
             password: 'thomas123',
             profile: {
                 create: {
-                    firstName: 'Thomas',
-                    lastName: 'Van den houdt',
+                    username: 'Buuuldog',
                     bio: 'just a user',
                     role: 'User',
                     posts: {
@@ -49,13 +49,13 @@ async function main() {
     });
     const user2 = await prisma.user.create({
         data: {
-            username: 'DaanGamemeneer',
+            firstName: 'Daan',
+            lastName: 'Hoeven',
             email: 'daan.hoeven@gmail.com',
             password: 'daan123',
             profile: {
                 create: {
-                    firstName: 'Daan',
-                    lastName: 'Hoeven',
+                    username: 'DaanGamemeneer',
                     bio: 'just a user',
                     role: 'User',
                     posts: {
@@ -99,13 +99,13 @@ async function main() {
     });
     const user3 = await prisma.user.create({
         data: {
-            username: 'Kotenmaster',
+            firstName: 'Harry',
+            lastName: 'Potter',
             email: 'koten.master@gmail.com',
             password: 'kotenmaster123',
             profile: {
                 create: {
-                    firstName: 'Harry',
-                    lastName: 'Potter',
+                    username: 'Kotenmaster',
                     bio: 'The admin of this site',
                     role: 'Admin',
                     koten: {
@@ -140,13 +140,13 @@ async function main() {
     });
     const user4 = await prisma.user.create({
         data: {
-            username: 'Kotenmoderator',
+            firstName: 'Percy',
+            lastName: 'Jackson',
             email: 'koten.moderator@gmail.com',
             password: 'kotenmoderator123',
             profile: {
                 create: {
-                    firstName: 'Percy',
-                    lastName: 'Jackson',
+                    username: 'Kotenmoderator',
                     bio: 'A moderator of this site',
                     role: 'Moderator',
                     koten: {

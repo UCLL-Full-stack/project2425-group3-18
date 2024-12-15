@@ -1,10 +1,6 @@
 import { Kot } from './kot';
 import { Post } from './post';
-import {
-    Profile as Profileprisma,
-    Kot as KotPrisma,
-    Post as PostPrisma,
-} from '@prisma/client';
+import { Profile as Profileprisma, Kot as KotPrisma, Post as PostPrisma } from '@prisma/client';
 
 enum role {
     user = 'User',
@@ -14,29 +10,15 @@ enum role {
 
 export class Profile {
     private id?: number;
-    private firstName: string;
-    private lastName: string;
+    private username: string;
     private bio: string;
     private role: role;
-    private posts: Array<Post>;
-    private koten: Array<Kot>;
 
-    constructor(profile: {
-        id?: number;
-        firstName: string;
-        lastName: string;
-        bio: string;
-        role: role;
-        posts: Array<Post>;
-        koten: Array<Kot>;
-    }) {
+    constructor(profile: { id?: number; username: string; bio: string; role: role }) {
         this.id = profile.id;
-        this.firstName = this.validateName(profile.firstName);
-        this.lastName = this.validateName(profile.lastName);
+        this.username = this.validateName(profile.username);
         this.bio = this.validateBio(profile.bio);
         this.role = this.validateRole(profile.role);
-        this.posts = profile.posts;
-        this.koten = profile.koten;
     }
 
     private validateName(name: string): string {
@@ -64,20 +46,12 @@ export class Profile {
         return this.id;
     }
 
-    getFirstName(): string {
-        return this.firstName;
+    getUsername(): string {
+        return this.username;
     }
 
-    setFirstName(firstName: string): void {
-        this.firstName = this.validateName(firstName);
-    }
-
-    getLastName(): string {
-        return this.lastName;
-    }
-
-    setLastName(lastName: string): void {
-        this.lastName = this.validateName(lastName);
+    setUsername(userName: string): void {
+        this.username = this.validateName(userName);
     }
 
     getBio(): string {
@@ -96,53 +70,21 @@ export class Profile {
         this.role = this.validateRole(role);
     }
 
-    getPosts(): Array<Post> {
-        return this.posts;
-    }
-
-    addPost(post: Post): void {
-        this.posts.push(post);
-    }
-
-    getKoten(): Array<Kot> {
-        return this.koten;
-    }
-
-    addKot(kot: Kot): void {
-        this.koten.push(kot);
-    }
-
     equals(profile: Profile): boolean {
         return (
             this.id === profile.getId() &&
-            this.firstName === profile.getFirstName() &&
-            this.lastName === profile.getLastName() &&
+            this.username === profile.getUsername() &&
             this.bio === profile.getBio() &&
-            this.role === profile.getRole() &&
-            this.posts.length === profile.getPosts().length &&
-            this.posts.every((post, index) => post.equals(profile.getPosts()[index])) &&
-            this.koten.length === profile.getKoten().length &&
-            this.koten.every((kot, index) => kot.equals(profile.getKoten()[index]))
+            this.role === profile.getRole()
         );
     }
 
-    static from({
-        id,
-        firstName,
-        lastName,
-        bio,
-        role,
-        posts = [],
-        koten = [],
-    }: Profileprisma & { posts?: PostPrisma[]; koten?: KotPrisma[] }) {
+    static from({ id, username, bio, role }: Profileprisma) {
         return new Profile({
             id,
-            firstName,
-            lastName,
+            username,
             bio,
             role: role as role,
-            posts: posts.map((post) => Post.from(post)),
-            koten: koten.map((kot) => Kot.from(kot)),
         });
     }
 }

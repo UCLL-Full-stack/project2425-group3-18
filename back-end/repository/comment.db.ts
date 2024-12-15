@@ -6,7 +6,12 @@ const getAllComments = async (): Promise<Comment[]> => {
         const commentsPrisma = await database.comment.findMany({
             include: {
                 profile: true,
-            },
+                post: {
+                    include: {
+                        profile: true,
+                    }
+                },
+            }
         });
         return commentsPrisma.map((commentPrisma) => Comment.from(commentPrisma));
     } catch (error) {

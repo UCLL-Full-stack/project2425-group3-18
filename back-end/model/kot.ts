@@ -1,21 +1,29 @@
 import { Location } from './location';
-import { Kot as KotPrisma, Location as LocationPrisma } from '@prisma/client';
+import { Profile } from './profile';
+import {
+    Kot as KotPrisma,
+    Location as LocationPrisma,
+    Profile as ProfilePrisma,
+} from '@prisma/client';
 export class Kot {
     private id?: number;
     private location: Location | null;
     private price: number;
     private surfaceSpace: number;
+    private profiles: Profile[];
 
     constructor(kot: {
         id?: number;
         location: Location | null;
         price: number;
         surfaceSpace: number;
+        profiles: Profile[];
     }) {
         this.id = kot.id;
         this.location = kot.location;
         this.price = this.validatePrice(kot.price);
         this.surfaceSpace = this.validateSurfaceSpace(kot.surfaceSpace);
+        this.profiles = kot.profiles;
     }
 
     private validatePrice(price: number): number {
@@ -63,16 +71,34 @@ export class Kot {
         this.surfaceSpace = this.validateSurfaceSpace(surfaceSpace);
     }
 
-    equals(kot: Kot): boolean {
-        return this.id === kot.getId() && this.price === kot.getPrice();
+    getProfile(): Profile[] {
+        return this.profiles;
     }
 
-    static from({ id, location, price, surfaceSpace }: KotPrisma & { location?: LocationPrisma }) {
+    addProfile(profile: Profile): void {
+        this.profiles.push(profile)
+    }
+
+    equals(kot: Kot): boolean {
+        return (
+            this.id === kot.getId() &&
+            this.price === kot.getPrice()
+        );
+    }
+
+    static from({
+        id,
+        location,
+        price,
+        surfaceSpace,
+        profiles,
+    }: KotPrisma & { location?: LocationPrisma; profiles: ProfilePrisma[] }) {
         return new Kot({
             id,
             location: location ? Location.from(location) : null,
             price,
             surfaceSpace,
+            profiles: profiles.map((profile) => Profile.from(profile)),
         });
     }
 }

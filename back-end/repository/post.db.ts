@@ -6,6 +6,7 @@ const getAllPosts = async (): Promise<Post[]> => {
         const postsPrisma = await database.post.findMany({
             include: {
                 comments: true,
+                profile: true,
             },
         });
         return postsPrisma.map((postPrisma) => Post.from(postPrisma));

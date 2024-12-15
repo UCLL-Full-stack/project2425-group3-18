@@ -1,22 +1,25 @@
-import { Comment } from './comment';
-import { Post as PostPrisma, Comment as CommentPrisma } from '@prisma/client';
+import { Profile } from './profile';
+import {
+    Post as PostPrisma,
+    Profile as ProfilePrisma,
+} from '@prisma/client';
 
 export class Post {
     private id?: number;
     private description: string;
     private image: string;
-    private comments: Array<Comment>;
+    private profile: Profile | undefined;
 
     constructor(post: {
         id?: number;
         description: string;
         image: string;
-        comments: Array<Comment>;
+        profile: Profile | undefined;
     }) {
         this.id = post.id;
         this.description = this.validateDescription(post.description);
         this.image = this.validateImage(post.image);
-        this.comments = post.comments || [];
+        this.profile = post.profile;
     }
 
     private validateDescription(description: string): string {
@@ -53,30 +56,33 @@ export class Post {
         this.image = this.validateImage(image);
     }
 
-    getComments(): Array<Comment> {
-        return this.comments;
+    getProfile(): Profile | undefined {
+        return this.profile;
     }
 
-    setComments(comments: Array<Comment>): void {
-        this.comments = comments;
+    setProfile(profile: Profile): void {
+        this.profile = profile;
     }
 
     equals(post: Post): boolean {
         return (
             this.id === post.getId() &&
             this.description === post.getDescription() &&
-            this.image === post.getImage() &&
-            this.comments.length === post.getComments().length &&
-            this.comments.every((comment, index) => comment.equals(post.getComments()[index]))
+            this.image === post.getImage() 
         );
     }
-    
-    static from({ id, description, image, comments = []}: PostPrisma & { comments?: CommentPrisma[] }) {
+
+    static from({
+        id,
+        description,
+        image,
+        profile,
+    }: PostPrisma & { profile: ProfilePrisma | null }) {
         return new Post({
             id,
             description,
             image,
-            comments: comments.map((comment) => Comment.from(comment)),
+            profile: profile ? Profile.from(profile): undefined, 
         });
     }
 }

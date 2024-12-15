@@ -6,6 +6,7 @@ const getAllKoten = async (): Promise<Kot[]> => {
         const kotenPrisma = await database.kot.findMany({
             include: {
                 location: true,
+                profiles: true,
             },
         });
         return kotenPrisma.map((kotPrisma) => Kot.from(kotPrisma));

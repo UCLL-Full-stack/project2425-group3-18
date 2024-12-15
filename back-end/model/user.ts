@@ -3,24 +3,33 @@ import { User as UserPrisma, Profile as ProfilePrisma } from '@prisma/client';
 
 export class User {
     private id?: number;
-    private username: string;
+    private firstName: string;
+    private lastName: string;
     private email: string;
     private password: string;
     private profile: Profile | null;
 
-    constructor(user: { id?: number; username: string; email: string; password: string; profile: Profile | null }) {
+    constructor(user: {
+        id?: number;
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        profile: Profile | null;
+    }) {
         this.id = user.id;
-        this.username = this.validateUsername(user.username);
+        this.firstName = this.validateName(user.firstName);
+        this.lastName = this.validateName(user.lastName);
         this.email = this.validateEmail(user.email);
         this.password = this.validatePassword(user.password);
         this.profile = user.profile;
     }
 
-    private validateUsername(userName: string): string {
-        if (!userName || userName.trim() === '') {
-            throw new Error('UserName cannot be empty');
+    private validateName(name: string): string {
+        if (!name || name.trim() === '') {
+            throw new Error('Name cannot be empty');
         }
-        return userName;
+        return name;
     }
 
     private validateEmail(email: string): string {
@@ -45,12 +54,20 @@ export class User {
         return this.id;
     }
 
-    getUsername(): string {
-        return this.username;
+    getFirstName(): string {
+        return this.firstName;
     }
 
-    setUsername(userName: string): void {
-        this.username = this.validateUsername(userName);
+    setFirstName(firstName: string): void {
+        this.firstName = this.validateName(firstName);
+    }
+
+    getLastName(): string {
+        return this.lastName;
+    }
+
+    setLastName(lastName: string): void {
+        this.lastName = this.validateName(lastName);
     }
 
     getEmail(): string {
@@ -83,7 +100,8 @@ export class User {
     equals(user: User): boolean {
         return (
             this.id === user.getId() &&
-            this.username === user.getUsername() &&
+            this.firstName === user.getLastName() &&
+            this.lastName === user.getLastName()&&
             this.email === user.getEmail() &&
             this.password === user.getPassword()
         );
@@ -91,14 +109,16 @@ export class User {
 
     static from({
         id,
-        username,
+        firstName,
+        lastName,
         email,
         password,
         profile,
     }: UserPrisma & { profile: ProfilePrisma | null }) {
         return new User({
             id,
-            username,
+            firstName,
+            lastName,
             email,
             password,
             profile: profile ? Profile.from(profile) : null,
