@@ -7,7 +7,7 @@ export class User {
     private lastName: string;
     private email: string;
     private password: string;
-    private profile: Profile | null;
+    private profile?: Profile | null;
 
     constructor(user: {
         id?: number;
@@ -15,14 +15,14 @@ export class User {
         lastName: string;
         email: string;
         password: string;
-        profile: Profile | null;
+        profile?: Profile | null;
     }) {
         this.id = user.id;
         this.firstName = this.validateName(user.firstName);
         this.lastName = this.validateName(user.lastName);
         this.email = this.validateEmail(user.email);
         this.password = this.validatePassword(user.password);
-        this.profile = user.profile;
+        user.profile ? this.profile = user.profile : null;
     }
 
     private validateName(name: string): string {
@@ -86,7 +86,7 @@ export class User {
         this.password = this.validatePassword(password);
     }
 
-    getProfile(): Profile | null {
+    getProfile(): Profile | null | undefined {
         return this.profile;
     }
 

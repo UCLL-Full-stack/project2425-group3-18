@@ -5,9 +5,12 @@
  *     User:
  *       type: object
  *       properties:
- *         userName:
+ *         firstName:
  *           type: string
- *           description: The user's name.
+ *           description: First name of the profile user.
+ *         lastName:
+ *           type: string
+ *           description: Last name of the profile user.
  *         email:
  *           type: string
  *           description: The user's email address.
@@ -21,45 +24,19 @@
  *     Profile:
  *       type: object
  *       properties:
- *         firstName:
+ *         userName:
  *           type: string
- *           description: First name of the profile user.
- *         lastName:
- *           type: string
- *           description: Last name of the profile user.
+ *           description: The user's name.
  *         bio:
  *           type: string
  *           description: Bio of the profile user.
  *         role:
  *           type: string
  *           description: Role of the user in the platform.
- *         user:
- *           $ref: '#/components/schemas/User'
- *           description: The user associated with this profile.
- *         posts:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               description:
- *                 type: string
- *                 description: Description of the post.
- *               image:
- *                 type: string
- *                 description: Image URL of the post.
- *           description: List of posts made by the user.
- *         koten:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Kot'
- *           description: List of koten associated with the profile.
  */
-
 import express, { Request, Response, NextFunction } from 'express';
 import userService from '../service/user.service';
-import { ProfileInput, UserInput } from '../types';
-import profileService from '../service/profile.service';
-
+import { UserInput } from '../types';
 const userRouter = express.Router();
 
 /**
@@ -92,11 +69,11 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  * @swagger
  * /users:
  *  post:
- *      summary: Create a new user and associated profile.
+ *      summary: Create a new user
  *      tags:
  *        - Users
  *      requestBody:
- *          description: User and profile data
+ *          description: User 
  *          required: true
  *          content:
  *              application/json:
@@ -105,23 +82,15 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                      properties:
  *                          user:
  *                              $ref: '#/components/schemas/User'
- *                          profile:
- *                              $ref: '#/components/schemas/Profile'
  *                  example:
  *                      user:
- *                          userName: "john_doe"
- *                          email: "john@example.com"
- *                          password: "securePassword123"
- *                      profile:
  *                          firstName: "John"
  *                          lastName: "Doe"
- *                          bio: "Software Developer"
- *                          role: "User"
- *                          posts: []
- *                          koten: []
+ *                          email: "john@example.com"
+ *                          password: "securePassword123"
  *      responses:
  *          200:
- *              description: User and profile created successfully.
+ *              description: User created successfully.
  *              content:
  *                  application/json:
  *                      schema:
@@ -129,11 +98,9 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: "User and profile created successfully"
+ *                                  example: "User created successfully"
  *                              user:
  *                                  $ref: '#/components/schemas/User'
- *                              profile:
- *                                  $ref: '#/components/schemas/Profile'
  *          400:
  *              description: Bad client request.
  *              content:
@@ -148,33 +115,25 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                                  type: string
  *                                  example: "Bad Client Request"
  */
-/*
-userRouter.post('/', (req: Request, res: Response) => {
-    console.log('Request Method:', req.method);
-    console.log('Request Headers:', req.headers);
-    console.log('Request Body:', req.body);
+userRouter.post('/', async (req: Request, res: Response) => {
     try {
-        if (!req.body.user  || !req.body.profile) {
+        if (!req.body.user) {
             return res.status(400).json({
                 status: 'error',
-                errorMessage: 'Missing user or profile data in request body',
+                errorMessage: 'Missing user data in request body',
             });
         }
         const user: UserInput = req.body.user;
-        const profile: ProfileInput = req.body.profile;
-
-        const createdUser = userService.createUser(user);
-        const createdProfile = profileService.createProfile(profile, user.email);
+        const createdUser = await userService.createNewUser(user);
 
         res.status(200).json({
-            message: 'User and profile created successfully',
+            message: 'User created successfully',
             user: createdUser,
-            profile: createdProfile,
         });
     } catch (error) {
-        console.error('Error creating user and profile:', error);
+        console.error('Error creating user: ', error);
         res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
     }
 });
-*/
+
 export { userRouter };

@@ -24,16 +24,14 @@ type KotInput = {
 };
 
 type ProfileInput = {
-    firstName: string;
-    lastName: string;
+    username: string;
     bio: string;
     role: role;
-    posts: PostInput[];
-    koten: KotInput[];
 };
 
 type UserInput = {
-    username: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
     profile?: ProfileInput;
