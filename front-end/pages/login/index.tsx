@@ -1,93 +1,56 @@
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { useRouter } from 'next/router'; // Import useRouter for redirection
+import { useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from "next/router";
 import styles from "@/styles/login/Login.module.css";
-import UserService from '@/services/UserService';
+import UserService from "@/services/UserService";
+import { User } from "@/types";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [loginMessage, setLoginMessage] = useState<string>('');
-  const [users, setUsers] = useState<Array<{ 
-    firstName: string; 
-    lastName: string; 
-    email: string; 
-    password: string; 
-    profile: { 
-      username: string; 
-      bio: string; 
-      role: string; 
-    }; 
-  }>>([]);
-  
-  const router = useRouter(); // Initialize useRouter for navigation
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const router = useRouter();
 
-  // Fetch all users (could be replaced by a more robust method)
-  const getAllUsers = async () => {
-    const response = await UserService.getAllUsers();
-    if (response.ok) {
-      const usersData = await response.json();
-      setUsers(usersData);
-    } else {
-      setErrorMessage('Failed to fetch users.');
-    }
-  };
-
-  // Handle login logic
-  const handleLogin = (e: FormEvent) => {
-    e.preventDefault();
-
-    const user = users.find((user) => 
-      (user.profile.username === username || user.email === email) && user.password === password
-    );
-
-    if (!user) {
-      setLoginMessage('Incorrect information.');
-      setErrorMessage('');
-    } else {
-      setLoginMessage(''); // Clear login message on successful login
-      setErrorMessage('');
-      
-      // Store login state (set to true on successful login)
-      localStorage.setItem("isLoggedIn", "true");
-
-      // Optionally store user data (this could be user profile or JWT token)
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // Redirect to the home page after successful login
-      router.push('/'); // Navigates to the home page
-    }
-  };
-
-  // Fetch users on mount
-  useEffect(() => {
-    getAllUsers();
-  }, []);
-
-  // Handle input change for all form fields
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
     (e: ChangeEvent<HTMLInputElement>) => {
       setter(e.target.value);
     };
 
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setErrorMessage("");
+
+    try {
+      const user: Partial<User> = { email, password };
+
+      const response = await UserService.loginUser(user as User);
+
+      if (response.ok) {
+        const data = await response.json();
+
+        localStorage.setItem(
+          "authToken",
+          JSON.stringify({
+            token: data.token,
+            fullname: `${data.firstName} ${data.lastName}`,
+            email: email,
+          })
+        );
+
+        router.push("/");
+      } else {
+        setErrorMessage("Invalid credentials. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage("An unexpected error occurred. Please try again.");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Login</h1>
-      {loginMessage && <p className={styles.loginMessage}>{loginMessage}</p>}
       {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
-      <form onSubmit={handleLogin} className={styles.form}>
-        <div className={styles.inputGroup}>
-          <label>Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={handleInputChange(setUsername)}
-            className={styles.input}
-            placeholder="Enter your username"
-            required
-          />
-        </div>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
           <label>Email</label>
           <input
@@ -110,7 +73,9 @@ export default function LoginPage() {
             required
           />
         </div>
-        <button type="submit" className={styles.button}>Login</button>
+        <button type="submit" className={styles.button}>
+          Login
+        </button>
       </form>
 
       <div className={styles.signupLink}>

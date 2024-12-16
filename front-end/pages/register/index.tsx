@@ -11,46 +11,9 @@ const RegisterForm = () => {
   const [bio, setBio] = useState('');
   const [role, setRole] = useState('User');
 
-  interface ProfileData {
-    username: string;
-    bio: string;
-    role: string;
-  }
-  
-  interface UserData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    profile: ProfileData;
-  }
-
   const handleRegister = async (e: FormEvent) => {
-    e.preventDefault();
-  
-    const userData: UserData = {
-      firstName,
-      lastName,
-      email,
-      password,
-      profile: {
-        username,  // profile-related information
-        bio,
-        role,
-      }
-    };
-  
-    console.log("Sending user data for registration:", userData);
-  
-    try {
-      const user = await UserService.createUser(userData);
-      console.log('User created successfully:', user);
-    } catch (error) {
-      console.error('Registration error:', error);
-    }
+    
   };
-  
-  
 
   return (
     <div className={styles.container}>
