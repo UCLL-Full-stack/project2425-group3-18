@@ -1,7 +1,8 @@
 import { User } from '../model/user';
 import userDb from '../repository/user.db';
-import { UserInput } from '../types';
+import { AuthInput, AuthenticationResponse, UserInput } from '../types';
 import bcrypt from 'bcrypt';
+import { generateJwtToken } from '../util/jwt';
 
 const getAllUsers = (): Promise<User[]> => {
     return userDb.getAllUsers();
@@ -21,7 +22,7 @@ const createNewUser = async ({
     email,
     password,
 }: UserInput): Promise<User> => {
-    const existingUser = await getUserByEmail(email)
+    const existingUser = await getUserByEmail(email);
     if (existingUser) {
         throw new Error(`User with email ${email} already exists.`);
     }
@@ -32,8 +33,26 @@ const createNewUser = async ({
     return await userDb.createUser(user);
 };
 
+const authenticate = async ({ email, password }: AuthInput): Promise<AuthenticationResponse> => {
+    const user = await getUserByEmail(email);
+
+    const isValidPassword = await bcrypt.compare(password, user.getPassword());
+
+    if (!isValidPassword) {
+        throw new Error('The given password is invalid.');
+    }
+
+    return {
+        token: generateJwtToken({ email }),
+        email: email,
+        fullName: `${user.getFirstName()} ${user.getLastName()}`,
+        role: user.getProfile()?.getRole(),
+    };
+};
+
 export default {
     getAllUsers,
     createNewUser,
-    getUserByEmail
+    getUserByEmail,
+    authenticate,
 };

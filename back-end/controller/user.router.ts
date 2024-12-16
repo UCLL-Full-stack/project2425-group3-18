@@ -36,7 +36,7 @@
  */
 import express, { Request, Response, NextFunction } from 'express';
 import userService from '../service/user.service';
-import { UserInput } from '../types';
+import { UserInput, AuthInput } from '../types';
 const userRouter = express.Router();
 
 /**
@@ -73,7 +73,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *      tags:
  *        - Users
  *      requestBody:
- *          description: User 
+ *          description: User
  *          required: true
  *          content:
  *              application/json:
@@ -133,6 +133,16 @@ userRouter.post('/create', async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Error creating user: ', error);
         res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
+    }
+});
+
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const authInput: AuthInput = req.body;
+        const response = await userService.authenticate(authInput);
+        res.status(200).json({message: 'Authentication succesful', ...response})
+    } catch (error) {
+        next(error);
     }
 });
 

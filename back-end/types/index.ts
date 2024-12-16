@@ -37,6 +37,18 @@ type UserInput = {
     profile?: ProfileInput;
 };
 
+type AuthInput = {
+    email: string;
+    password: string;
+}
+
+type AuthenticationResponse = {
+    token: string;
+    email: string;
+    fullName: string;
+    role?: string;
+};
+
 type LocationInput = {
     city: string;
     street: string;
@@ -50,4 +62,6 @@ export {
     KotInput,
     ProfileInput,
     UserInput,
+    AuthInput,
+    AuthenticationResponse
 };
