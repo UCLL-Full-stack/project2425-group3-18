@@ -69,9 +69,10 @@
  *           type: string
  *           description: Description of the kot.
  */
-import express, { Request, Response, NextFunction } from "express";
-import profileService from "../service/profile.service";
-import { ProfileInput } from "../types";
+import express, { Request, Response, NextFunction } from 'express';
+import profileService from '../service/profile.service';
+import { ProfileInput } from '../types';
+import { profile } from 'console';
 
 const profileRouter = express.Router();
 
@@ -97,8 +98,30 @@ profileRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
         const posts = await profileService.getAllProfiles();
         res.status(200).json(posts);
     } catch (err) {
-        res.status(400).json({ status: 'error', errorMessage: "Bad Client Request" });
+        res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
     }
 });
 
-export { profileRouter }
+profileRouter.post('/create', async (req: Request, res: Response) => {
+    try {
+        if (!req.body.user) {
+            return res.status(400).json({
+                status: 'error',
+                errorMessage: 'Missisng profile data in request body',
+            });
+        }
+        const profile: ProfileInput = req.body.profile;
+        const email: string = req.body.string;
+        const createdProfile = await profileService.createProfile(profile, email);
+
+        res.status(200).json({
+            message: 'Profile has been created succesfully',
+            profile: createdProfile,
+        });
+    } catch (error) {
+        console.error('Error creating profile: ', error);
+        res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
+    }
+});
+
+export { profileRouter };

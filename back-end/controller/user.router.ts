@@ -115,7 +115,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                                  type: string
  *                                  example: "Bad Client Request"
  */
-userRouter.post('/', async (req: Request, res: Response) => {
+userRouter.post('/create', async (req: Request, res: Response) => {
     try {
         if (!req.body.user) {
             return res.status(400).json({
