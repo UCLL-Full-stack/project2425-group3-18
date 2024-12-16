@@ -15,36 +15,35 @@ export default function LoginPage() {
       setter(e.target.value);
     };
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-    setErrorMessage("");
-
-    try {
-      const user: Partial<User> = { email, password };
-
-      const response = await UserService.loginUser(user as User);
-
-      if (response.ok) {
-        const data = await response.json();
-
-        localStorage.setItem(
-          "authToken",
-          JSON.stringify({
-            token: data.token,
-            fullname: `${data.firstName} ${data.lastName}`,
-            email: email,
-          })
-        );
-
-        router.push("/");
-      } else {
-        setErrorMessage("Invalid credentials. Please try again.");
+    const handleSubmit = async (event: FormEvent) => {
+      event.preventDefault();
+      setErrorMessage("");
+    
+      try {
+        const user: Partial<User> = { email, password };
+    
+        const response = await UserService.loginUser(user as User);
+    
+        if (response.token) {
+          localStorage.setItem(
+            "authToken",
+            JSON.stringify({
+              token: response.token,
+              fullname: `${response.firstName} ${response.lastName}`,
+              email: email,
+            })
+          );
+    
+          router.push("/");
+        } else {
+          setErrorMessage("Invalid credentials. Please try again.");
+        }
+      } catch (err) {
+        console.error(err);
+        setErrorMessage("An unexpected error occurred. Please try again.");
       }
-    } catch (err) {
-      console.error(err);
-      setErrorMessage("An unexpected error occurred. Please try again.");
-    }
-  };
+    };
+    
 
   return (
     <div className={styles.container}>

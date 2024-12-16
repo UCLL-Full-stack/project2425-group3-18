@@ -80,3 +80,35 @@
     color: #555;
     border: 1px solid #ddd;
 }
+
+/* New styles for Profile Picture and Logout Menu */
+
+.profilePic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.logoutMenu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.logoutOption {
+    cursor: pointer;
+    color: red;
+    font-size: 14px;
+    margin: 0;
+}
+
+.authButtons {
+    display: flex;
+    gap: 10px;
+}

@@ -66,14 +66,35 @@
 .loginLink {
     margin-top: 10px;
     text-align: center;
-  }
-  
+}
+
 .loginLink a {
     color: #0070f3;
     text-decoration: none;
     font-size: 14px;
-  }
-  
+}
+
 .loginLink a:hover {
     text-decoration: underline;
-  }
+}
+
+.passwordWrapper {
+    position: relative;
+}
+
+.eyeButton {
+    position: absolute;
+    right: 0px;
+    top: 60%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 1;
+}
+
+.eyeButton img {
+    width: 20px;
+    height: 20px;
+}
