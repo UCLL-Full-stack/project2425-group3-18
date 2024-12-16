@@ -7,14 +7,21 @@ const getAllUsers = (): Promise<User[]> => {
     return userDb.getAllUsers();
 };
 
+const getUserByEmail = async (email: string): Promise<User> => {
+    const user = await userDb.getUserByEmail({ email });
+    if (!user) {
+        throw new Error(`User with ${email} does not exist.`);
+    }
+    return user;
+};
+
 const createNewUser = async ({
     firstName,
     lastName,
     email,
     password,
 }: UserInput): Promise<User> => {
-    const existingUser = await userDb.getUserByEmail({ email });
-
+    const existingUser = await getUserByEmail(email)
     if (existingUser) {
         throw new Error(`User with email ${email} already exists.`);
     }
@@ -28,4 +35,5 @@ const createNewUser = async ({
 export default {
     getAllUsers,
     createNewUser,
+    getUserByEmail
 };

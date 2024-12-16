@@ -1,4 +1,5 @@
 import { Profile } from '../model/profile';
+import { User } from '../model/user';
 import database from './prisma/database';
 
 const getAllProfiles = async (): Promise<Profile[]> => {
@@ -10,17 +11,25 @@ const getAllProfiles = async (): Promise<Profile[]> => {
     }
 };
 
-/*
-const createProfile = async (profileData: Profile) => {
+const createProfile = async (profile: Profile, user: User): Promise<Profile> => {
     try {
-        await database.profile.create(profileData)
+        const profilePrisma = await database.profile.create({
+            data: {
+                username: profile.getUsername(),
+                bio: profile.getBio(),
+                role: profile.getRole(),
+                user: {
+                    connect: { id: user.getId() },
+                },
+            },
+        });
+        return Profile.from(profilePrisma);
     } catch (error) {
-        throw new Error('Database error, see server log for more information.')
+        throw new Error('Error creating profile.');
     }
 };
-*/
 
 export default {
     getAllProfiles,
-    //createProfile,
+    createProfile,
 };
