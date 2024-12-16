@@ -3,52 +3,76 @@ import React, { useState, FormEvent } from 'react';
 import styles from "@/styles/register/Register.module.css";
 
 const RegisterForm = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [role, setRole] = useState('User');
 
+  interface ProfileData {
+    username: string;
+    bio: string;
+    role: string;
+  }
+  
+  interface UserData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    profile: ProfileData;
+  }
+
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
-
-    const userData = {
-      user: {
-        userName,
-        email,
-        password,
-      },
+  
+    const userData: UserData = {
+      firstName,
+      lastName,
+      email,
+      password,
       profile: {
-        firstName,
-        lastName,
+        username,  // profile-related information
         bio,
         role,
-        posts: [],
-        koten: [],
-      },
+      }
     };
-
+  
+    console.log("Sending user data for registration:", userData);
+  
     try {
-      const response = await UserService.createUser(userData);
-      console.log('User registered successfully:', response);
-    } catch (error: any) {
+      const user = await UserService.createUser(userData);
+      console.log('User created successfully:', user);
+    } catch (error) {
       console.error('Registration error:', error);
     }
   };
+  
+  
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Register</h1>
       <form className={styles.form} onSubmit={handleRegister}>
         <div className={styles.inputGroup}>
-          <label>User Name</label>
+          <label>First Name</label>
           <input 
             type="text" 
             className={styles.input} 
-            value={userName} 
-            onChange={(e) => setUserName(e.target.value)} 
+            value={firstName} 
+            onChange={(e) => setFirstName(e.target.value)} 
+            required 
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <label>Last Name</label>
+          <input 
+            type="text" 
+            className={styles.input} 
+            value={lastName} 
+            onChange={(e) => setLastName(e.target.value)} 
             required 
           />
         </div>
@@ -73,22 +97,12 @@ const RegisterForm = () => {
           />
         </div>
         <div className={styles.inputGroup}>
-          <label>First Name</label>
+          <label>Username</label>
           <input 
             type="text" 
             className={styles.input} 
-            value={firstName} 
-            onChange={(e) => setFirstName(e.target.value)} 
-            required 
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>Last Name</label>
-          <input 
-            type="text" 
-            className={styles.input} 
-            value={lastName} 
-            onChange={(e) => setLastName(e.target.value)} 
+            value={username} 
+            onChange={(e) => setUsername(e.target.value)} 
             required 
           />
         </div>
@@ -107,8 +121,8 @@ const RegisterForm = () => {
             value={role} 
             onChange={(e) => setRole(e.target.value)}
           >
-            <option value="Student">User</option>
-            <option value="Rental">Admin</option>
+            <option value="User">User</option>
+            <option value="Admin">Admin</option>
           </select>
         </div>
         <button type="submit" className={styles.button}>Register</button>

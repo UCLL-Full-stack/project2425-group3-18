@@ -107,7 +107,7 @@ profileRouter.post('/create', async (req: Request, res: Response) => {
         if (!req.body.user) {
             return res.status(400).json({
                 status: 'error',
-                errorMessage: 'Missisng profile data in request body',
+                errorMessage: 'Missing profile data in request body',
             });
         }
         const profile: ProfileInput = req.body.profile;
