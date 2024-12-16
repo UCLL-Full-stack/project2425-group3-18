@@ -97,14 +97,15 @@ profileRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  */
 profileRouter.post('/create', async (req: Request, res: Response) => {
     try {
-        if (!req.body.user) {
+        if (!req.body.profile) {
             return res.status(400).json({
                 status: 'error',
                 errorMessage: 'Missing profile data in request body',
             });
         }
         const profile: ProfileInput = req.body.profile;
-        const email: string = req.body.string;
+        const email: string = req.body.email;
+        console.log(email);
         const createdProfile = await profileService.createProfile(profile, email);
 
         res.status(200).json({

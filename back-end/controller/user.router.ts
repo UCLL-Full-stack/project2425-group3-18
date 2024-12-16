@@ -21,10 +21,35 @@
  *           $ref: '#/components/schemas/Profile'
  *           nullable: true
  *           description: The profile associated with the user.
+ *     AuthInput:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: The email associated with the user who wants to login.
+ *         password:
+ *           type: string
+ *           description: The password associated with the user who wants to login.
+ *     AuthenticationResponse:
+ *       type: object
+ *       properties:
+ *         token:
+ *           type: string
+ *           description: The JWT token the users receives.
+ *         email:
+ *           type: string
+ *           description: The email associated with the user who wants to login.
+ *         fullname:
+ *           type: string
+ *           description: The fullname of the user who wants to login.
+ *         role:
+ *           type: string
+ *           description: The role associated with the user who wants to login.
  */
 import express, { Request, Response, NextFunction } from 'express';
 import userService from '../service/user.service';
 import { UserInput, AuthInput } from '../types';
+import { checkPrime } from 'crypto';
 const userRouter = express.Router();
 
 /**
@@ -113,11 +138,45 @@ userRouter.post('/create', async (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @swagger
+ * /users/login:
+ *  post:
+ *      summary: Login as an existing user.
+ *      tags:
+ *        - Users
+ *      requestBody:
+ *          description: AuthInput
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          AuthInput:
+ *                              $ref: '#/components/schemas/AuthInput'
+ *                  example:
+ *                          email: "john@example.com"
+ *                          password: "securePassword123"
+ *      responses:
+ *          200:
+ *              description: User successfully logged in.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  example: "Authentication Sucessful"
+ *                              AuthenticationResponse:
+ *                                  $ref: '#/components/schemas/AuthenticationResponse'
+ */
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const authInput: AuthInput = req.body;
         const response = await userService.authenticate(authInput);
-        res.status(200).json({message: 'Authentication succesful', ...response})
+        res.status(200).json({ message: 'Authentication succesful', ...response });
     } catch (error) {
         next(error);
     }

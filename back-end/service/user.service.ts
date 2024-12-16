@@ -31,7 +31,9 @@ const createNewUser = async ({
     return await userDb.createUser(user);
 };
 
-const authenticate = async ({ email, password }: AuthInput): Promise<AuthenticationResponse> => {
+const authenticate = async (a: AuthInput): Promise<AuthenticationResponse> => {
+    const email = a.email;
+    const password = a.password;
     const user = await getUserByEmail(email);
 
     const isValidPassword = await bcrypt.compare(password, user.getPassword());

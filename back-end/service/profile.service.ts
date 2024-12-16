@@ -12,9 +12,6 @@ const createProfile = async (
     email: string
 ): Promise<Profile> => {
     const user = await userService.getUserByEmail(email);
-    if (!user) {
-        throw new Error('Cannot make profile for user that doesn\'t exist.' )
-    }
     const profile = new Profile({ username, bio, role });
     return await profileDb.createProfile(profile, user);
 };

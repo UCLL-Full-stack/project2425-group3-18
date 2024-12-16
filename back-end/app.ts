@@ -18,7 +18,7 @@ app.use(
         secret: process.env.JWT_SECRET || 'default_secret',
         algorithms: ['HS256'],
     }).unless({
-        path: ['/api-docs', /^\/api-docs\/.*/, '/users/create', '/users/login'],
+        path: ['/api-docs', /^\/api-docs\/.*/, '/users/create', '/users/login', '/profiles/create'],
     })
 );
 
