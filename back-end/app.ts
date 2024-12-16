@@ -9,24 +9,36 @@ import { kotRouter } from './controller/kot.router';
 import { postRouter } from './controller/post.router';
 import { userRouter } from './controller/user.router';
 import { profileRouter } from './controller/profile.router';
-
+import { expressjwt } from 'express-jwt';
 
 const app = express();
+
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', '/^\/api-docs\/.*/', '/users/create', '/users/login']
+    })
+);
+
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 app.use(bodyParser.json());
 
-app.use(cors({
-    origin: 'http://localhost:8080',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-}));
+app.use(
+    cors({
+        origin: 'http://localhost:8080',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true,
+    })
+);
 
 app.use('/comments', commentRouter);
 app.use('/koten', kotRouter);
 app.use('/posts', postRouter);
-app.use('/users', userRouter)
-app.use('/profiles', profileRouter)
+app.use('/users', userRouter);
+app.use('/profiles', profileRouter);
 
 app.use(cors());
 
