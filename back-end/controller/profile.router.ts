@@ -5,12 +5,9 @@
  *     Profile:
  *       type: object
  *       properties:
- *         firstName:
+ *         username:
  *           type: string
- *           description: First name of the profile user.
- *         lastName:
- *           type: string
- *           description: Last name of the profile user.
+ *           description: The username of the profile.
  *         bio:
  *           type: string
  *           description: Bio of the profile user.
@@ -18,68 +15,18 @@
  *           type: string
  *           description: Role of the user in the platform. Must be either "User", "Admin", or "Moderator".
  *           enum: [User, Admin, Moderator]
- *         user:
- *           $ref: '#/components/schemas/User'
- *           description: The user associated with this profile.
- *         posts:
- *           type: array
- *           description: List of posts made by the user.
- *           items:
- *             $ref: '#/components/schemas/Post'
- *         koten:
- *           type: array
- *           description: List of koten associated with the profile.
- *           items:
- *             $ref: '#/components/schemas/Kot'
- *
- *     User:
- *       type: object
- *       properties:
- *         userName:
- *           type: string
- *           description: The user's name.
- *         email:
- *           type: string
- *           description: The user's email address.
- *         password:
- *           type: string
- *           description: The user's password.
- *         profile:
- *           $ref: '#/components/schemas/Profile'
- *           nullable: true
- *           description: The profile associated with the user.
- *
- *     Post:
- *       type: object
- *       properties:
- *         description:
- *           type: string
- *           description: Description of the post.
- *         image:
- *           type: string
- *           description: Image URL of the post.
- *
- *     Kot:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           description: Name of the kot.
- *         description:
- *           type: string
- *           description: Description of the kot.
  */
 import express, { Request, Response, NextFunction } from 'express';
 import profileService from '../service/profile.service';
 import { ProfileInput } from '../types';
-import { profile } from 'console';
-
 const profileRouter = express.Router();
 
 /**
  * @swagger
  * /profiles:
  *  get:
+ *      security:
+ *        - bearerAuth: []
  *      summary: Retrieve a list of profiles.
  *      tags:
  *        - Profiles
@@ -102,6 +49,52 @@ profileRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
+/**
+ *@swagger
+ * /profiles/create:
+ *  post:
+ *      summary: Create a new profile, associated with a user.
+ *      tags:
+ *        - Profiles
+ *      requestBody:
+ *          description: Profile data and associated user's email.
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      properties:
+ *                          profile:
+ *                              type: object
+ *                              properties:
+ *                                  username:
+ *                                      type: string
+ *                                  bio:
+ *                                      type: string
+ *                                  role:
+ *                                      type: string
+ *                              required:
+ *                                  - username
+ *                                  - role
+ *                          email:
+ *                              type: string
+ *                      required:
+ *                          - profile
+ *                          - email
+ *                  example:
+ *                      profile:
+ *                          username: "John_Doe"
+ *                          bio: "Hi! I'm John."
+ *                          role: "User"
+ *                      email: "john@example.com"
+ *      responses:
+ *          200:
+ *              description: A created Profile object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Profile'
+ */
 profileRouter.post('/create', async (req: Request, res: Response) => {
     try {
         if (!req.body.user) {

@@ -1,11 +1,6 @@
 /**
  * @swagger
  *   components:
- *    securitySchemes:
- *     bearerAuth:
- *      type: http
- *      scheme: bearer
- *      bearerFormat: JWT
  *    schemas:
  *      Comment:
  *          type: object
@@ -16,20 +11,20 @@
  *            post:
  *              $ref: '#/components/schemas/Post'
  *              description: The post associated with this comment.
- *          
+ *            profile:
+ *              $ref: '#/components/schemas/Profile'
+ *              description: The profile associated with this comment.
  */
 import express, { NextFunction, Request, Response } from 'express';
-import commentService from "../service/comment.service";
-
+import commentService from '../service/comment.service';
 const commentRouter = express.Router();
-
 /**
  * @swagger
  * /comments:
  *  get:
- *      summary: Retrieve a list of comments.
  *      security:
  *        - bearerAuth: []
+ *      summary: Retrieve a list of all comments.
  *      tags:
  *        - Comments
  *      responses:
@@ -46,8 +41,8 @@ commentRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
     try {
         const comments = await commentService.getAllComments();
         res.status(200).json(comments);
-    } catch (err) {
-        res.status(400).json({ status: 'error', errorMessage: "Bad Client Request" });
+    } catch (error) {
+        next(error);
     }
 });
 

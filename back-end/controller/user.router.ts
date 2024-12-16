@@ -21,18 +21,6 @@
  *           $ref: '#/components/schemas/Profile'
  *           nullable: true
  *           description: The profile associated with the user.
- *     Profile:
- *       type: object
- *       properties:
- *         userName:
- *           type: string
- *           description: The user's name.
- *         bio:
- *           type: string
- *           description: Bio of the profile user.
- *         role:
- *           type: string
- *           description: Role of the user in the platform.
  */
 import express, { Request, Response, NextFunction } from 'express';
 import userService from '../service/user.service';
@@ -43,6 +31,8 @@ const userRouter = express.Router();
  * @swagger
  * /users:
  *  get:
+ *      security:
+ *        - bearerAuth: []
  *      summary: Retrieve a list of users.
  *      tags:
  *        - Users
@@ -67,7 +57,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 /**
  * @swagger
- * /users:
+ * /users/create:
  *  post:
  *      summary: Create a new user
  *      tags:
@@ -101,19 +91,6 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                                  example: "User created successfully"
  *                              user:
  *                                  $ref: '#/components/schemas/User'
- *          400:
- *              description: Bad client request.
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              status:
- *                                  type: string
- *                                  example: "error"
- *                              errorMessage:
- *                                  type: string
- *                                  example: "Bad Client Request"
  */
 userRouter.post('/create', async (req: Request, res: Response) => {
     try {

@@ -13,7 +13,7 @@ type CommentInput = {
 type PostInput = {
     description: string;
     image: string;
-    comments?: CommentInput[];
+    profile: ProfileInput;
 };
 
 type KotInput = {

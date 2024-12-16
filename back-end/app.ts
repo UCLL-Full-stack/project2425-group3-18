@@ -18,7 +18,7 @@ app.use(
         secret: process.env.JWT_SECRET || 'default_secret',
         algorithms: ['HS256'],
     }).unless({
-        path: ['/api-docs', '/^\/api-docs\/.*/', '/users/create', '/users/login']
+        path: ['/api-docs', /^\/api-docs\/.*/, '/users/create', '/users/login'],
     })
 );
 
@@ -50,14 +50,24 @@ const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Courses API',
+            title: 'RateMyKot API',
             version: '1.0.0',
+        },
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                },
+            },
         },
     },
     apis: ['./controller/*.ts'],
 };
 const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err);

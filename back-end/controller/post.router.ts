@@ -2,16 +2,6 @@
  * @swagger
  *   components:
  *    schemas:
- *      Comment:
- *          type: object
- *          properties:
- *            text:
- *              type: string
- *              description: The content of the comment.
- *            post:
- *              $ref: '#/components/schemas/Post'
- *              description: The post associated with this comment.
- * 
  *      Post:
  *          type: object
  *          properties:
@@ -21,21 +11,20 @@
  *            image:
  *              type: string
  *              description: The URL of the post image.
- *            comments:
- *              type: array
- *              items:
- *                $ref: '#/components/schemas/Comment'
- *              description: List of comments associated with the post.
+ *            profile:
+ *              $ref: '#/components/schemas/Profile'
+ *              description: The profile related to the post
  */
 import express, { NextFunction, Request, Response } from 'express';
 import postService from "../service/post.service";
-
 const postRouter = express.Router();
 
 /**
  * @swagger
  * /posts:
  *  get:
+ *      security:
+ *        - bearerAuth: []
  *      summary: Retrieve a list of posts.
  *      tags:
  *        - Posts

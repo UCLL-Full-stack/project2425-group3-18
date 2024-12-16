@@ -22,14 +22,12 @@ const createNewUser = async ({
     email,
     password,
 }: UserInput): Promise<User> => {
-    const existingUser = await getUserByEmail(email);
+    const existingUser = await userDb.getUserByEmail({ email });
     if (existingUser) {
         throw new Error(`User with email ${email} already exists.`);
     }
-
     const hashedPassword = await bcrypt.hash(password, 15);
     const user = new User({ firstName, lastName, email, password: hashedPassword });
-
     return await userDb.createUser(user);
 };
 
