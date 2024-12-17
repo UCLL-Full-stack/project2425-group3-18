@@ -1,6 +1,6 @@
 import { Post } from '../model/post';
 import postDb from '../repository/post.db';
-import { PostInput } from '../types';
+import { PostId, PostInput } from '../types';
 import profileService from './profile.service';
 
 const getAllPosts = (): Promise<Post[]> => {
@@ -13,4 +13,12 @@ const createNewPost = async ({ description, image, profile }: PostInput): Promis
     return await postDb.createPost(post);
 };
 
-export default { getAllPosts, createNewPost };
+const getPostById = async ({ postId }: PostId): Promise<Post> => {
+    const post = await postDb.getPostById({ id: postId });
+    if (post === null) {
+        throw new Error(`Post with id ${postId} was not found.`);
+    }
+    return post;
+};
+
+export default { getAllPosts, createNewPost, getPostById };

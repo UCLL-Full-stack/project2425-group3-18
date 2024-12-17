@@ -16,6 +16,10 @@ type PostInput = {
     profile: ProfileInput;
 };
 
+type PostId = {
+    postId: number;
+};
+
 type KotInput = {
     location: LocationInput;
     price: number;
@@ -40,7 +44,7 @@ type UserInput = {
 type AuthInput = {
     email: string;
     password: string;
-}
+};
 
 type AuthenticationResponse = {
     token: string;
@@ -55,7 +59,7 @@ type LocationInput = {
     street: string;
     housenumber: number;
     kot: KotInput;
-}
+};
 
 export {
     CommentInput,
@@ -64,5 +68,6 @@ export {
     ProfileInput,
     UserInput,
     AuthInput,
-    AuthenticationResponse
+    AuthenticationResponse,
+    PostId,
 };
