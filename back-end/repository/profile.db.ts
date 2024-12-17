@@ -40,7 +40,7 @@ const createProfile = async (profile: Profile, user: User): Promise<Profile> => 
         });
         return Profile.from(profilePrisma);
     } catch (error) {
-        throw new Error('Error creating profile.');
+        throw new Error('Database error creating profile.');
     }
 };
 

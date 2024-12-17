@@ -19,6 +19,9 @@ const createProfile = async (
     { username, bio, role }: ProfileInput,
     email: string
 ): Promise<Profile> => {
+    if ((await profileDb.getProfileByUsername({ username }))) {
+        throw new Error(`Profile with username ${username} already exists.`);
+    }
     const user = await userService.getUserByEmail(email);
     const profile = new Profile({ username, bio, role });
     return await profileDb.createProfile(profile, user);
