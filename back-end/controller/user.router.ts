@@ -42,6 +42,9 @@
  *         fullname:
  *           type: string
  *           description: The fullname of the user who wants to login.
+ *         username:
+ *           type: string
+ *           description: The username associated with the user who wants to login. 
  *         role:
  *           type: string
  *           description: The role associated with the user who wants to login.

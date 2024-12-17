@@ -5,4 +5,6 @@ const getAllComments = (): Promise<Comment[]> => {
     return commentDb.getAllComments();
 };
 
+//const createNewComment = async ({})
+
 export default { getAllComments };
