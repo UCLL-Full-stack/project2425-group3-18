@@ -20,3 +20,18 @@ export interface Profile {
   bio: string;
   role: string;
 }
+
+export interface PostData {
+  description: string;
+  image: string;
+  profile: {
+    username: string;
+    bio: string;
+    role: string;
+  };
+}
+
+export interface CreatePostResponse {
+  message: string;
+  post: PostData;
+}
