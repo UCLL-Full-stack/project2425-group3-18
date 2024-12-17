@@ -25,10 +25,10 @@ const getAllUsers = async (): Promise<UserData[]> => {
     }
 
     const users = await response.json();
+    console.log("Fetched users:", users);
 
     return users;
   } catch (error) {
-    console.error("Error in getAllUsers function:", error);
     throw error;
   }
 };

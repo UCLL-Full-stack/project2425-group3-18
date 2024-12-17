@@ -15,7 +15,6 @@ const RegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  // Email validation function
   const validateEmail = (email: string): string => {
     if (!email || email.trim() === '') {
       throw new Error('Email cannot be empty');
@@ -33,7 +32,6 @@ const RegisterForm = () => {
     setError(null);
 
     try {
-      // Check if all required fields are filled
       if (!firstName) {
         throw new Error('Please fill in the first name field');
       }
@@ -50,10 +48,8 @@ const RegisterForm = () => {
         throw new Error('Please fill in the username field');
       }
 
-      // Validate email
       validateEmail(email);
 
-      // Register user and create profile
       const userResponse = await UserService.registerUser({
         firstName,
         lastName,

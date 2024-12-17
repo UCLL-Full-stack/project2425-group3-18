@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "@/styles/profile/Profile.module.css";
 import { User, UserData } from "@/types";
 import UserService from "@/services/UserService";
-import Layoutwrapper from "@/components/Layoutwrapper";
+import LayoutWrapper from "@/components/Layoutwrapper";
 
 const ProfilePage: React.FC = () => {
   const [user, setUser] = useState<UserData | null>(null);
@@ -39,8 +39,13 @@ const ProfilePage: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  const { profile } = user;
+  if (!profile) {
+    return <div>Error: Profile data is missing.</div>;
+  }
+
   return (
-    <Layoutwrapper>
+    <LayoutWrapper>
       <div className={styles.profileContainer}>
         <h1>Profile of {user.firstName} {user.lastName}</h1>
         <div className={styles.grid}>
@@ -49,15 +54,15 @@ const ProfilePage: React.FC = () => {
               <img src="/img/profilepic.png" alt="Profile" />
             </div>
             <div className={styles.profileDetails}>
-              <p><strong>Username:</strong> {user.profile.username}</p>
+              <p><strong>Username:</strong> {profile.username}</p>
               <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Role:</strong> {user.profile.role}</p>
-              <p><strong>Bio:</strong> {user.profile.bio}</p>
+              <p><strong>Role:</strong> {profile.role}</p>
+              <p><strong>Bio:</strong> {profile.bio}</p>
             </div>
           </div>
         </div>
       </div>
-    </Layoutwrapper>
+    </LayoutWrapper>
   );
 };
 
