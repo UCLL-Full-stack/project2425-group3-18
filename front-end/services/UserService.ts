@@ -1,15 +1,12 @@
 import { User, UserData } from "@/types";
 
-// Get all users
 const getAllUsers = async (): Promise<UserData[]> => {
   try {
     const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
-
     const token = loggedInUser.token;
     if (!token) {
       throw new Error("No authentication token found");
     }
-
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
       method: "GET",
       headers: {
@@ -17,22 +14,51 @@ const getAllUsers = async (): Promise<UserData[]> => {
         "Authorization": `Bearer ${token}`,
       },
     });
-
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Error fetching users:", errorData);
       throw new Error(errorData.message || "Failed to fetch users");
     }
-
     const users = await response.json();
-    console.log("Fetched users:", users);
-
     return users;
   } catch (error) {
+    console.error("Error in getAllUsers function:", error);
     throw error;
   }
 };
 
+const getProfileByUsername = async (username: string) => {
+  const loggedInUserString = sessionStorage.getItem("loggedInUser");
+
+  if (!loggedInUserString) {
+    throw new Error("Logged-in user data is missing in sessionStorage.");
+  }
+
+  const loggedInUser = JSON.parse(loggedInUserString);
+
+  const token = loggedInUser?.token;
+  console.log(token);
+
+  if (!token) {
+    throw new Error("No auth token found");
+  }
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/profiles/${username}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!response.ok) {
+    throw new Error(`Failed to fetch profile: ${response.statusText}`);
+  }
+
+  return await response.json();
+};
 
 // Login user
 const loginUser = async (user: User) => {
@@ -76,27 +102,33 @@ const registerUser = async (user: User) => {
 
 // Create Profile
 const createProfile = async (profileData: { username: string; bio: string; role: string; email: string }) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/create`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ profile: profileData, email: profileData.email }),
-  });
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ profile: profileData, email: profileData.email }),
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Profile creation failed");
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error creating profile:", errorData.message);
+      throw new Error(errorData.message || "Profile creation failed");
+    }
+
+    return response.json();
+  } catch (error) {
+    throw error;
   }
-
-  return response.json();
 };
 
 const UserService = {
-  getAllUsers,
+  getProfileByUsername,
   loginUser,
   registerUser,
   createProfile,
+  getAllUsers,
 };
 
 export default UserService;

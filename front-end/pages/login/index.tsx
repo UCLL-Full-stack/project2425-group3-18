@@ -1,8 +1,8 @@
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/router";
 import UserService from "@/services/UserService";
 import styles from "@/styles/login/Login.module.css";
-import { User } from "@/types";
+import { User, UserData } from "@/types";
 import { ErrorOutline } from '@mui/icons-material';
 import Link from "next/link";
 
@@ -12,10 +12,22 @@ const LoginPage = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [users, setUsers] = useState<UserData[]>([]); // Store users in state
   const router = useRouter();
 
-  // Check if the user is already logged in
+  // Fetch users on component mount
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersData = await UserService.getAllUsers();
+        setUsers(usersData);
+      } catch (error) {
+        console.error("Error fetching users", error);
+      }
+    };
+
+    fetchUsers();
+
     const isLoggedIn = sessionStorage.getItem("isLoggedIn");
     if (isLoggedIn === "true") {
       router.push("/"); // Redirect to home page if logged in
@@ -48,7 +60,7 @@ const LoginPage = () => {
         );
         sessionStorage.setItem("isLoggedIn", "true");
 
-        router.push("/"); // Redirect to the home page after successful login
+        router.push("/"); // Redirect after successful login
       } else {
         setErrorMessage("Invalid credentials. Please try again.");
       }
@@ -72,6 +84,7 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Login</h1>
+
       {errorMessage && (
         <span
           style={{
@@ -85,6 +98,7 @@ const LoginPage = () => {
           {errorMessage}
         </span>
       )}
+
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
           <label>Email</label>
@@ -97,6 +111,7 @@ const LoginPage = () => {
             required
           />
         </div>
+
         <div className={styles.inputGroup}>
           <label>Password</label>
           <div className={styles.passwordWrapper}>
@@ -114,13 +129,14 @@ const LoginPage = () => {
               onClick={() => setPasswordVisible((prev) => !prev)}
             >
               <img
-                src="/img/eye-password-hide.svg"
+                src={passwordVisible ? "/img/eye-password-show.svg" : "/img/eye-password-hide.svg"}
                 alt="Toggle Password Visibility"
                 className={styles.eyeIcon}
               />
             </button>
           </div>
         </div>
+
         <button
           type="submit"
           className={styles.button}
@@ -129,11 +145,31 @@ const LoginPage = () => {
           {isSubmitting ? "Logging in..." : "Login"}
         </button>
       </form>
-
       <div className={styles.signupLink}>
         <p>
-          Don't have an account? <a href="/register">Sign Up here</a>
+          Don't have an account? <Link href="/register">Sign Up here</Link>
         </p>
+      </div>
+      <div className={styles.userTableContainer}>
+      <h2 id="UserListTitle">User List</h2>
+        <table className={styles.userTable}>
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Password</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.email}>
+                <td>{user.email}</td>
+                <td>{user.profile ? user.profile.role : "No role available"}</td>
+                <td>Password</td>
+              </tr>
+            ))}
+        </tbody>
+        </table>
       </div>
     </div>
   );

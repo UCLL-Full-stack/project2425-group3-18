@@ -15,3 +15,8 @@ export interface UserData {
       role: string;
     };
 }
+export interface Profile {
+  username: string;
+  bio: string;
+  role: string;
+}
