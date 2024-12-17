@@ -7,6 +7,14 @@ const getAllProfiles = (): Promise<Profile[]> => {
     return profileDb.getAllProfiles();
 };
 
+const getProfileByUsername = async (username: string): Promise<Profile> => {
+    const profile = await profileDb.getProfileByUsername({ username });
+    if (profile === null) {
+        throw new Error(`Profile with username ${username} does not exist.`);
+    }
+    return profile;
+};
+
 const createProfile = async (
     { username, bio, role }: ProfileInput,
     email: string
@@ -18,5 +26,6 @@ const createProfile = async (
 
 export default {
     getAllProfiles,
-    createProfile
+    createProfile,
+    getProfileByUsername,
 };

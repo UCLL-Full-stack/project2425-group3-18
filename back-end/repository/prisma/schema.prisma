@@ -44,7 +44,7 @@ model Post {
 
 model Profile {
   id        Int      @id @default(autoincrement())
-  username String
+  username String    @unique
   bio       String
   role      String
   userId    Int      @unique

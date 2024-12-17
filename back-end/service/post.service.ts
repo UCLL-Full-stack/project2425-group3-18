@@ -1,8 +1,16 @@
 import { Post } from '../model/post';
 import postDb from '../repository/post.db';
+import { PostInput } from '../types';
+import profileService from './profile.service';
 
 const getAllPosts = (): Promise<Post[]> => {
     return postDb.getAllPosts();
 };
 
-export default { getAllPosts };
+const createNewPost = async ({ description, image, profile }: PostInput): Promise<Post> => {
+    const postProfile = await profileService.getProfileByUsername(profile.username);
+    const post = new Post({ description, image, profile: postProfile });
+    return await postDb.createPost(post);
+};
+
+export default { getAllPosts, createNewPost };

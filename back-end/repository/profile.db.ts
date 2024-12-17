@@ -7,7 +7,22 @@ const getAllProfiles = async (): Promise<Profile[]> => {
         const profilesPrisma = await database.profile.findMany({});
         return profilesPrisma.map((profilePrisma) => Profile.from(profilePrisma));
     } catch (error) {
-        throw new Error('Database error, see server log for more information.');
+        throw new Error('Database error getting all profiles.');
+    }
+};
+
+const getProfileByUsername = async ({
+    username,
+}: {
+    username: string;
+}): Promise<Profile | null> => {
+    try {
+        const profilePrisma = await database.profile.findUnique({
+            where: { username },
+        });
+        return profilePrisma ? Profile.from(profilePrisma) : null;
+    } catch (error) {
+        throw new Error('Database error finding profile by username.');
     }
 };
 
@@ -32,4 +47,5 @@ const createProfile = async (profile: Profile, user: User): Promise<Profile> => 
 export default {
     getAllProfiles,
     createProfile,
+    getProfileByUsername,
 };

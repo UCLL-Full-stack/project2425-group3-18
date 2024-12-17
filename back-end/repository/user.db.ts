@@ -10,7 +10,7 @@ const getAllUsers = async (): Promise<User[]> => {
         });
         return usersPrisma.map((userPrisma) => User.from(userPrisma));
     } catch (error) {
-        throw new Error('Database error, see server log for more information.');
+        throw new Error('Database error trying to find all users.');
     }
 };
 
@@ -22,7 +22,7 @@ const getUserByEmail = async ({ email }: { email: string }): Promise<User | null
         });
         return userPrisma ? User.from(userPrisma) : null
     } catch (error) {
-        throw new Error('Error trying to find user by email.')
+        throw new Error('Database error trying to find user by email.')
     }
 };
 
@@ -39,7 +39,7 @@ const createUser = async (user: User): Promise<User> => {
         });
         return User.from(userPrisma);
     } catch (error) {
-        throw new Error('Error creating user.');
+        throw new Error('Database error creating user.');
     }
 };
 
