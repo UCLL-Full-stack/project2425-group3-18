@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/profile/Profile.module.css";
-import { Profile, UserData } from "@/types";
+import { Profile } from "@/types";
 import UserService from "@/services/UserService";
 import LayoutWrapper from "@/components/Layoutwrapper";
+import ContentGrid from "@/components/ContentGrid";
 
 const ProfilePage: React.FC = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -17,13 +18,14 @@ const ProfilePage: React.FC = () => {
         }
 
         const loggedInUser = JSON.parse(loggedInUserString);
-        const username = loggedInUser.username
+        const username = loggedInUser.username;
 
         if (!username) {
           throw new Error("Username is missing from the logged-in user data.");
         }
 
-        const profile: Profile = await UserService.getProfileByUsername(username);
+        // Fetch the profile by username
+        const profile = await UserService.getProfileByUsername(username);
 
         console.log("Fetched profile:", profile);
 
@@ -62,7 +64,13 @@ const ProfilePage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Add ContentGrid here to show posts by the user */}
       </div>
+      <div className={styles.postsSection}>
+          <h2>Posts by {profile.username}</h2>
+          <ContentGrid username={profile.username} />
+        </div>
     </LayoutWrapper>
   );
 };

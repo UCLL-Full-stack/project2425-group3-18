@@ -47,9 +47,11 @@ const AddPost: React.FC = () => {
                     role: profile.role || "User",
                 },
             };
-    
-            await PostService.createPost(postData);
-    
+
+            // Assume PostService.createPost returns the post with an id
+            const createdPost = await PostService.createPost(postData);
+
+            // Handle the returned post which contains the id now
             setSuccessMessage("Post created successfully!");
             setDescription("");
             setImages(null);
@@ -59,7 +61,7 @@ const AddPost: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };    
+    };
 
     const imageUrls = images ? Array.from(images).map((file) => URL.createObjectURL(file)) : [];
     const imageNames = images ? Array.from(images).map((file) => file.name) : [];

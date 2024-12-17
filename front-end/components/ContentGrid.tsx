@@ -4,7 +4,11 @@ import { PostData } from "@/types";
 import styles from "@/styles/contentGrid/contentGrid.module.css";
 import PostService from "@/services/PostService";
 
-const ContentGrid: React.FC = () => {
+interface ContentGridProps {
+  username: string;
+}
+
+const ContentGrid: React.FC<ContentGridProps> = ({ username }) => {
   const [posts, setPosts] = useState<PostData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +19,16 @@ const ContentGrid: React.FC = () => {
     const fetchPosts = async () => {
       try {
         const fetchedPosts = await PostService.getAllPosts();
-        setPosts(fetchedPosts);
+
+        const postsWithIds = fetchedPosts.map((post: any, index: number) => ({
+          ...post,
+          id: post.id || index + 1,
+        }));
+
+        // Filter posts by the provided username
+        const userPosts = postsWithIds.filter((post) => post.profile.username === username);
+
+        setPosts(userPosts);
       } catch (err) {
         console.error("Error fetching posts:", err);
         setError("Failed to load posts.");
@@ -25,7 +38,7 @@ const ContentGrid: React.FC = () => {
     };
 
     fetchPosts();
-  }, []);
+  }, [username]);
 
   const viewDetails = (postId: number) => {
     router.push(`/post/${postId}`);
@@ -41,23 +54,23 @@ const ContentGrid: React.FC = () => {
 
   return (
     <div className={styles.grid}>
-      {posts.map((post, index) => (
-        <div
-          key={index}
-          className={styles.card}
-          onClick={() => viewDetails(index)}
-        >
-          <img
-            src={post.image}
-            alt={post.description}
-            className={styles.image}
-          />
-          <h3>{post.profile.username}</h3>
-          <p>{post.description}</p>
-
-          <div className={styles.iconContainer}></div>
-        </div>
-      ))}
+      {posts.map((post) =>
+        post.id !== undefined ? (
+          <div
+            key={post.id}
+            className={styles.card}
+            onClick={() => viewDetails(post.id as number)}
+          >
+            <img
+              src={post.image}
+              alt={post.description}
+              className={styles.image}
+            />
+            <h3>{post.profile.username}</h3>
+            <p>{post.description}</p>
+          </div>
+        ) : null
+      )}
     </div>
   );
 };

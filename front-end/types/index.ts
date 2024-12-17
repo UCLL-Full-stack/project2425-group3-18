@@ -22,6 +22,7 @@ export interface Profile {
 }
 
 export interface PostData {
+  id?: number;
   description: string;
   image: string;
   profile: {

@@ -9,7 +9,8 @@ const PostDetail: React.FC = () => {
   const router = useRouter();
   const { postId } = router.query;
 
-  const postIdAsNumber = Number(postId);
+  // Ensure postId is a valid number
+  const postIdAsNumber = postId ? Number(postId) : null;
 
   const [post, setPost] = useState<any | null>(null);
   const [comments, setComments] = useState<{ [key: number]: { text: string; rating: number }[] }>({});
@@ -66,7 +67,8 @@ const PostDetail: React.FC = () => {
     return totalRating / comments.length;
   };
 
-  const currentPostComments = comments[postIdAsNumber] || [];
+  // Ensure comments exist for the postId before calculating
+  const currentPostComments = postIdAsNumber ? comments[postIdAsNumber] || [] : [];
   const averageRating = calculateAverageRating(currentPostComments);
 
   return (
