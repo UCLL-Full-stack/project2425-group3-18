@@ -48,7 +48,6 @@ postRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-
 /**
  * @swagger
  * /posts/create:

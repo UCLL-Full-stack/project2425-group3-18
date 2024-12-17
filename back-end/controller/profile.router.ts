@@ -108,6 +108,7 @@ profileRouter.get('/:username', async (req: Request, res: Response, next: NextFu
  *                                      type: string
  *                              required:
  *                                  - username
+ *                                  - bio
  *                                  - role
  *                          email:
  *                              type: string
@@ -138,7 +139,6 @@ profileRouter.post('/create', async (req: Request, res: Response) => {
         }
         const profile: ProfileInput = req.body.profile;
         const email: string = req.body.email;
-        console.log(email);
         const createdProfile = await profileService.createProfile(profile, email);
 
         res.status(200).json({

@@ -10,6 +10,11 @@ type CommentInput = {
     profile: ProfileInput;
 };
 
+type CommentCreate = {
+    text: string;
+    username: string;
+};
+
 type PostInput = {
     description: string;
     image: string;
@@ -70,4 +75,5 @@ export {
     AuthInput,
     AuthenticationResponse,
     PostId,
+    CommentCreate,
 };

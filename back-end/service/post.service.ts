@@ -13,7 +13,7 @@ const createNewPost = async ({ description, image, profile }: PostInput): Promis
     return await postDb.createPost(post);
 };
 
-const getPostById = async ({ postId }: PostId): Promise<Post> => {
+const getPostById = async (postId: number): Promise<Post> => {
     const post = await postDb.getPostById({ id: postId });
     if (post === null) {
         throw new Error(`Post with id ${postId} was not found.`);
