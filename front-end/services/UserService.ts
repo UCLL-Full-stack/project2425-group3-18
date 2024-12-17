@@ -1,5 +1,22 @@
 import { User } from "@/types";
 
+// Get all users
+const getAllUsers = async (): Promise<User[]> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to fetch users");
+  }
+
+  return response.json();
+};
+
 // Login user
 const loginUser = async (user: User) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
@@ -55,6 +72,7 @@ const createProfile = async (profileData: { username: string; bio: string; role:
 };
 
 const UserService = {
+  getAllUsers,
   loginUser,
   registerUser,
   createProfile,

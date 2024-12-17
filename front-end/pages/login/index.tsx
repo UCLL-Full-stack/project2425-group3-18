@@ -1,49 +1,56 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/router";
-import styles from "@/styles/login/Login.module.css";
 import UserService from "@/services/UserService";
+import styles from "@/styles/login/Login.module.css";
 import { User } from "@/types";
 
-export default function LoginPage() {
+const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
 
-  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
+  const handleInputChange =
+    (setter: React.Dispatch<React.SetStateAction<string>>) =>
     (e: ChangeEvent<HTMLInputElement>) => {
       setter(e.target.value);
     };
 
-    const handleSubmit = async (event: FormEvent) => {
-      event.preventDefault();
-      setErrorMessage("");
+    const handleSubmit = async (e: FormEvent) => {
+      e.preventDefault();
+      setErrorMessage(null);
+      setIsSubmitting(true);
     
       try {
         const user: Partial<User> = { email, password };
-    
         const response = await UserService.loginUser(user as User);
     
-        if (response.token) {
+        if (response?.token) {
           localStorage.setItem(
             "authToken",
             JSON.stringify({
               token: response.token,
               fullname: `${response.firstName} ${response.lastName}`,
-              email: email,
+              email,
             })
           );
+          localStorage.setItem("isLoggedIn", "true");
     
           router.push("/");
         } else {
           setErrorMessage("Invalid credentials. Please try again.");
         }
-      } catch (err) {
-        console.error(err);
-        setErrorMessage("An unexpected error occurred. Please try again.");
+      } catch (error: any) {
+        console.error(error);
+        setErrorMessage(
+          error.message || "An unexpected error occurred. Please try again."
+        );
+      } finally {
+        setIsSubmitting(false);
       }
-    };
-    
+    };    
 
   return (
     <div className={styles.container}>
@@ -54,32 +61,53 @@ export default function LoginPage() {
           <label>Email</label>
           <input
             type="email"
+            className={styles.input}
             value={email}
             onChange={handleInputChange(setEmail)}
-            className={styles.input}
             placeholder="Enter your email"
             required
           />
         </div>
         <div className={styles.inputGroup}>
           <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={handleInputChange(setPassword)}
-            className={styles.input}
-            placeholder="Enter your password"
-            required
-          />
+          <div className={styles.passwordWrapper}>
+            <input
+              type={passwordVisible ? "text" : "password"}
+              className={styles.input}
+              value={password}
+              onChange={handleInputChange(setPassword)}
+              placeholder="Enter your password"
+              required
+            />
+            <button
+              type="button"
+              className={styles.eyeButton}
+              onClick={() => setPasswordVisible((prev) => !prev)}
+            >
+              <img
+                src="/img/eye-password-hide.svg"
+                alt="Toggle Password Visibility"
+                className={styles.eyeIcon}
+              />
+            </button>
+          </div>
         </div>
-        <button type="submit" className={styles.button}>
-          Login
+        <button
+          type="submit"
+          className={styles.button}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Logging in..." : "Login"}
         </button>
       </form>
 
       <div className={styles.signupLink}>
-        <p>Don't have an account? <a href="/register">Sign Up here</a></p>
+        <p>
+          Don't have an account? <a href="/register">Sign Up here</a>
+        </p>
       </div>
     </div>
   );
-}
+};
+
+export default LoginPage;

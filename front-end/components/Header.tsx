@@ -7,12 +7,21 @@ const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLogoutMenu, setShowLogoutMenu] = useState<boolean>(false);
+  const [userFullName, setUserFullName] = useState<string>("");
   const logoutMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Check if user is logged in (replace with actual auth logic if needed)
-    const userToken = localStorage.getItem("authToken"); // Assuming token presence indicates login
-    setIsLoggedIn(!!userToken); // Set login state based on token
+    const userToken = localStorage.getItem("authToken");
+
+    if (userToken) {
+      setIsLoggedIn(true);
+
+      const userInfo = JSON.parse(userToken);
+
+      setUserFullName(userInfo.fullname || "Unknown User");
+    } else {
+      setIsLoggedIn(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -38,9 +47,10 @@ const Header: React.FC = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken"); // Remove token from localStorage
-    setIsLoggedIn(false); // Update state
-    setShowLogoutMenu(false); // Hide logout menu
+    localStorage.removeItem("authToken");
+    localStorage.setItem("isLoggedIn", "false");
+    setIsLoggedIn(false);
+    setShowLogoutMenu(false);
   };
 
   const toggleLogoutMenu = () => {
@@ -50,7 +60,6 @@ const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.leftSection}>
-        {/* Make a Post Button */}
         <Link href="/addpost">
           <button className={`${styles.sharedButton} ${postButtonStyles.makePostButton}`}>
             Make a Post
@@ -75,8 +84,7 @@ const Header: React.FC = () => {
 
       <div className={styles.userMenu}>
         {isLoggedIn ? (
-          <div style={{ position: "relative" }}>
-            {/* Profile Picture */}
+          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
             <img
               src="/img/profilepic.png"
               alt="Profile"
@@ -84,10 +92,7 @@ const Header: React.FC = () => {
               onClick={toggleLogoutMenu}
             />
             {showLogoutMenu && (
-              <div
-                ref={logoutMenuRef}
-                className={styles.logoutMenu}
-              >
+              <div ref={logoutMenuRef} className={styles.logoutMenu}>
                 <p onClick={handleLogout} className={styles.logoutOption}>
                   Logout
                 </p>
