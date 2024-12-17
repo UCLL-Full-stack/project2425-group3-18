@@ -1,121 +1,133 @@
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { useRouter } from 'next/router'; // Import useRouter for redirection
+import { useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from "next/router";
+import UserService from "@/services/UserService";
 import styles from "@/styles/login/Login.module.css";
-import UserService from '@/services/UserService';
+import { User } from "@/types";
+import { ErrorOutline } from '@mui/icons-material';
 
-export default function LoginPage() {
-  const [username, setUsername] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [loginMessage, setLoginMessage] = useState<string>('');
-  const [users, setUsers] = useState<Array<{ 
-    firstName: string; 
-    lastName: string; 
-    email: string; 
-    password: string; 
-    profile: { 
-      username: string; 
-      bio: string; 
-      role: string; 
-    }; 
-  }>>([]);
-  
-  const router = useRouter(); // Initialize useRouter for navigation
+const LoginPage = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const router = useRouter();
 
-  // Fetch all users (could be replaced by a more robust method)
-  const getAllUsers = async () => {
-    const response = await UserService.getAllUsers();
-    if (response.ok) {
-      const usersData = await response.json();
-      setUsers(usersData);
-    } else {
-      setErrorMessage('Failed to fetch users.');
-    }
-  };
-
-  // Handle login logic
-  const handleLogin = (e: FormEvent) => {
-    e.preventDefault();
-
-    const user = users.find((user) => 
-      (user.profile.username === username || user.email === email) && user.password === password
-    );
-
-    if (!user) {
-      setLoginMessage('Incorrect information.');
-      setErrorMessage('');
-    } else {
-      setLoginMessage(''); // Clear login message on successful login
-      setErrorMessage('');
-      
-      // Store login state (set to true on successful login)
-      localStorage.setItem("isLoggedIn", "true");
-
-      // Optionally store user data (this could be user profile or JWT token)
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // Redirect to the home page after successful login
-      router.push('/'); // Navigates to the home page
-    }
-  };
-
-  // Fetch users on mount
-  useEffect(() => {
-    getAllUsers();
-  }, []);
-
-  // Handle input change for all form fields
-  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
+  const handleInputChange =
+    (setter: React.Dispatch<React.SetStateAction<string>>) =>
     (e: ChangeEvent<HTMLInputElement>) => {
       setter(e.target.value);
     };
 
+    const handleSubmit = async (e: FormEvent) => {
+      e.preventDefault();
+      setErrorMessage(null);
+      setIsSubmitting(true);
+    
+      try {
+        const user: Partial<User> = { email, password };
+        const response = await UserService.loginUser(user as User);
+    
+        if (response?.token) {
+          sessionStorage.setItem(
+            "authToken",
+            JSON.stringify({
+              token: response.token,
+              fullname: `${response.firstName} ${response.lastName}`,
+              email,
+            })
+          );
+          sessionStorage.setItem("isLoggedIn", "true");
+    
+          router.push("/");
+        } else {
+          setErrorMessage("Invalid credentials. Please try again.");
+        }
+      } catch (error: unknown) {
+        setIsSubmitting(false);
+    
+        if (error instanceof Error) {
+          if (error.message.includes("invalid")) {
+            setErrorMessage("The given password is invalid. Please try again.");
+          } else if (error.message.includes("does not exist")) {
+            setErrorMessage("User does not exist. Please check your email.");
+          } else {
+            setErrorMessage(error.message || "An unexpected error occurred. Please try again.");
+          }
+        } else {
+          setErrorMessage("An unexpected error occurred. Please try again.");
+        }
+      }
+    };    
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Login</h1>
-      {loginMessage && <p className={styles.loginMessage}>{loginMessage}</p>}
-      {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
-      <form onSubmit={handleLogin} className={styles.form}>
-        <div className={styles.inputGroup}>
-          <label>Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={handleInputChange(setUsername)}
-            className={styles.input}
-            placeholder="Enter your username"
-            required
-          />
-        </div>
+      {errorMessage && (
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            color: "red",
+          }}
+        >
+          <ErrorOutline fontSize="small" />
+          {errorMessage}
+        </span>
+      )}
+      <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
           <label>Email</label>
           <input
             type="email"
+            className={styles.input}
             value={email}
             onChange={handleInputChange(setEmail)}
-            className={styles.input}
             placeholder="Enter your email"
             required
           />
         </div>
         <div className={styles.inputGroup}>
           <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={handleInputChange(setPassword)}
-            className={styles.input}
-            placeholder="Enter your password"
-            required
-          />
+          <div className={styles.passwordWrapper}>
+            <input
+              type={passwordVisible ? "text" : "password"}
+              className={styles.input}
+              value={password}
+              onChange={handleInputChange(setPassword)}
+              placeholder="Enter your password"
+              required
+            />
+            <button
+              type="button"
+              className={styles.eyeButton}
+              onClick={() => setPasswordVisible((prev) => !prev)}
+            >
+              <img
+                src="/img/eye-password-hide.svg"
+                alt="Toggle Password Visibility"
+                className={styles.eyeIcon}
+              />
+            </button>
+          </div>
         </div>
-        <button type="submit" className={styles.button}>Login</button>
+        <button
+          type="submit"
+          className={styles.button}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Logging in..." : "Login"}
+        </button>
       </form>
 
       <div className={styles.signupLink}>
-        <p>Don't have an account? <a href="/register">Sign Up here</a></p>
+        <p>
+          Don't have an account? <a href="/register">Sign Up here</a>
+        </p>
       </div>
     </div>
   );
-}
+};
+
+export default LoginPage;
