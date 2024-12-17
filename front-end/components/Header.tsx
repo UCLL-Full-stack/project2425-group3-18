@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";  // Import the useRouter hook
 import styles from "@/styles/header/header.module.css";
 import postButtonStyles from "@/styles/buttons/AddPostButton.module.css";
 
@@ -9,6 +10,7 @@ const Header: React.FC = () => {
   const [showLogoutMenu, setShowLogoutMenu] = useState<boolean>(false);
   const [userFullName, setUserFullName] = useState<string>("");
   const logoutMenuRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();  // Initialize useRouter hook
 
   useEffect(() => {
     const userToken = sessionStorage.getItem("authToken");
@@ -51,6 +53,7 @@ const Header: React.FC = () => {
     sessionStorage.setItem("isLoggedIn", "false");
     setIsLoggedIn(false);
     setShowLogoutMenu(false);
+    router.push("/login");  // Redirect to the login page
   };
 
   const toggleLogoutMenu = () => {
