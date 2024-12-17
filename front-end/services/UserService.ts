@@ -1,21 +1,38 @@
-import { User } from "@/types";
+import { User, UserData } from "@/types";
 
 // Get all users
-const getAllUsers = async (): Promise<User[]> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+const getAllUsers = async (): Promise<UserData[]> => {
+  try {
+    const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Failed to fetch users");
+    const token = loggedInUser.token;
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error fetching users:", errorData);
+      throw new Error(errorData.message || "Failed to fetch users");
+    }
+
+    const users = await response.json();
+
+    return users;
+  } catch (error) {
+    console.error("Error in getAllUsers function:", error);
+    throw error;
   }
-
-  return response.json();
 };
+
 
 // Login user
 const loginUser = async (user: User) => {
@@ -32,7 +49,11 @@ const loginUser = async (user: User) => {
     throw new Error(errorData.message || "Login failed");
   }
 
-  return response.json();
+  const userData = await response.json();
+
+  sessionStorage.setItem("loggedInUser", JSON.stringify(userData));
+
+  return userData;
 };
 
 // Register user

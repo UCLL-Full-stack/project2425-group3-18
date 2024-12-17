@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";  // Import the useRouter hook
+import { useRouter } from "next/router";
 import styles from "@/styles/header/header.module.css";
 import postButtonStyles from "@/styles/buttons/AddPostButton.module.css";
 
@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   const [showLogoutMenu, setShowLogoutMenu] = useState<boolean>(false);
   const [userFullName, setUserFullName] = useState<string>("");
   const logoutMenuRef = useRef<HTMLDivElement | null>(null);
-  const router = useRouter();  // Initialize useRouter hook
+  const router = useRouter();
 
   useEffect(() => {
     const userToken = sessionStorage.getItem("authToken");
@@ -53,7 +53,7 @@ const Header: React.FC = () => {
     sessionStorage.setItem("isLoggedIn", "false");
     setIsLoggedIn(false);
     setShowLogoutMenu(false);
-    router.push("/login");  // Redirect to the login page
+    router.push("/login");
   };
 
   const toggleLogoutMenu = () => {
@@ -86,38 +86,27 @@ const Header: React.FC = () => {
       </div>
 
       <div className={styles.userMenu}>
-        {isLoggedIn ? (
-          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-            <img
-              src="/img/profilepic.png"
-              alt="Profile"
-              className={styles.profilePic}
-              onClick={toggleLogoutMenu}
-            />
-            {showLogoutMenu && (
-              <div ref={logoutMenuRef} className={styles.logoutMenu}>
-                <p onClick={handleLogout} className={styles.logoutOption}>
-                  Logout
-                </p>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className={styles.authButtons}>
-            <Link href="/register">
-              <button className={`${styles.sharedButton} ${styles.signupButton}`}>
-                Sign Up
+      {isLoggedIn ? (
+        <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+          <img
+            src="/img/profilepic.png"
+            alt="Profile"
+            className={styles.profilePic}
+            onClick={toggleLogoutMenu}
+          />
+          {showLogoutMenu && (
+            <div ref={logoutMenuRef} className={styles.logoutMenu}>
+              <Link href="/profile">
+                <button className={styles.logoutOption}>Profile</button>
+              </Link>
+              <button onClick={handleLogout} className={styles.logoutOption}>
+                Logout
               </button>
-            </Link>
-
-            <Link href="/login">
-              <button className={`${styles.sharedButton} ${styles.loginButton}`}>
-                Log In
-              </button>
-            </Link>
-          </div>
-        )}
-      </div>
+            </div>
+          )}
+        </div>
+      ) : null}
+    </div>
     </header>
   );
 };

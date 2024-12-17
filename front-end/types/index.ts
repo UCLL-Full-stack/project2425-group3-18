@@ -4,3 +4,14 @@ export interface User {
     email: string;
     password: string;
   }
+
+export interface UserData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    profile: {
+      username: string;
+      bio: string;
+      role: string;
+    };
+}

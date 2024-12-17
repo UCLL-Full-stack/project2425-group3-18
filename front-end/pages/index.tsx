@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import Head from "next/head";
-import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
 import ContentGrid from "@/components/ContentGrid";
 import Layout from "@/components/Layoutwrapper";
 import { useRouter } from "next/router";
