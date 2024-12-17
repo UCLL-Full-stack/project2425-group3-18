@@ -1,4 +1,5 @@
 .container {
+  margin-top: 15rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,4 +111,42 @@
 
 .backLink a:hover {
   text-decoration: underline;
+}
+
+.userTableContainer {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.userTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.userTable th,
+.userTable td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+}
+
+.userTable th {
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+}
+
+.userTable tr:hover {
+  background-color: #f9f9f9;
+}
+
+.userTable td {
+  color: #555;
 }
