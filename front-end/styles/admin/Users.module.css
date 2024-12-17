@@ -1,0 +1,33 @@
+.usersContainer {
+    padding: 40px;
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .usersContainer h1 {
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+  
+  .usersTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .usersTable th,
+  .usersTable td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .usersTable th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .usersTable tr:hover {
+    background-color: #f1f1f1;
+  }
+  

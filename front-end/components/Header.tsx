@@ -9,18 +9,21 @@ const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [showLogoutMenu, setShowLogoutMenu] = useState<boolean>(false);
   const [userFullName, setUserFullName] = useState<string>("");
+  const [userRole, setUserRole] = useState<string>("");
   const logoutMenuRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const userToken = sessionStorage.getItem("authToken");
-
+    const userToken = sessionStorage.getItem("loggedInUser");
+    
     if (userToken) {
-      setIsLoggedIn(true);
-
       const userInfo = JSON.parse(userToken);
-
-      setUserFullName(userInfo.fullname || "Unknown User");
+      console.log("User Token:", userInfo);
+  
+      setIsLoggedIn(true);
+      setUserFullName(userInfo.fullName || "Unknown User");
+      setUserRole(userInfo.role || "user");
+  
     } else {
       setIsLoggedIn(false);
     }
@@ -49,7 +52,7 @@ const Header: React.FC = () => {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("authToken");
+    sessionStorage.removeItem("loggedInUser"); // Correct key for logout
     sessionStorage.setItem("isLoggedIn", "false");
     setIsLoggedIn(false);
     setShowLogoutMenu(false);
@@ -58,6 +61,10 @@ const Header: React.FC = () => {
 
   const toggleLogoutMenu = () => {
     setShowLogoutMenu(!showLogoutMenu);
+  };
+
+  const handleAdminClick = () => {
+    router.push("/admin/users");
   };
 
   return (
@@ -86,27 +93,32 @@ const Header: React.FC = () => {
       </div>
 
       <div className={styles.userMenu}>
-      {isLoggedIn ? (
-        <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-          <img
-            src="/img/profilepic.png"
-            alt="Profile"
-            className={styles.profilePic}
-            onClick={toggleLogoutMenu}
-          />
-          {showLogoutMenu && (
-            <div ref={logoutMenuRef} className={styles.logoutMenu}>
-              <Link href="/profile">
-                <button className={styles.logoutOption}>Profile</button>
-              </Link>
-              <button onClick={handleLogout} className={styles.logoutOption}>
-                Logout
-              </button>
-            </div>
-          )}
-        </div>
-      ) : null}
-    </div>
+        {isLoggedIn ? (
+          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+            <img
+              src="/img/profilepic.png"
+              alt="Profile"
+              className={styles.profilePic}
+              onClick={toggleLogoutMenu}
+            />
+            {showLogoutMenu && (
+              <div ref={logoutMenuRef} className={styles.logoutMenu}>
+                <Link href="/profile">
+                  <button className={styles.logoutOption}>Profile</button>
+                </Link>
+                {userRole === "Admin" && (
+                  <button onClick={handleAdminClick} className={styles.logoutOption}>
+                    Manage Users
+                  </button>
+                )}
+                <button onClick={handleLogout} className={styles.logoutOption}>
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        ) : null}
+      </div>
     </header>
   );
 };
