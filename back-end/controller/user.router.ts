@@ -49,7 +49,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import userService from '../service/user.service';
 import { UserInput, AuthInput } from '../types';
-import { checkPrime } from 'crypto';
 const userRouter = express.Router();
 
 /**
@@ -75,8 +74,8 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const posts = await userService.getAllUsers();
         res.status(200).json(posts);
-    } catch (err) {
-        res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
+    } catch (error) {
+        next(error)
     }
 });
 
@@ -117,7 +116,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                              user:
  *                                  $ref: '#/components/schemas/User'
  */
-userRouter.post('/create', async (req: Request, res: Response) => {
+userRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (!req.body.user) {
             return res.status(400).json({
@@ -133,8 +132,7 @@ userRouter.post('/create', async (req: Request, res: Response) => {
             user: createdUser,
         });
     } catch (error) {
-        console.error('Error creating user: ', error);
-        res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
+        next(error)
     }
 });
 
