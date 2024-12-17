@@ -50,6 +50,39 @@ profileRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
 });
 
 /**
+ * @swagger
+ * /profiles/{username}:
+ *  get:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Get a profile by username.
+ *      tags:
+ *          - Profiles
+ *      parameters:
+ *          - in: path
+ *            name: username
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The profile username.
+ *      responses:
+ *          200:
+ *              description: A profile object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Profile'
+ */
+profileRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const profile = await profileService.getProfileByUsername(String(req.params.username));
+        res.status(200).json(profile)
+    } catch (error) {
+        next(error)
+    }
+})
+
+/**
  *@swagger
  * /profiles/create:
  *  post:

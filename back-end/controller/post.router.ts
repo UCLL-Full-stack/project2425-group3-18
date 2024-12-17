@@ -102,7 +102,7 @@ postRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                                  type: string
  *                                  example: "Post created successfully"
  *                              post:
- *                                  $ref: '#/components/schemas/Post'
+ *                                  $ref: '#/components/schemas/Post'       
  */
 postRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
