@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import UserService from "@/services/UserService";
 import styles from "@/styles/login/Login.module.css";
 import { User } from "@/types";
+import { ErrorOutline } from '@mui/icons-material';
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
@@ -28,7 +29,7 @@ const LoginPage = () => {
         const response = await UserService.loginUser(user as User);
     
         if (response?.token) {
-          localStorage.setItem(
+          sessionStorage.setItem(
             "authToken",
             JSON.stringify({
               token: response.token,
@@ -36,26 +37,45 @@ const LoginPage = () => {
               email,
             })
           );
-          localStorage.setItem("isLoggedIn", "true");
+          sessionStorage.setItem("isLoggedIn", "true");
     
           router.push("/");
         } else {
           setErrorMessage("Invalid credentials. Please try again.");
         }
-      } catch (error: any) {
-        console.error(error);
-        setErrorMessage(
-          error.message || "An unexpected error occurred. Please try again."
-        );
-      } finally {
+      } catch (error: unknown) {
         setIsSubmitting(false);
+    
+        if (error instanceof Error) {
+          if (error.message.includes("invalid")) {
+            setErrorMessage("The given password is invalid. Please try again.");
+          } else if (error.message.includes("does not exist")) {
+            setErrorMessage("User does not exist. Please check your email.");
+          } else {
+            setErrorMessage(error.message || "An unexpected error occurred. Please try again.");
+          }
+        } else {
+          setErrorMessage("An unexpected error occurred. Please try again.");
+        }
       }
     };    
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Login</h1>
-      {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+      {errorMessage && (
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            color: "red",
+          }}
+        >
+          <ErrorOutline fontSize="small" />
+          {errorMessage}
+        </span>
+      )}
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
           <label>Email</label>

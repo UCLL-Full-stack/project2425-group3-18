@@ -11,7 +11,7 @@ const Header: React.FC = () => {
   const logoutMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const userToken = localStorage.getItem("authToken");
+    const userToken = sessionStorage.getItem("authToken");
 
     if (userToken) {
       setIsLoggedIn(true);
@@ -47,8 +47,8 @@ const Header: React.FC = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.setItem("isLoggedIn", "false");
+    sessionStorage.removeItem("authToken");
+    sessionStorage.setItem("isLoggedIn", "false");
     setIsLoggedIn(false);
     setShowLogoutMenu(false);
   };

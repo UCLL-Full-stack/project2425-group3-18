@@ -1,6 +1,7 @@
 import UserService from '@/services/UserService';
 import React, { useState, FormEvent } from 'react';
 import styles from "@/styles/register/Register.module.css";
+import { ErrorOutline } from '@mui/icons-material';
 
 const RegisterForm = () => {
   const [firstName, setFirstName] = useState('');
@@ -14,12 +15,45 @@ const RegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
+  // Email validation function
+  const validateEmail = (email: string): string => {
+    if (!email || email.trim() === '') {
+      throw new Error('Email cannot be empty');
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]*\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      throw new Error('Email is not valid');
+    }
+    return email;
+  };
+
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
     try {
+      // Check if all required fields are filled
+      if (!firstName) {
+        throw new Error('Please fill in the first name field');
+      }
+      if (!lastName) {
+        throw new Error('Please fill in the last name field');
+      }
+      if (!email) {
+        throw new Error('Please fill in the email field');
+      }
+      if (!password) {
+        throw new Error('Please fill in the password field');
+      }
+      if (!username) {
+        throw new Error('Please fill in the username field');
+      }
+
+      // Validate email
+      validateEmail(email);
+
+      // Register user and create profile
       const userResponse = await UserService.registerUser({
         firstName,
         lastName,
@@ -40,15 +74,30 @@ const RegisterForm = () => {
         throw new Error('Registration failed, please try again');
       }
     } catch (error: any) {
-      setError(error.message || 'An error occurred during registration');
-    } finally {
       setIsSubmitting(false);
+
+      if (error instanceof Error) {
+        setError(error.message || 'An unexpected error occurred');
+      }
     }
   };
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Register</h1>
+      {error && (
+        <span
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            color: 'red',
+          }}
+        >
+          <ErrorOutline fontSize="small" />
+          {error}
+        </span>
+      )}
       <form className={styles.form} onSubmit={handleRegister}>
         <div className={styles.inputGroup}>
           <label>First Name</label>
@@ -57,7 +106,6 @@ const RegisterForm = () => {
             className={styles.input}
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            required
           />
         </div>
         <div className={styles.inputGroup}>
@@ -67,7 +115,6 @@ const RegisterForm = () => {
             className={styles.input}
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            required
           />
         </div>
         <div className={styles.inputGroup}>
@@ -77,7 +124,6 @@ const RegisterForm = () => {
             className={styles.input}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
         </div>
         <div className={styles.inputGroup}>
@@ -88,7 +134,6 @@ const RegisterForm = () => {
               className={styles.input}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
             />
             <button
               type="button"
@@ -106,7 +151,6 @@ const RegisterForm = () => {
             className={styles.input}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
           />
         </div>
         <div className={styles.inputGroup}>
@@ -128,8 +172,6 @@ const RegisterForm = () => {
             <option value="Admin">Admin</option>
           </select>
         </div>
-
-        {error && <p className={styles.error}>{error}</p>}
 
         <button type="submit" className={styles.button} disabled={isSubmitting}>
           {isSubmitting ? 'Registering...' : 'Register'}

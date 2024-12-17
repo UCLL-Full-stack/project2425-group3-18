@@ -8,7 +8,7 @@ GET /profile/{userId}
 POST /profile/{userId} (Voeg profiel toe aan user)
 
 GET /kot
-POST /kot
+POST /kot/{userId}
 
 GET /comments/{postId} (Krijg comments van een post)
 POST /comments/{postId} (Post comment bij een post)
