@@ -47,6 +47,7 @@
   },
   "header": {
     "makePostButton": "Plaats een Bericht",
+    "addKotText": "Voeg Kot Toe",
     "searchPlaceholder": "Zoek een bericht...",
     "searchButton": "Zoeken",
     "languageButtonAlt": "Verander Taal",
@@ -124,5 +125,16 @@
     "user": "Gebruiker",
     "noBio": "Geen biografie",
     "fetchError": "Fout bij het ophalen van gebruikers."
+  },
+  "addKotPage": {
+    "addKotTitle": "Voeg een Kot Toe",
+    "cityLabel": "Stad",
+    "streetLabel": "Straat",
+    "housenumberLabel": "Huisnummer",
+    "priceLabel": "Prijs",
+    "surfaceSpaceLabel": "Oppervlakte (m²)",
+    "submitButton": "Indienen",
+    "surfaceSpaceError": "Oppervlakte moet een positief getal zijn",
+    "generalError": "Er is een fout opgetreden bij het toevoegen van het Kot. Probeer het opnieuw."
   }
 }

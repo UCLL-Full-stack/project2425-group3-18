@@ -47,6 +47,7 @@
   },
   "header": {
     "makePostButton": "Make a Post",
+    "addKotText": "Add Kot",
     "searchPlaceholder": "Search a post...",
     "searchButton": "Search",
     "languageButtonAlt": "Change Language",
@@ -124,5 +125,16 @@
    "user": "User",
    "noBio": "No Bio",
    "fetchError": "Failed to fetch users."
+  },
+  "addKotPage": {
+    "addKotTitle": "Add a Kot",
+    "cityLabel": "City",
+    "streetLabel": "Street",
+    "housenumberLabel": "House Number",
+    "priceLabel": "Price",
+    "surfaceSpaceLabel": "Surface Space (m²)",
+    "submitButton": "Submit",
+    "surfaceSpaceError": "Surface space must be a positive number",
+    "generalError": "An error occurred while adding the Kot. Please try again."
   }
 }

@@ -41,3 +41,10 @@ export interface ContentGridProps {
   username?: string;
   filterByUsername?: boolean;
 }
+export interface KotData {
+  city: string;
+  street: string;
+  housenumber: string;
+  price: string;
+  surfaceSpace: string;
+}
