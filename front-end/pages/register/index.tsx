@@ -1,9 +1,9 @@
-import UserService from '@/services/UserService';
 import React, { useState, FormEvent } from 'react';
 import styles from "@/styles/register/Register.module.css";
 import { ErrorOutline } from '@mui/icons-material';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { UserService } from '@/services/UserService';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
@@ -53,28 +53,23 @@ const RegisterForm = () => {
 
       validateEmail(email);
 
-      const userResponse = await UserService.registerUser({
-        firstName,
-        lastName,
-        email,
-        password,
-      });
+      await UserService.registerUserWithProfile(
+        {
+          firstName,
+          lastName,
+          email,
+          password,
+        },
+        {
+          username,
+          bio,
+          role,
+        }
+      );
 
-      const profileResponse = await UserService.createProfile({
-        username,
-        bio,
-        role,
-        email,
-      });
-
-      if (userResponse && profileResponse) {
-        window.location.href = '/login';
-      } else {
-        throw new Error(t('register.registrationFailed'));
-      }
+      window.location.href = '/login';
     } catch (error: any) {
       setIsSubmitting(false);
-
       if (error instanceof Error) {
         setError(error.message || t('register.unexpectedError'));
       }

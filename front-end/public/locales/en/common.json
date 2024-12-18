@@ -126,10 +126,12 @@
    "email": "Email",
    "role": "Role",
    "bio": "Bio",
+   "actions": "Actions",
    "notAvailable": "Not Available",
    "user": "User",
    "noBio": "No Bio",
-   "fetchError": "Failed to fetch users."
+   "fetchError": "Failed to fetch users.",
+   "delete": "Delete user"
   },
   "addKotPage": {
     "addKotTitle": "Add a Kot",

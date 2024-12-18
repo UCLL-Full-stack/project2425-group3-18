@@ -56,7 +56,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userRole, onLogout }) => {
           <Link href="/profile">
             <button className={styles.logoutOption}>{t('profileMenu.profile')}</button>
           </Link>
-          {userRole === "Admin" && (
+          {(userRole === "Admin" || userRole === "Moderator") && (
             <button onClick={handleAdminClick} className={styles.logoutOption}>
               {t('profileMenu.manageUsers')}
             </button>

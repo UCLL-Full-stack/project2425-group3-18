@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/router";
-import UserService from "@/services/UserService";
 import styles from "@/styles/login/Login.module.css";
 import { User, UserData } from "@/types";
 import { ErrorOutline } from '@mui/icons-material';
@@ -8,6 +7,7 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import useSWR from 'swr';
+import { UserService } from "@/services/UserService";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 

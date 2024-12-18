@@ -1,4 +1,4 @@
-import { User, UserData } from "@/types";
+import { Profile, User, UserData } from "@/types";
 
 const getAllUsers = async (): Promise<UserData[]> => {
   try {
@@ -27,39 +27,6 @@ const getAllUsers = async (): Promise<UserData[]> => {
   }
 };
 
-const getProfileByUsername = async (username: string) => {
-  const loggedInUserString = sessionStorage.getItem("loggedInUser");
-
-  if (!loggedInUserString) {
-    throw new Error("Logged-in user data is missing in sessionStorage.");
-  }
-
-  const loggedInUser = JSON.parse(loggedInUserString);
-
-  const token = loggedInUser?.token;
-  console.log(token);
-
-  if (!token) {
-    throw new Error("No auth token found");
-  }
-
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/profiles/${username}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  if (!response.ok) {
-    throw new Error(`Failed to fetch profile: ${response.statusText}`);
-  }
-
-  return await response.json();
-};
-
 // Login user
 const loginUser = async (user: User) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
@@ -83,52 +50,85 @@ const loginUser = async (user: User) => {
 };
 
 // Register user
-const registerUser = async (user: User) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/create`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ user }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "User registration failed");
-  }
-
-  return response.json();
-};
-
-// Create Profile
-const createProfile = async (profileData: { username: string; bio: string; role: string; email: string }) => {
+const registerUserWithProfile = async (
+  user: User,
+  profile: Profile
+) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/create`, {
+    // Step 1: Create the user
+    const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ profile: profileData, email: profileData.email }),
+      body: JSON.stringify({ user }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error creating profile:", errorData.message);
+    if (!userResponse.ok) {
+      const errorData = await userResponse.json();
+      throw new Error(errorData.message || "User registration failed");
+    }
+
+    const createdUser = await userResponse.json();
+
+    // Step 2: Create the profile associated with the user
+    const profileResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ profile, email: user.email }), // Use the user's email for association
+    });
+
+    if (!profileResponse.ok) {
+      const errorData = await profileResponse.json();
       throw new Error(errorData.message || "Profile creation failed");
     }
 
-    return response.json();
+    const createdProfile = await profileResponse.json();
+
+    // Return both user and profile data
+    return { user: createdUser, profile: createdProfile };
   } catch (error) {
+    console.error("Error registering user and creating profile:", error);
     throw error;
   }
 };
 
-const UserService = {
-  getProfileByUsername,
-  loginUser,
-  registerUser,
-  createProfile,
-  getAllUsers,
+const deleteUserByEmail = async (email: string) => {
+  try {
+    const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
+    const token = loggedInUser.token;
+
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${email}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error deleting user:", errorData);
+      throw new Error(errorData.message || "User deletion failed");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error in deleteUserByEmail function:", error);
+    throw error;
+  }
 };
 
-export default UserService;
+export const UserService = {
+  loginUser,
+  registerUserWithProfile,
+  getAllUsers,
+  deleteUserByEmail,
+};
+

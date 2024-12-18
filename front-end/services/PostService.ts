@@ -126,11 +126,10 @@ const deletePost = async (id: number) => {
   }
 };
 
-const PostService = {
+export const PostService = {
   createPost,
   getAllPosts,
   getPostsByUsername,
   deletePost,
 };
 
-export default PostService;

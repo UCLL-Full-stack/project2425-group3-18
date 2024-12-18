@@ -126,10 +126,12 @@
     "email": "E-mail",
     "role": "Rol",
     "bio": "Biografie",
+    "actions": "Acties",
     "notAvailable": "Niet beschikbaar",
     "user": "Gebruiker",
     "noBio": "Geen biografie",
-    "fetchError": "Fout bij het ophalen van gebruikers."
+    "fetchError": "Fout bij het ophalen van gebruikers.",
+    "delete": "Verwijder gebruiker"
   },
   "addKotPage": {
     "addKotTitle": "Voeg een Kot Toe",

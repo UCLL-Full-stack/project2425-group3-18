@@ -4,7 +4,9 @@ import Layout from "@/components/Layoutwrapper";
 import { UserData } from "@/types";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
+import { ProfileService } from "@/services/ProfileService";
+import { UserService } from "@/services/UserService";
 
 const UsersPage: React.FC = () => {
   const { t } = useTranslation();
@@ -38,7 +40,7 @@ const UsersPage: React.FC = () => {
   useEffect(() => {
     const checkAdminAccess = () => {
       const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
-      if (loggedInUser?.role === "Admin") {
+      if (loggedInUser?.role === "Admin" || loggedInUser?.role === "Moderator") {
         setIsAdmin(true);
       } else {
         setIsAdmin(false);
@@ -52,6 +54,21 @@ const UsersPage: React.FC = () => {
     isAdmin ? `${process.env.NEXT_PUBLIC_API_URL}/users` : null,
     fetchUsers
   );
+
+  const handleDelete = async (username: string, email: string) => {
+    try {
+      const confirmation = window.confirm(t("usersPage.confirmDelete"));
+      if (confirmation) {
+        await ProfileService.deleteProfileByUsername(username);
+        await UserService.deleteUserByEmail(email);
+        alert(t("usersPage.deleteSuccess"));
+        mutate(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+      }
+    } catch (error) {
+      alert(t("usersPage.deleteError"));
+      console.error(error);
+    }
+  };
 
   if (isAdmin === null) {
     return <div>{t('usersPage.loading')}</div>;
@@ -81,6 +98,7 @@ const UsersPage: React.FC = () => {
               <th>{t('usersPage.email')}</th>
               <th>{t('usersPage.role')}</th>
               <th>{t('usersPage.bio')}</th>
+              <th>{t('usersPage.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -91,6 +109,14 @@ const UsersPage: React.FC = () => {
                 <td>{user.email}</td>
                 <td>{user.profile?.role || t('usersPage.user')}</td>
                 <td>{user.profile?.bio || t('usersPage.noBio')}</td>
+                <td>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => handleDelete(user.profile?.username || "", user.email || "")}
+                  >
+                    {t('usersPage.delete')}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

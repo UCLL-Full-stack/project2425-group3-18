@@ -4,9 +4,6 @@ const addKot = async (kotData:KotData) => {
 
   };
 
-const kotService = {
+export const kotService = {
     addKot,
   }
-
-  export default kotService;
-  

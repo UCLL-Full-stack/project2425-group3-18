@@ -2,10 +2,10 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import useSWR from "swr";
 import styles from "@/styles/profile/Profile.module.css";
-import UserService from "@/services/UserService";
 import LayoutWrapper from "@/components/Layoutwrapper";
 import ContentGrid from "@/components/ContentGrid";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { ProfileService } from "@/services/ProfileService";
 
 const fetchProfile = async () => {
   try {
@@ -21,7 +21,7 @@ const fetchProfile = async () => {
       throw new Error("Username is missing from the logged-in user data.");
     }
 
-    const profile = await UserService.getProfileByUsername(username);
+    const profile = await ProfileService.getProfileByUsername(username);
     return profile;
   } catch (error) {
     console.error("Error fetching user profile:", error);

@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { ContentGridProps } from "@/types";
 import styles from "@/styles/contentGrid/contentGrid.module.css";
-import PostService from "@/services/PostService";
 import { useTranslation } from "next-i18next";
 import useSWR from "swr";
 import DeletePostButton from "./deletePostButton";
+import { PostService } from "@/services/PostService";
 
 const fetchPosts = async (username: string | undefined) => {
   try {
