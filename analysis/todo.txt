@@ -11,7 +11,7 @@ BE = back-end
 -Domain tests met jest (BE)
 -2 components testen met React Testing Library (FE)
 -HTTP traffic protecten met Helmet (BE)
--swap to useSWR (FE)
+-swap to useSWR (FE = OK)
 -Als gebruiker een functionaliteit/pagina oproept waartoe hij niet gemachtigd is, wordt hij op een correcte manier geïnformeerd. (FE)
 -op homepage een tabel toevoege met users voor lectoren (FE)
 -taal switcher (FE = OK)
