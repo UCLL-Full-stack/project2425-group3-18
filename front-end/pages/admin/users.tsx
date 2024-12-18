@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "@/styles/admin/Users.module.css"; // Adjust the CSS path as necessary
+import styles from "@/styles/admin/Users.module.css";
 import Layout from "@/components/Layoutwrapper";
 import { UserData } from "@/types";
 
@@ -7,7 +7,7 @@ const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null); // Track admin state
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   const getAllUsers = async (): Promise<UserData[]> => {
     try {
@@ -42,8 +42,7 @@ const UsersPage: React.FC = () => {
   useEffect(() => {
     const checkAdminAccess = () => {
       const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
-      console.log("Logged In User:", loggedInUser); // Log the entire loggedInUser object
-      // Check if profile and role exist
+      console.log("Logged In User:", loggedInUser);
       if (loggedInUser?.role === "Admin") {
         setIsAdmin(true);
       } else {
@@ -55,7 +54,7 @@ const UsersPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isAdmin === null) return; // Wait until isAdmin is set
+    if (isAdmin === null) return;
     if (isAdmin) {
       const fetchUsers = async () => {
         try {
@@ -70,14 +69,14 @@ const UsersPage: React.FC = () => {
 
       fetchUsers();
     }
-  }, [isAdmin]); // Fetch only if isAdmin is confirmed
+  }, [isAdmin]);
 
   if (isAdmin === null) {
-    return <div>Loading...</div>; // Wait for admin check
+    return <div>Loading...</div>;
   }
 
   if (!isAdmin) {
-    return <div>Access Denied</div>; // Display message if not an admin
+    return <div>Access Denied</div>;
   }
 
   if (loading) {

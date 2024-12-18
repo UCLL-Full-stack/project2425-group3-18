@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { PostData } from "@/types";
+import { ContentGridProps, PostData } from "@/types";
 import styles from "@/styles/contentGrid/contentGrid.module.css";
 import PostService from "@/services/PostService";
 
-interface ContentGridProps {
-  username: string;
-}
-
-const ContentGrid: React.FC<ContentGridProps> = ({ username }) => {
+const ContentGrid: React.FC<ContentGridProps> = ({ username, filterByUsername = false }) => {
   const [posts, setPosts] = useState<PostData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,10 +21,11 @@ const ContentGrid: React.FC<ContentGridProps> = ({ username }) => {
           id: post.id || index + 1,
         }));
 
-        // Filter posts by the provided username
-        const userPosts = postsWithIds.filter((post) => post.profile.username === username);
+        const filteredPosts = filterByUsername
+          ? postsWithIds.filter((post) => post.profile.username === username)
+          : postsWithIds;
 
-        setPosts(userPosts);
+        setPosts(filteredPosts);
       } catch (err) {
         console.error("Error fetching posts:", err);
         setError("Failed to load posts.");
@@ -38,7 +35,7 @@ const ContentGrid: React.FC<ContentGridProps> = ({ username }) => {
     };
 
     fetchPosts();
-  }, [username]);
+  }, [username, filterByUsername]);
 
   const viewDetails = (postId: number) => {
     router.push(`/post/${postId}`);

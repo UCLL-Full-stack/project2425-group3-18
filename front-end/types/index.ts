@@ -36,3 +36,8 @@ export interface CreatePostResponse {
   message: string;
   post: PostData;
 }
+
+export interface ContentGridProps {
+  username?: string;
+  filterByUsername?: boolean;
+}
