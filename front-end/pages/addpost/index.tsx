@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import styles from "@/styles/addpost/addpost.module.css";
 import selectImageButtonStyles from "@/styles/buttons/selectImageButton.module.css";
 import Layout from "@/components/Layoutwrapper";
-import { PostData } from "@/types"; // Import the PostData type
+import { PostData } from "@/types";
 import PostService from "@/services/PostService";
 import UserService from "@/services/UserService";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const AddPost: React.FC = () => {
+    const { t } = useTranslation();
     const [description, setDescription] = useState("");
     const [images, setImages] = useState<FileList | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -48,16 +51,14 @@ const AddPost: React.FC = () => {
                 },
             };
 
-            // Assume PostService.createPost returns the post with an id
             const createdPost = await PostService.createPost(postData);
 
-            // Handle the returned post which contains the id now
-            setSuccessMessage("Post created successfully!");
+            setSuccessMessage(t("addPost.successMessage"));
             setDescription("");
             setImages(null);
         } catch (err) {
             console.error("Error creating post:", err);
-            setError("Failed to create post. Please try again.");
+            setError(t("addPost.errorMessage"));
         } finally {
             setLoading(false);
         }
@@ -69,27 +70,27 @@ const AddPost: React.FC = () => {
     return (
         <Layout>
             <div className={styles.container}>
-                <h1 className={styles.title}>Create a New Post</h1>
+                <h1 className={styles.title}>{t("addPost.title")}</h1>
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.field}>
-                        <label htmlFor="description">Description</label>
+                        <label htmlFor="description">{t("addPost.description")}</label>
                         <textarea
                             id="description"
                             value={description}
                             onChange={handleDescriptionChange}
-                            placeholder="Enter the post description"
+                            placeholder={t("addPost.descriptionPlaceholder")}
                             rows={5}
                             className={styles.textarea}
                         />
                     </div>
 
                     <div className={styles.field}>
-                        <label htmlFor="images">Select Images</label>
+                        <label htmlFor="images">{t("addPost.selectImages")}</label>
                         <label
                             htmlFor="images"
                             className={selectImageButtonStyles.selectImageButton}
                         >
-                            Choose Images
+                            {t("addPost.chooseImages")}
                         </label>
                         <input
                             type="file"
@@ -101,7 +102,6 @@ const AddPost: React.FC = () => {
                         />
                     </div>
 
-                    {/* Display the image previews with their clickable names */}
                     {images && images.length > 0 && (
                         <div className={styles.imagePreviewContainer}>
                             {imageUrls.map((url, index) => (
@@ -125,7 +125,7 @@ const AddPost: React.FC = () => {
                     )}
 
                     <button type="submit" className={styles.submitButton} disabled={loading}>
-                        {loading ? "Submitting..." : "Submit Post"}
+                        {loading ? t("addPost.submitting") : t("addPost.submitPost")}
                     </button>
 
                     {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
@@ -134,6 +134,16 @@ const AddPost: React.FC = () => {
             </div>
         </Layout>
     );
+};
+
+export const getServerSideProps = async (context: any) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default AddPost;

@@ -1,0 +1,112 @@
+{
+  "register": {
+    "title": "Register",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "username": "Username",
+    "bio": "Bio",
+    "role": "Role",
+    "user": "User",
+    "admin": "Admin",
+    "register": "Register",
+    "registering": "Registering...",
+    "alreadyHaveAccount": "Already have an account?",
+    "loginHere": "Login here",
+    "emailEmpty": "Email cannot be empty",
+    "invalidEmail": "Email is not valid",
+    "firstNameRequired": "Please fill in the first name field",
+    "lastNameRequired": "Please fill in the last name field",
+    "emailRequired": "Please fill in the email field",
+    "passwordRequired": "Please fill in the password field",
+    "usernameRequired": "Please fill in the username field",
+    "registrationFailed": "Registration failed, please try again",
+    "unexpectedError": "An unexpected error occurred",
+    "togglePasswordVisibility": "Toggle password visibility"
+  },
+  "login": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "loginButton": "Login",
+    "loggingIn": "Logging in...",
+    "errorInvalidCredentials": "Invalid credentials. Please try again.",
+    "errorInvalidPassword": "The given password is invalid. Please try again.",
+    "errorUserNotExist": "User does not exist. Please check your email.",
+    "errorUnexpected": "An unexpected error occurred. Please try again.",
+    "dontHaveAccount": "Don't have an account? ",
+    "signUpHere": "Sign Up here",
+    "userList": "User List",
+    "emailColumn": "Email",
+    "roleColumn": "Role",
+    "passwordColumn": "Password"
+  },
+  "header": {
+    "makePostButton": "Make a Post",
+    "searchPlaceholder": "Search a post...",
+    "searchButton": "Search",
+    "languageButtonAlt": "Change Language",
+    "english": "English",
+    "dutch": "Dutch"
+  },
+  "contentGrid": {
+    "loading": "Loading posts...",
+    "error": "Failed to load posts."
+  },
+  "addPost": {
+    "title": "Create a New Post",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter the post description",
+    "selectImages": "Select Images",
+    "chooseImages": "Choose Images",
+    "submitPost": "Submit Post",
+    "submitting": "Submitting...",
+    "successMessage": "Post created successfully!",
+    "errorMessage": "Failed to create post. Please try again."
+  },
+  "comments": {
+    "comments": "Comments",
+    "no_comments": "No comments yet.",
+    "add_comment_placeholder": "Add a comment...",
+    "star": "Star",
+    "add_comment_button": "Add Comment"
+  },
+  "profileMenu": {
+    "profilePicAlt": "Profile",
+    "profile": "Profile",
+    "manageUsers": "Manage Users",
+    "logout": "Logout"
+  },
+  "shareModal": {
+    "title": "Share this post",
+    "facebook": "Facebook",
+    "x": "X",
+    "whatsapp": "WhatsApp",
+    "close": "X"
+  },
+  "sidebar": {
+    "logoAlt": "Rate My Kot Logo",
+    "navlink1": "Home",
+    "navlink2": "Posts",
+    "navlink3": "Profile",
+    "navlink4": "Settings"
+  },
+  "profilePage": {
+  "profileOf": "Profile of",
+  "loading": "Loading...",
+  "accessDenied": "Access Denied",
+  "loadingUsers": "Loading users...",
+  "manageUsers": "Manage Users",
+  "username": "Username",
+  "fullName": "Full Name",
+  "email": "Email",
+  "role": "Role",
+  "bio": "Bio",
+  "profilePicAlt": "Profile picture",
+  "profileError": "Error loading profile",
+  "postsBy": "Posts by"
+ }
+}

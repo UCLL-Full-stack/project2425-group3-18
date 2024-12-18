@@ -1,0 +1,112 @@
+{
+  "register": {
+    "title": "Registreren",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
+    "email": "E-mail",
+    "password": "Wachtwoord",
+    "username": "Gebruikersnaam",
+    "bio": "Bio",
+    "role": "Rol",
+    "user": "Gebruiker",
+    "admin": "Beheerder",
+    "register": "Registreren",
+    "registering": "Registreren...",
+    "alreadyHaveAccount": "Heb je al een account?",
+    "loginHere": "Log hier in",
+    "emailEmpty": "E-mail kan niet leeg zijn",
+    "invalidEmail": "E-mail is niet geldig",
+    "firstNameRequired": "Vul het veld voornaam in",
+    "lastNameRequired": "Vul het veld achternaam in",
+    "emailRequired": "Vul het veld e-mail in",
+    "passwordRequired": "Vul het veld wachtwoord in",
+    "usernameRequired": "Vul het veld gebruikersnaam in",
+    "registrationFailed": "Registratie mislukt, probeer het opnieuw",
+    "unexpectedError": "Er is een onverwachte fout opgetreden",
+    "togglePasswordVisibility": "Wissel zichtbaarheid wachtwoord"
+  },
+  "login": {
+    "login": "Inloggen",
+    "email": "E-mail",
+    "password": "Wachtwoord",
+    "enterEmail": "Voer je e-mail in",
+    "enterPassword": "Voer je wachtwoord in",
+    "loginButton": "Inloggen",
+    "loggingIn": "Inloggen...",
+    "errorInvalidCredentials": "Ongeldige inloggegevens. Probeer het opnieuw.",
+    "errorInvalidPassword": "Het opgegeven wachtwoord is ongeldig. Probeer het opnieuw.",
+    "errorUserNotExist": "Gebruiker bestaat niet. Controleer je e-mail.",
+    "errorUnexpected": "Er is een onverwachte fout opgetreden. Probeer het opnieuw.",
+    "dontHaveAccount": "Heb je nog geen account? ",
+    "signUpHere": "Registreer hier",
+    "userList": "Gebruikerslijst",
+    "emailColumn": "E-mail",
+    "roleColumn": "Rol",
+    "passwordColumn": "Wachtwoord"
+  },
+  "header": {
+    "makePostButton": "Plaats een Bericht",
+    "searchPlaceholder": "Zoek een bericht...",
+    "searchButton": "Zoeken",
+    "languageButtonAlt": "Verander Taal",
+    "english": "Engels",
+    "dutch": "Nederlands"
+  },
+  "contentGrid": {
+    "loading": "Berichten laden...",
+    "error": "Fout bij het laden van berichten."
+  },
+  "addPost": {
+    "title": "Maak een nieuw bericht",
+    "description": "Beschrijving",
+    "descriptionPlaceholder": "Voer de berichtbeschrijving in",
+    "selectImages": "Selecteer Afbeeldingen",
+    "chooseImages": "Kies Afbeeldingen",
+    "submitPost": "Plaats Bericht",
+    "submitting": "Bezig met plaatsen...",
+    "successMessage": "Bericht succesvol geplaatst!",
+    "errorMessage": "Het plaatsen van het bericht is mislukt. Probeer het opnieuw."
+  },
+  "comments": {
+    "comments": "Reacties",
+    "no_comments": "Nog geen reacties.",
+    "add_comment_placeholder": "Voeg een reactie toe...",
+    "star": "Ster",
+    "add_comment_button": "Voeg reactie toe"
+  },
+  "profileMenu": {
+    "profilePicAlt": "Profiel",
+    "profile": "Profiel",
+    "manageUsers": "Beheer Gebruikers",
+    "logout": "Uitloggen"
+  },
+  "shareModal": {
+    "title": "Deel dit bericht",
+    "facebook": "Facebook",
+    "x": "X",
+    "whatsapp": "WhatsApp",
+    "close": "X"
+  },
+  "sidebar": {
+    "logoAlt": "Rate Mijn Kot Logo",
+    "navlink1": "Home",
+    "navlink2": "Berichten",
+    "navlink3": "Profiel",
+    "navlink4": "Instellingen"
+  },
+  "profilePage": {
+    "profileOf": "Profiel van",
+    "loading": "Laden...",
+    "accessDenied": "Toegang Geweigerd",
+    "loadingUsers": "Gebruikers laden...",
+    "manageUsers": "Beheer Gebruikers",
+    "username": "Gebruikersnaam",
+    "fullName": "Volledige Naam",
+    "email": "E-mail",
+    "role": "Rol",
+    "bio": "Biografie",
+    "profilePicAlt": "Profielafbeelding",
+    "profileError": "Fout bij het laden van het profiel",
+    "postsBy": "Berichten van"
+  }
+}

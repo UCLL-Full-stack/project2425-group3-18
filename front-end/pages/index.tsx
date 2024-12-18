@@ -3,8 +3,11 @@ import Head from "next/head";
 import ContentGrid from "@/components/ContentGrid";
 import Layout from "@/components/Layoutwrapper";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const App: React.FC = () => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   useEffect(() => {
@@ -28,20 +31,14 @@ const App: React.FC = () => {
   );
 };
 
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    display: "flex",
-    height: "100vh",
-    fontFamily: "Arial, sans-serif",
-    backgroundColor: "#f9f9f9",
-  },
-  mainContent: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    padding: "1rem",
-    overflowY: "auto",
-  },
+export const getServerSideProps = async (context:any) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
 };
 
 export default App;

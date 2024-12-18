@@ -3,8 +3,10 @@ import { useRouter } from "next/router";
 import { ContentGridProps, PostData } from "@/types";
 import styles from "@/styles/contentGrid/contentGrid.module.css";
 import PostService from "@/services/PostService";
+import { useTranslation } from "next-i18next";
 
 const ContentGrid: React.FC<ContentGridProps> = ({ username, filterByUsername = false }) => {
+  const { t } = useTranslation();
   const [posts, setPosts] = useState<PostData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,21 +30,21 @@ const ContentGrid: React.FC<ContentGridProps> = ({ username, filterByUsername = 
         setPosts(filteredPosts);
       } catch (err) {
         console.error("Error fetching posts:", err);
-        setError("Failed to load posts.");
+        setError(t("contentGrid.error"));
       } finally {
         setLoading(false);
       }
     };
 
     fetchPosts();
-  }, [username, filterByUsername]);
+  }, [username, filterByUsername, t]);
 
   const viewDetails = (postId: number) => {
     router.push(`/post/${postId}`);
   };
 
   if (loading) {
-    return <p>Loading posts...</p>;
+    return <p>{t("contentGrid.loading")}</p>;
   }
 
   if (error) {

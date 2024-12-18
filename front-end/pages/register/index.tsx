@@ -2,8 +2,11 @@ import UserService from '@/services/UserService';
 import React, { useState, FormEvent } from 'react';
 import styles from "@/styles/register/Register.module.css";
 import { ErrorOutline } from '@mui/icons-material';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 const RegisterForm = () => {
+  const { t } = useTranslation();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -17,11 +20,11 @@ const RegisterForm = () => {
 
   const validateEmail = (email: string): string => {
     if (!email || email.trim() === '') {
-      throw new Error('Email cannot be empty');
+      throw new Error(t('register.emailEmpty'));
     }
     const emailRegex = /^[^\s@]+@[^\s@]*\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
-      throw new Error('Email is not valid');
+      throw new Error(t('register.invalidEmail'));
     }
     return email;
   };
@@ -33,19 +36,19 @@ const RegisterForm = () => {
 
     try {
       if (!firstName) {
-        throw new Error('Please fill in the first name field');
+        throw new Error(t('register.firstNameRequired'));
       }
       if (!lastName) {
-        throw new Error('Please fill in the last name field');
+        throw new Error(t('register.lastNameRequired'));
       }
       if (!email) {
-        throw new Error('Please fill in the email field');
+        throw new Error(t('register.emailRequired'));
       }
       if (!password) {
-        throw new Error('Please fill in the password field');
+        throw new Error(t('register.passwordRequired'));
       }
       if (!username) {
-        throw new Error('Please fill in the username field');
+        throw new Error(t('register.usernameRequired'));
       }
 
       validateEmail(email);
@@ -67,20 +70,20 @@ const RegisterForm = () => {
       if (userResponse && profileResponse) {
         window.location.href = '/login';
       } else {
-        throw new Error('Registration failed, please try again');
+        throw new Error(t('register.registrationFailed'));
       }
     } catch (error: any) {
       setIsSubmitting(false);
 
       if (error instanceof Error) {
-        setError(error.message || 'An unexpected error occurred');
+        setError(error.message || t('register.unexpectedError'));
       }
     }
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Register</h1>
+      <h1 className={styles.title}>{t('register.title')}</h1>
       {error && (
         <span
           style={{
@@ -96,7 +99,7 @@ const RegisterForm = () => {
       )}
       <form className={styles.form} onSubmit={handleRegister}>
         <div className={styles.inputGroup}>
-          <label>First Name</label>
+          <label>{t('register.firstName')}</label>
           <input
             type="text"
             className={styles.input}
@@ -105,7 +108,7 @@ const RegisterForm = () => {
           />
         </div>
         <div className={styles.inputGroup}>
-          <label>Last Name</label>
+          <label>{t('register.lastName')}</label>
           <input
             type="text"
             className={styles.input}
@@ -114,7 +117,7 @@ const RegisterForm = () => {
           />
         </div>
         <div className={styles.inputGroup}>
-          <label>Email</label>
+          <label>{t('register.email')}</label>
           <input
             type="email"
             className={styles.input}
@@ -123,7 +126,7 @@ const RegisterForm = () => {
           />
         </div>
         <div className={styles.inputGroup}>
-          <label>Password</label>
+          <label>{t('register.password')}</label>
           <div className={styles.passwordWrapper}>
             <input
               type={passwordVisible ? 'text' : 'password'}
@@ -136,12 +139,12 @@ const RegisterForm = () => {
               className={styles.eyeButton}
               onClick={() => setPasswordVisible(!passwordVisible)}
             >
-              <img src="/img/eye-password-hide.svg" alt="Toggle password visibility" />
+              <img src="/img/eye-password-hide.svg" alt={t('register.togglePasswordVisibility')} />
             </button>
           </div>
         </div>
         <div className={styles.inputGroup}>
-          <label>Username</label>
+          <label>{t('register.username')}</label>
           <input
             type="text"
             className={styles.input}
@@ -150,7 +153,7 @@ const RegisterForm = () => {
           />
         </div>
         <div className={styles.inputGroup}>
-          <label>Bio</label>
+          <label>{t('register.bio')}</label>
           <textarea
             className={styles.input}
             value={bio}
@@ -158,27 +161,37 @@ const RegisterForm = () => {
           />
         </div>
         <div className={styles.inputGroup}>
-          <label>Role</label>
+          <label>{t('register.role')}</label>
           <select
             className={styles.input}
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
-            <option value="User">User</option>
-            <option value="Admin">Admin</option>
+            <option value="User">{t('register.user')}</option>
+            <option value="Admin">{t('register.admin')}</option>
           </select>
         </div>
 
         <button type="submit" className={styles.button} disabled={isSubmitting}>
-          {isSubmitting ? 'Registering...' : 'Register'}
+          {isSubmitting ? t('register.registering') : t('register.register')}
         </button>
       </form>
 
       <div className={styles.loginLink}>
-        <p>Already have an account? <a href="/login">Login here</a></p>
+        <p>{t('register.alreadyHaveAccount')} <a href="/login">{t('register.loginHere')}</a></p>
       </div>
     </div>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 
 export default RegisterForm;

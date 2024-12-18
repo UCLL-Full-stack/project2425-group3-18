@@ -4,12 +4,14 @@ import CommentSection from "../../components/CommentSection";
 import ShareModal from "../../components/SharePopup";
 import styles from "@/styles/postDetail/postDetail.module.css";
 import Layout from "@/components/Layoutwrapper";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const PostDetail: React.FC = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { postId } = router.query;
 
-  // Ensure postId is a valid number
   const postIdAsNumber = postId ? Number(postId) : null;
 
   const [post, setPost] = useState<any | null>(null);
@@ -67,7 +69,6 @@ const PostDetail: React.FC = () => {
     return totalRating / comments.length;
   };
 
-  // Ensure comments exist for the postId before calculating
   const currentPostComments = postIdAsNumber ? comments[postIdAsNumber] || [] : [];
   const averageRating = calculateAverageRating(currentPostComments);
 
@@ -127,6 +128,16 @@ const PostDetail: React.FC = () => {
       </div>
     </Layout>
   );
+};
+
+export const getServerSideProps = async (context:any) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? "en", ["common"])),
+        },
+    };
 };
 
 export default PostDetail;

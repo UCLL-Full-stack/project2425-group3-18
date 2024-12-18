@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import styles from "@/styles/commentSection/CommentSection.module.css";
 
 interface CommentSectionProps {
@@ -8,6 +9,7 @@ interface CommentSectionProps {
 }
 
 const CommentSection: React.FC<CommentSectionProps> = ({ postId, comments, onAddComment }) => {
+    const { t } = useTranslation();
     const [newComment, setNewComment] = useState<string>("");
     const [rating, setRating] = useState<number>(0);
 
@@ -29,7 +31,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, comments, onAdd
 
     return (
         <div className={styles.commentSection}>
-            <h4>Comments</h4>
+            <h4>{t('comments.comments')}</h4>
             <div className={styles.commentList}>
                 {comments.length > 0 ? (
                     comments.map((comment, index) => (
@@ -40,7 +42,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, comments, onAdd
                                     <img
                                         key={i}
                                         src="/img/star.webp"
-                                        alt={`Star ${i + 1}`}
+                                        alt={`${t('comments.star')} ${i + 1}`}
                                         className={i < comment.rating ? styles.filledStar : styles.emptyStar}
                                     />
                                 ))}
@@ -48,13 +50,13 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, comments, onAdd
                         </div>
                     ))
                 ) : (
-                    <p>No comments yet.</p>
+                    <p>{t('comments.no_comments')}</p>
                 )}
             </div>
             <textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add a comment..."
+                placeholder={t('comments.add_comment_placeholder')}
                 className={styles.commentInput}
             />
             <div className={styles.ratingContainer}>
@@ -62,14 +64,14 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId, comments, onAdd
                     <img
                         key={i}
                         src="/img/star.webp"
-                        alt={`Star ${i + 1}`}
+                        alt={`${t('comments.star')} ${i + 1}`}
                         className={i < rating ? styles.filledStar : styles.emptyStar}
                         onClick={() => handleStarClick(i)}
                     />
                 ))}
             </div>
             <button onClick={handleAddComment} className={styles.addButton}>
-                Add Comment
+                {t('comments.add_comment_button')}
             </button>
         </div>
     );

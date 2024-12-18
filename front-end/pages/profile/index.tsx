@@ -4,8 +4,11 @@ import { Profile } from "@/types";
 import UserService from "@/services/UserService";
 import LayoutWrapper from "@/components/Layoutwrapper";
 import ContentGrid from "@/components/ContentGrid";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const ProfilePage: React.FC = () => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -24,7 +27,6 @@ const ProfilePage: React.FC = () => {
           throw new Error("Username is missing from the logged-in user data.");
         }
 
-        // Fetch the profile by username
         const profile = await UserService.getProfileByUsername(username);
 
         console.log("Fetched profile:", profile);
@@ -41,38 +43,46 @@ const ProfilePage: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>{t('profilePage.loading')}</div>;
   }
 
   if (!profile) {
-    return <div>Error: Profile data is missing.</div>;
+    return <div>{t('profilePage.profileError')}</div>;
   }
 
   return (
     <LayoutWrapper>
       <div className={styles.profileContainer}>
-        <h1>Profile of {profile.username}</h1>
+        <h1>{t('profilePage.profileOf')} {profile.username}</h1>
         <div className={styles.grid}>
           <div className={styles.card}>
             <div className={styles.profilePic}>
-              <img src="/img/profilepic.png" alt="Profile" />
+              <img src="/img/profilepic.png" alt={t('profilePage.profilePicAlt')} />
             </div>
             <div className={styles.profileDetails}>
-              <p><strong>Username:</strong> {profile.username}</p>
-              <p><strong>Role:</strong> {profile.role}</p>
-              <p><strong>Bio:</strong> {profile.bio}</p>
+              <p><strong>{t('profilePage.username')}:</strong> {profile.username}</p>
+              <p><strong>{t('profilePage.role')}:</strong> {profile.role}</p>
+              <p><strong>{t('profilePage.bio')}:</strong> {profile.bio}</p>
             </div>
           </div>
         </div>
-
-        {/* Add ContentGrid here to show posts by the user */}
       </div>
       <div className={styles.postsSection}>
-          <h2>Posts by {profile.username}</h2>
-          <ContentGrid username={profile.username} />
-        </div>
+        <h2>{t('profilePage.postsBy')} {profile.username}</h2>
+        <ContentGrid username={profile.username} />
+      </div>
     </LayoutWrapper>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 
 export default ProfilePage;

@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import styles from "@/styles/admin/Users.module.css";
 import Layout from "@/components/Layoutwrapper";
 import { UserData } from "@/types";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 const UsersPage: React.FC = () => {
+  const { t } = useTranslation();
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,15 +75,15 @@ const UsersPage: React.FC = () => {
   }, [isAdmin]);
 
   if (isAdmin === null) {
-    return <div>Loading...</div>;
+    return <div>{t('usersPage.loading')}</div>;
   }
 
   if (!isAdmin) {
-    return <div>Access Denied</div>;
+    return <div>{t('usersPage.accessDenied')}</div>;
   }
 
   if (loading) {
-    return <div>Loading users...</div>;
+    return <div>{t('usersPage.loadingUsers')}</div>;
   }
 
   if (error) {
@@ -89,33 +92,43 @@ const UsersPage: React.FC = () => {
 
   return (
     <Layout>
-    <div className={styles.usersContainer}>
-      <h1>Manage Users</h1>
-      <table className={styles.usersTable}>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Bio</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div className={styles.usersContainer}>
+        <h1>{t('usersPage.manageUsers')}</h1>
+        <table className={styles.usersTable}>
+          <thead>
+            <tr>
+              <th>{t('usersPage.username')}</th>
+              <th>{t('usersPage.fullName')}</th>
+              <th>{t('usersPage.email')}</th>
+              <th>{t('usersPage.role')}</th>
+              <th>{t('usersPage.bio')}</th>
+            </tr>
+          </thead>
+          <tbody>
             {users.map((user) => (
-                <tr key={user.email}>
-                <td>{user.profile?.username || "N/A"}</td>
+              <tr key={user.email}>
+                <td>{user.profile?.username || t('usersPage.notAvailable')}</td>
                 <td>{`${user.firstName} ${user.lastName}`}</td>
                 <td>{user.email}</td>
-                <td>{user.profile?.role || "User"}</td>
-                <td>{user.profile?.bio || "No bio available"}</td>
-                </tr>
+                <td>{user.profile?.role || t('usersPage.user')}</td>
+                <td>{user.profile?.bio || t('usersPage.noBio')}</td>
+              </tr>
             ))}
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
     </Layout>
   );
+};
+
+export const getServerSideProps = async (context: any) => {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 
 export default UsersPage;
