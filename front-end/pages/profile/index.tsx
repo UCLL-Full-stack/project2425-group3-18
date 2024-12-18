@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useTranslation } from "next-i18next";
 import useSWR from "swr";
 import styles from "@/styles/profile/Profile.module.css";
@@ -32,7 +32,6 @@ const fetchProfile = async () => {
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
 
-  // Using SWR to fetch the profile
   const { data: profile, error, isLoading } = useSWR("userProfile", fetchProfile);
 
   if (isLoading) {
@@ -60,6 +59,7 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </div>
+
       <div className={styles.postsSection}>
         <h2>{t('profilePage.postsBy')} {profile.username}</h2>
         <ContentGrid username={profile.username} />

@@ -6,27 +6,34 @@ import PostService from "@/services/PostService";
 import { useTranslation } from "next-i18next";
 import useSWR from "swr";
 
-const fetchPosts = async (username: string | undefined, filterByUsername: boolean) => {
+const fetchPosts = async (username: string | undefined) => {
   try {
-    const fetchedPosts = await PostService.getAllPosts();
-    const postsWithIds = fetchedPosts.map((post: any, index: number) => ({
-      ...post,
-      id: post.id || index + 1,
-    }));
-
-    return filterByUsername
-      ? postsWithIds.filter((post) => post.profile.username === username)
-      : postsWithIds;
+    if (username) {
+      const fetchedPosts = await PostService.getPostsByUsername(username);
+      const postsWithIds = fetchedPosts.map((post: any, index: number) => ({
+        ...post,
+        id: post.id || index + 1,
+      }));
+      return postsWithIds;
+    } else {
+      const fetchedPosts = await PostService.getAllPosts();
+      const postsWithIds = fetchedPosts.map((post: any, index: number) => ({
+        ...post,
+        id: post.id || index + 1,
+      }));
+      return postsWithIds;
+    }
   } catch (err) {
+    console.error("Error fetching posts:", err);
     throw new Error("Error fetching posts");
   }
 };
 
-const ContentGrid: React.FC<ContentGridProps> = ({ username, filterByUsername = false }) => {
+const ContentGrid: React.FC<ContentGridProps> = ({ username }) => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { data: posts, error } = useSWR([username, filterByUsername], fetchPosts, {
+  const { data: posts, error } = useSWR([username], fetchPosts, {
     onError: (err) => {
       console.error("Error fetching posts:", err);
     },
