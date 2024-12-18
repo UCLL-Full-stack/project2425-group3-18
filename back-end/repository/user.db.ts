@@ -18,11 +18,11 @@ const getUserByEmail = async ({ email }: { email: string }): Promise<User | null
     try {
         const userPrisma = await database.user.findUnique({
             where: { email },
-            include: {profile: true}
+            include: { profile: true },
         });
-        return userPrisma ? User.from(userPrisma) : null
+        return userPrisma ? User.from(userPrisma) : null;
     } catch (error) {
-        throw new Error('Database error trying to find user by email.')
+        throw new Error('Database error trying to find user by email.');
     }
 };
 
@@ -43,8 +43,23 @@ const createUser = async (user: User): Promise<User> => {
     }
 };
 
+const deleteUser = async ({ email }: { email: string }): Promise<User> => {
+    try {
+        const deleteUser = await database.user.delete({
+            where: {
+                email,
+            },
+            include: { profile: true },
+        });
+        return User.from(deleteUser);
+    } catch (error) {
+        throw new Error('Database error deleting user.');
+    }
+};
+
 export default {
     getAllUsers,
     getUserByEmail,
     createUser,
+    deleteUser, 
 };

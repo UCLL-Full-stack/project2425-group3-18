@@ -1,3 +1,4 @@
+import { Profile } from '@prisma/client';
 import { Post } from '../model/post';
 import database from './prisma/database';
 
@@ -57,9 +58,42 @@ const createPost = async (post: Post): Promise<Post> => {
     }
 };
 
+const deletePost = async (postId: number): Promise<Post> => {
+    try {
+        const deletePost = await database.post.delete({
+            where: {
+                id: postId,
+            },
+            include: {
+                profile: true,
+            },
+        });
+        return Post.from(deletePost);
+    } catch (error) {
+        throw new Error('Database error deleting post');
+    }
+};
+
+const deleteAllProfilePosts = async (username: string): Promise<number> => {
+    try {
+        const { count } = await database.post.deleteMany({
+            where: {
+                profile: {
+                    username,
+                },
+            },
+        });
+        return count;
+    } catch (error) {
+        throw new Error('Database error deleting posts');
+    }
+};
+
 export default {
     getAllPosts,
     createPost,
     getPostById,
     getAllPostsByProfile,
+    deletePost,
+    deleteAllProfilePosts,
 };

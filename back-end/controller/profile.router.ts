@@ -44,8 +44,8 @@ profileRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
     try {
         const posts = await profileService.getAllProfiles();
         res.status(200).json(posts);
-    } catch (err) {
-        res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -76,11 +76,11 @@ profileRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
 profileRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const profile = await profileService.getProfileByUsername(String(req.params.username));
-        res.status(200).json(profile)
+        res.status(200).json(profile);
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 /**
  *@swagger

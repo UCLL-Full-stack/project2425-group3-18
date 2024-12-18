@@ -51,9 +51,18 @@ const authenticate = async (a: AuthInput): Promise<AuthenticationResponse> => {
     };
 };
 
+const deleteUser = async (email: string): Promise<User> => {
+    const user = getUserByEmail(email);
+    if ((await user).getProfile()) {
+        throw new Error('Please first delete the profile before deleting the user');
+    }
+    return userDb.deleteUser({ email });
+};
+
 export default {
     getAllUsers,
     createNewUser,
     getUserByEmail,
     authenticate,
+    deleteUser,
 };

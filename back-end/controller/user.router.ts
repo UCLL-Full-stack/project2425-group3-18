@@ -44,7 +44,7 @@
  *           description: The fullname of the user who wants to login.
  *         username:
  *           type: string
- *           description: The username associated with the user who wants to login. 
+ *           description: The username associated with the user who wants to login.
  *         role:
  *           type: string
  *           description: The role associated with the user who wants to login.
@@ -78,7 +78,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
         const posts = await userService.getAllUsers();
         res.status(200).json(posts);
     } catch (error) {
-        next(error)
+        next(error);
     }
 });
 
@@ -135,7 +135,7 @@ userRouter.post('/create', async (req: Request, res: Response, next: NextFunctio
             user: createdUser,
         });
     } catch (error) {
-        next(error)
+        next(error);
     }
 });
 
@@ -178,6 +178,46 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         const authInput: AuthInput = req.body;
         const response = await userService.authenticate(authInput);
         res.status(200).json({ message: 'Authentication succesful', ...response });
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/{email}:
+ *  delete:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Delete a user.
+ *      tags:
+ *          - Users
+ *      parameters:
+ *          - in: path
+ *            name: email
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The email of the user who needs to deleted.
+ *      responses:
+ *          200:
+ *              description: Message and user that has been deleted.
+ *              content:
+ *                  application/json:
+ *                  properties:
+ *                       message:
+ *                          type: string
+ *                          example: "User succesfully deleted"
+ *                       user:
+ *                          $ref: '#/components/schemas/User'
+ */
+userRouter.delete('/:email', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await userService.deleteUser(String(req.params.email));
+        res.status(200).json({
+            message: 'User succesfully deleted',
+            user: user,
+        });
     } catch (error) {
         next(error);
     }

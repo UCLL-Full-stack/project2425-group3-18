@@ -1,3 +1,4 @@
+import { strictTransportSecurity } from 'helmet';
 import { Post } from '../model/post';
 import postDb from '../repository/post.db';
 import { PostInput } from '../types';
@@ -29,4 +30,29 @@ const getPostsByUsername = async (username: string): Promise<Post[]> => {
     return await postDb.getAllPostsByProfile({ id });
 };
 
-export default { getAllPosts, createNewPost, getPostById, getPostsByUsername };
+const deletePost = async (postId: number): Promise<Post> => {
+    try {
+        await getPostById(postId);
+        return await postDb.deletePost(postId);
+    } catch (error) {
+        throw new Error(`Post with id ${postId} could not be deleted.`);
+    }
+};
+
+const deleteAllProfilePosts = async (username: string): Promise<string> => {
+    try {
+        const count = postDb.deleteAllProfilePosts(username);
+        return `${count} posts were deleted.`;
+    } catch (error) {
+        throw new Error('Posts could not be deleted');
+    }
+};
+
+export default {
+    getAllPosts,
+    createNewPost,
+    getPostById,
+    getPostsByUsername,
+    deletePost,
+    deleteAllProfilePosts,
+};

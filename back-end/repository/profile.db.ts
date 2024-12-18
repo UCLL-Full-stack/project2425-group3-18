@@ -44,8 +44,22 @@ const createProfile = async (profile: Profile, user: User): Promise<Profile> => 
     }
 };
 
+const deleteProfile = async ({ username }: { username: string }): Promise<Profile> => {
+    try {
+        const deleteProfile = await database.profile.delete({
+            where: {
+                username,
+            },
+        });
+        return Profile.from(deleteProfile);
+    } catch (error) {
+        throw new Error('Database error deleting profile');
+    }
+};
+
 export default {
     getAllProfiles,
     createProfile,
     getProfileByUsername,
+    deleteProfile,
 };

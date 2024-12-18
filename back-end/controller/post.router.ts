@@ -43,8 +43,8 @@ postRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const posts = await postService.getAllPosts();
         res.status(200).json(posts);
-    } catch (err) {
-        res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -153,6 +153,48 @@ postRouter.get('/:username', async (req: Request, res: Response, next: NextFunct
     try {
         const posts = await postService.getPostsByUsername(String(req.params.username));
         res.status(200).json(posts);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /posts/{id}:
+ *  delete:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Delete a post.
+ *      tags:
+ *          - Posts
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: The ID of the post that needs to be deleted.
+ *      responses:
+ *          200:
+ *              description: Message and the post that has been deleted.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  example: "Post was deleted successfully"
+ *                              deletedPost:
+ *                                  $ref: '#/components/schemas/Post'
+ */
+postRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const deletedPost = await postService.deletePost(Number(req.params.id));
+        res.status(200).json({
+            message: 'Post was deleted succesfully',
+            deletedPost: deletedPost,
+        });
     } catch (error) {
         next(error);
     }
