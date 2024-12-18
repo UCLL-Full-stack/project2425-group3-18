@@ -6,6 +6,7 @@ import postButtonStyles from "@/styles/buttons/AddPostButton.module.css";
 import LanguageButton from "./LanguageButton";
 import ProfileMenu from "./ProfileMenu";
 import { useTranslation } from "next-i18next";
+import AddKotButton from "./addKotButton";
 
 const Header: React.FC = () => {
   const { t } = useTranslation();
@@ -55,6 +56,12 @@ const Header: React.FC = () => {
           </button>
         </Link>
       </div>
+
+      {isLoggedIn && (
+        <div className={styles.addKotButtonContainer}>
+          <AddKotButton />
+        </div>
+      )}
 
       <div className={styles.searchBarContainer}>
         <form onSubmit={handleSearchSubmit} className={styles.searchForm}>

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { ContentGridProps, PostData } from "@/types";
+import { ContentGridProps } from "@/types";
 import styles from "@/styles/contentGrid/contentGrid.module.css";
 import PostService from "@/services/PostService";
 import { useTranslation } from "next-i18next";
 import useSWR from "swr";
+import DeletePostButton from "./deletePostButton";
 
 const fetchPosts = async (username: string | undefined) => {
   try {
@@ -32,6 +33,9 @@ const fetchPosts = async (username: string | undefined) => {
 const ContentGrid: React.FC<ContentGridProps> = ({ username }) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const [deleteButtonVisible, setDeleteButtonVisible] = useState<number | null>(null);
+  const settingsButtonRef = useRef<HTMLButtonElement | null>(null);
+  const deleteButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const { data: posts, error } = useSWR([username], fetchPosts, {
     onError: (err) => {
@@ -42,6 +46,32 @@ const ContentGrid: React.FC<ContentGridProps> = ({ username }) => {
   const viewDetails = (postId: number) => {
     router.push(`/post/${postId}`);
   };
+
+  const handleDeleteButtonToggle = (postId: number) => {
+    setDeleteButtonVisible(postId === deleteButtonVisible ? null : postId);
+  };
+
+  const handleDeletePost = (postId: number) => {
+    setDeleteButtonVisible(null);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      settingsButtonRef.current &&
+      !settingsButtonRef.current.contains(event.target as Node) &&
+      deleteButtonRef.current &&
+      !deleteButtonRef.current.contains(event.target as Node)
+    ) {
+      setDeleteButtonVisible(null);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   if (!posts) {
     return <p>{t("contentGrid.loading")}</p>;
@@ -67,6 +97,31 @@ const ContentGrid: React.FC<ContentGridProps> = ({ username }) => {
             />
             <h3>{post.profile.username}</h3>
             <p>{post.description}</p>
+
+            {post.profile.username === username && (
+              <div className={styles.settingsIconContainer}>
+                <button
+                  className={styles.settingsButton}
+                  ref={settingsButtonRef}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteButtonToggle(post.id as number);
+                  }}
+                >
+                  &#8226;&#8226;&#8226;
+                </button>
+
+                {deleteButtonVisible === post.id && (
+                  <div className={styles.deleteButtonWrapper}>
+                    <DeletePostButton
+                      postId={post.id as number}
+                      onDelete={() => handleDeletePost(post.id as number)}
+                      ref={deleteButtonRef}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ) : null
       )}
