@@ -29,20 +29,19 @@ const createProfile = async (
     return await profileDb.createProfile(profile, user);
 };
 
-/* wip
 const deleteProfile = async (username: string): Promise<Profile> => {
     try {
-        const profile = await getProfileByUsername(username);
-        const posts = await postService.getPostsByUsername(username);
-        //const comments = await commentService.getCommentsByUsername(username);
-
-
-    } catch (error) {}
+        await postService.deleteAllProfilePosts(username);
+        await commentService.deleteAllProfileComments(username);
+        return await profileDb.deleteProfile({ username });
+    } catch (error) {
+        throw new Error('Profile could not be deleted!');
+    }
 };
-*/
 
 export default {
     getAllProfiles,
     createProfile,
     getProfileByUsername,
+    deleteProfile,
 };

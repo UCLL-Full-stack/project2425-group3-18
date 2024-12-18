@@ -18,4 +18,22 @@ const createNewComment = async (
     return comment;
 };
 
-export default { getAllComments, createNewComment };
+const getCommentsByUsername = async (username: string): Promise<Comment[]> => {
+    const id = (await profileService.getProfileByUsername(username)).getId();
+    if (!id) {
+        throw new Error(`Profile with username ${username} does not exist.`);
+    }
+    return await commentDb.getAllCommentsByProfile({ id });
+};
+
+const deleteAllProfileComments = async (username: string): Promise<string> => {
+    const count = await commentDb.deleteAllProfileComments(username);
+    return `${count} comments were deleted.`;
+};
+
+export default {
+    getAllComments,
+    createNewComment,
+    getCommentsByUsername,
+    deleteAllProfileComments,
+};

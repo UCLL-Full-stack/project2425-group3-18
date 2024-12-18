@@ -41,7 +41,7 @@ const deletePost = async (postId: number): Promise<Post> => {
 
 const deleteAllProfilePosts = async (username: string): Promise<string> => {
     try {
-        const count = postDb.deleteAllProfilePosts(username);
+        const count = await postDb.deleteAllProfilePosts(username);
         return `${count} posts were deleted.`;
     } catch (error) {
         throw new Error('Posts could not be deleted');

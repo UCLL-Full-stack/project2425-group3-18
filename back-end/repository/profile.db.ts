@@ -53,7 +53,8 @@ const deleteProfile = async ({ username }: { username: string }): Promise<Profil
         });
         return Profile.from(deleteProfile);
     } catch (error) {
-        throw new Error('Database error deleting profile');
+        console.log(error)
+        throw new Error('Database error deleting profile', );
     }
 };
 

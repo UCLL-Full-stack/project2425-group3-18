@@ -195,21 +195,23 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  *      parameters:
  *          - in: path
  *            name: email
+ *            required: true
  *            schema:
  *              type: string
- *              required: true
- *              description: The email of the user who needs to deleted.
+ *            description: The email of the user who needs to be deleted.
  *      responses:
  *          200:
  *              description: Message and user that has been deleted.
  *              content:
  *                  application/json:
- *                  properties:
- *                       message:
- *                          type: string
- *                          example: "User succesfully deleted"
- *                       user:
- *                          $ref: '#/components/schemas/User'
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  example: "User successfully deleted"
+ *                              user:
+ *                                  $ref: '#/components/schemas/User'
  */
 userRouter.delete('/:email', async (req: Request, res: Response, next: NextFunction) => {
     try {

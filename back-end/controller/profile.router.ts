@@ -19,6 +19,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import profileService from '../service/profile.service';
 import { ProfileInput } from '../types';
+import userService from '../service/user.service';
 const profileRouter = express.Router();
 
 /**
@@ -129,7 +130,7 @@ profileRouter.get('/:username', async (req: Request, res: Response, next: NextFu
  *                      schema:
  *                          $ref: '#/components/schemas/Profile'
  */
-profileRouter.post('/create', async (req: Request, res: Response) => {
+profileRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (!req.body.profile) {
             return res.status(400).json({
@@ -146,8 +147,50 @@ profileRouter.post('/create', async (req: Request, res: Response) => {
             profile: createdProfile,
         });
     } catch (error) {
-        console.error('Error creating profile: ', error);
-        res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /profiles/{username}:
+ *  delete:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Delete a profile and all affiliated data.
+ *      tags:
+ *          - Profiles
+ *      parameters:
+ *          - in: path
+ *            name: username
+ *            required: true
+ *            schema:
+ *              type: string
+ *            description: The username of the profile that needs to be deleted.
+ *      responses:
+ *          200:
+ *              description: Message and profile that has been deleted.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  example: "Profile successfully deleted"
+ *                              deletedProfile:
+ *                                  $ref: '#/components/schemas/Profile'
+ */
+
+profileRouter.delete('/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const profile = await profileService.deleteProfile(String(req.params.username));
+        res.status(200).json({
+            message: 'Profile succesfuly deleted',
+            deletedProfile: profile,
+        });
+    } catch (error) {
+        next(error);
     }
 });
 
