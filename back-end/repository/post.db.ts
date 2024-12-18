@@ -1,4 +1,3 @@
-import { Profile } from '@prisma/client';
 import { Post } from '../model/post';
 import database from './prisma/database';
 

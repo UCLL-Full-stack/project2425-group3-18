@@ -54,9 +54,42 @@ kotRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const koten = await kotService.getAllKoten();
         res.status(200).json(koten);
-    } catch (err) {
-        res.status(400).json({ status: 'error', errorMessage: 'Bad Client Request' });
+    } catch (error) {
+        next(error);
     }
+});
+
+/**
+ * @swagger
+ * /koten/{username}:
+ *  get:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Get koten by username.
+ *      tags:
+ *          - Koten
+ *      parameters:
+ *          - in: path
+ *            name: username
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The username of the profile related to the koten.
+ *      responses:
+ *          200:
+ *              description: An array with koten objects
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Kot'
+ */
+kotRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const koten = await kotService.getKotenByUsername(String(req.params.username));
+        res.status(200).json(koten);
+    } catch (error) {}
 });
 
 export { kotRouter };

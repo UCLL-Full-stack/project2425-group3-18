@@ -125,7 +125,7 @@ postRouter.post('/create', async (req: Request, res: Response, next: NextFunctio
 
 /**
  * @swagger
- * /posts/{username}:
+ * /posts/profile/{username}:
  *  get:
  *      security:
  *          - bearerAuth: []
@@ -149,12 +149,45 @@ postRouter.post('/create', async (req: Request, res: Response, next: NextFunctio
  *                          items:
  *                              $ref: '#/components/schemas/Post'
  */
-postRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
+postRouter.get('/profile/:username', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const posts = await postService.getPostsByUsername(String(req.params.username));
         res.status(200).json(posts);
     } catch (error) {
         next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /posts/{id}:
+ *  get:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Get a post by it's id.
+ *      tags:
+ *          - Posts
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: number
+ *              required: true
+ *              description: The post id.
+ *      responses:
+ *          200:       
+ *              description: A post object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Post'
+ */
+postRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const post = await postService.getPostById(Number(req.params.id));
+        res.status(200).json(post);
+    } catch (error) {
+        next(error)
     }
 });
 

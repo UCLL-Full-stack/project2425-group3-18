@@ -39,6 +39,8 @@ const deleteProfile = async (username: string): Promise<Profile> => {
     }
 };
 
+
+
 export default {
     getAllProfiles,
     createProfile,

@@ -19,7 +19,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import profileService from '../service/profile.service';
 import { ProfileInput } from '../types';
-import userService from '../service/user.service';
 const profileRouter = express.Router();
 
 /**
