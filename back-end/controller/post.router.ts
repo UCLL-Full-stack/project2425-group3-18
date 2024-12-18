@@ -101,7 +101,7 @@ postRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *                                  type: string
  *                                  example: "Post created successfully"
  *                              post:
- *                                  $ref: '#/components/schemas/Post'       
+ *                                  $ref: '#/components/schemas/Post'
  */
 postRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -118,6 +118,41 @@ postRouter.post('/create', async (req: Request, res: Response, next: NextFunctio
             message: 'Post created successfully',
             post: createdPost,
         });
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /posts/{username}:
+ *  get:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Get all posts related to a profile with a certain username.
+ *      tags:
+ *          - Posts
+ *      parameters:
+ *          - in: path
+ *            name: username
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The profile username.
+ *      responses:
+ *          200:
+ *              description: An array of Post objects.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Post'
+ */
+postRouter.get('/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const posts = await postService.getPostsByUsername(String(req.params.username));
+        res.status(200).json(posts);
     } catch (error) {
         next(error);
     }

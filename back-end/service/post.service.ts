@@ -1,6 +1,6 @@
 import { Post } from '../model/post';
 import postDb from '../repository/post.db';
-import { PostId, PostInput } from '../types';
+import { PostInput } from '../types';
 import profileService from './profile.service';
 
 const getAllPosts = (): Promise<Post[]> => {
@@ -21,4 +21,12 @@ const getPostById = async (postId: number): Promise<Post> => {
     return post;
 };
 
-export default { getAllPosts, createNewPost, getPostById };
+const getPostsByUsername = async (username: string): Promise<Post[]> => {
+    const id = (await profileService.getProfileByUsername(username)).getId();
+    if (!id) {
+        throw new Error(`Profile with username ${username} does not exist.`);
+    }
+    return await postDb.getAllPostsByProfile({ id });
+};
+
+export default { getAllPosts, createNewPost, getPostById, getPostsByUsername };

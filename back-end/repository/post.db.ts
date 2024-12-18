@@ -27,6 +27,18 @@ const getPostById = async ({ id }: { id: number }): Promise<Post | null> => {
     }
 };
 
+const getAllPostsByProfile = async ({ id }: { id: number }): Promise<Post[]> => {
+    try {
+        const postsPrisma = await database.post.findMany({
+            where: { profileId: id },
+            include: { profile: true },
+        });
+        return postsPrisma.map((postPrisma) => Post.from(postPrisma));
+    } catch (error) {
+        throw new Error('Database error finding all posts by profile');
+    }
+};
+
 const createPost = async (post: Post): Promise<Post> => {
     try {
         const postPrisma = await database.post.create({
@@ -49,4 +61,5 @@ export default {
     getAllPosts,
     createPost,
     getPostById,
+    getAllPostsByProfile,
 };
