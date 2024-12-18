@@ -48,3 +48,8 @@ export interface KotData {
   price: string;
   surfaceSpace: string;
 }
+
+export interface DeletePostButtonProps {
+  postId: number;
+  onDelete: () => void;
+}

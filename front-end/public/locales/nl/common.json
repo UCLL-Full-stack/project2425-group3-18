@@ -69,6 +69,11 @@
     "successMessage": "Bericht succesvol geplaatst!",
     "errorMessage": "Het plaatsen van het bericht is mislukt. Probeer het opnieuw."
   },
+  "deletePost" :{
+    "deleteButton": "Verwijder",
+    "deletedSuccess": "Deze post werd succesvol verwijderd!",
+    "deletedError": "Kon de post niet verwijderen!"
+  },
   "comments": {
     "comments": "Reacties",
     "no_comments": "Nog geen reacties.",

@@ -69,6 +69,11 @@
     "successMessage": "Post created successfully!",
     "errorMessage": "Failed to create post. Please try again."
   },
+  "deletePost" :{
+    "deleteButton": "Delete",
+    "deletedSuccess": "Successfully deleted this post!",
+    "deletedError": "Could not delete this post!"
+  },
   "comments": {
     "comments": "Comments",
     "no_comments": "No comments yet.",

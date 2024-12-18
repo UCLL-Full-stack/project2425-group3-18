@@ -94,10 +94,43 @@ const getPostsByUsername = async (username: string): Promise<PostData[]> => {
   }
 };
 
+const deletePost = async (id: number) => {
+  try {
+    const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
+    const token = loggedInUser.token;
+
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error deleting post:", errorData);
+      throw new Error(errorData.message || "Failed to delete post");
+    }
+
+    const result = await response.json();
+    console.log("Post deleted successfully:", result);
+    return result;
+  } catch (error) {
+    console.error("Error in deletePost function:", error);
+    throw error;
+  }
+};
+
 const PostService = {
   createPost,
   getAllPosts,
   getPostsByUsername,
+  deletePost,
 };
 
 export default PostService;
