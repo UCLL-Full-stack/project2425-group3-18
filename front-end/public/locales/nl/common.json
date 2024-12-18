@@ -37,6 +37,7 @@
     "errorInvalidPassword": "Het opgegeven wachtwoord is ongeldig. Probeer het opnieuw.",
     "errorUserNotExist": "Gebruiker bestaat niet. Controleer je e-mail.",
     "errorUnexpected": "Er is een onverwachte fout opgetreden. Probeer het opnieuw.",
+    "errorFetchingUsers" : "Fout: Kon geen gebruikers laden.",
     "dontHaveAccount": "Heb je nog geen account? ",
     "signUpHere": "Registreer hier",
     "userList": "Gebruikerslijst",
@@ -108,5 +109,20 @@
     "profilePicAlt": "Profielafbeelding",
     "profileError": "Fout bij het laden van het profiel",
     "postsBy": "Berichten van"
+  },
+  "usersPage": {
+    "loading": "Laden...",
+    "accessDenied": "Toegang geweigerd",
+    "loadingUsers": "Gebruikers laden...",
+    "manageUsers": "Beheer gebruikers",
+    "username": "Gebruikersnaam",
+    "fullName": "Volledige naam",
+    "email": "E-mail",
+    "role": "Rol",
+    "bio": "Biografie",
+    "notAvailable": "Niet beschikbaar",
+    "user": "Gebruiker",
+    "noBio": "Geen biografie",
+    "fetchError": "Fout bij het ophalen van gebruikers."
   }
 }

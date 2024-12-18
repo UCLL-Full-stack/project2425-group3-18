@@ -1,0 +1,17 @@
+FE = front-end
+BE = back-end
+
+-Add kot knop -> profile kan 1 of meer koten onder profiel zetten (FE)
+-Posts rating fixen (FE + BE)
+-Post images uploaden fixen (BE + FE?)
+-Kot rent availability fixen -> gwn status toevoegen 'available' of 'taken' (FE + BE)
+-Moderator remove post toevoegen (FE + BE)
+-Moderator remove user toevoegen (FE + BE)
+-Admin page met alle info van elke user, en een put request om een user te upgrade naar moderator of moderator naar user, en ban user (FE + BE)
+-Domain tests met jest (BE)
+-2 components testen met React Testing Library (FE)
+-HTTP traffic protecten met Helmet (BE)
+-swap to useSWR (FE)
+-Als gebruiker een functionaliteit/pagina oproept waartoe hij niet gemachtigd is, wordt hij op een correcte manier geïnformeerd. (FE)
+-op homepage een tabel toevoege met users voor lectoren (FE)
+-taal switcher (FE = OK)

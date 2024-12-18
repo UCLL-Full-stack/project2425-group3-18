@@ -1,54 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import { ContentGridProps, PostData } from "@/types";
 import styles from "@/styles/contentGrid/contentGrid.module.css";
 import PostService from "@/services/PostService";
 import { useTranslation } from "next-i18next";
+import useSWR from "swr";
+
+const fetchPosts = async (username: string | undefined, filterByUsername: boolean) => {
+  try {
+    const fetchedPosts = await PostService.getAllPosts();
+    const postsWithIds = fetchedPosts.map((post: any, index: number) => ({
+      ...post,
+      id: post.id || index + 1,
+    }));
+
+    return filterByUsername
+      ? postsWithIds.filter((post) => post.profile.username === username)
+      : postsWithIds;
+  } catch (err) {
+    throw new Error("Error fetching posts");
+  }
+};
 
 const ContentGrid: React.FC<ContentGridProps> = ({ username, filterByUsername = false }) => {
   const { t } = useTranslation();
-  const [posts, setPosts] = useState<PostData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const fetchedPosts = await PostService.getAllPosts();
-
-        const postsWithIds = fetchedPosts.map((post: any, index: number) => ({
-          ...post,
-          id: post.id || index + 1,
-        }));
-
-        const filteredPosts = filterByUsername
-          ? postsWithIds.filter((post) => post.profile.username === username)
-          : postsWithIds;
-
-        setPosts(filteredPosts);
-      } catch (err) {
-        console.error("Error fetching posts:", err);
-        setError(t("contentGrid.error"));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, [username, filterByUsername, t]);
+  const { data: posts, error } = useSWR([username, filterByUsername], fetchPosts, {
+    onError: (err) => {
+      console.error("Error fetching posts:", err);
+    },
+  });
 
   const viewDetails = (postId: number) => {
     router.push(`/post/${postId}`);
   };
 
-  if (loading) {
+  if (!posts) {
     return <p>{t("contentGrid.loading")}</p>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p>{t("contentGrid.error")}</p>;
   }
 
   return (

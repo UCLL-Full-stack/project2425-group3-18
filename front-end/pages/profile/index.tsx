@@ -1,52 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useTranslation } from "next-i18next";
+import useSWR from "swr";
 import styles from "@/styles/profile/Profile.module.css";
-import { Profile } from "@/types";
 import UserService from "@/services/UserService";
 import LayoutWrapper from "@/components/Layoutwrapper";
 import ContentGrid from "@/components/ContentGrid";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "next-i18next";
+
+const fetchProfile = async () => {
+  try {
+    const loggedInUserString = sessionStorage.getItem("loggedInUser");
+    if (!loggedInUserString) {
+      throw new Error("Logged-in user data is missing in sessionStorage.");
+    }
+
+    const loggedInUser = JSON.parse(loggedInUserString);
+    const username = loggedInUser.username;
+
+    if (!username) {
+      throw new Error("Username is missing from the logged-in user data.");
+    }
+
+    const profile = await UserService.getProfileByUsername(username);
+    return profile;
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    throw error;
+  }
+};
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const loggedInUserString = sessionStorage.getItem("loggedInUser");
-        if (!loggedInUserString) {
-          throw new Error("Logged-in user data is missing in sessionStorage.");
-        }
+  // Using SWR to fetch the profile
+  const { data: profile, error, isLoading } = useSWR("userProfile", fetchProfile);
 
-        const loggedInUser = JSON.parse(loggedInUserString);
-        const username = loggedInUser.username;
-
-        if (!username) {
-          throw new Error("Username is missing from the logged-in user data.");
-        }
-
-        const profile = await UserService.getProfileByUsername(username);
-
-        console.log("Fetched profile:", profile);
-
-        setProfile(profile);
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <div>{t('profilePage.loading')}</div>;
   }
 
-  if (!profile) {
+  if (error || !profile) {
     return <div>{t('profilePage.profileError')}</div>;
   }
 

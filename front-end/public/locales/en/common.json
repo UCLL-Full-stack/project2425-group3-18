@@ -37,6 +37,7 @@
     "errorInvalidPassword": "The given password is invalid. Please try again.",
     "errorUserNotExist": "User does not exist. Please check your email.",
     "errorUnexpected": "An unexpected error occurred. Please try again.",
+    "errorFetchingUsers" : "Error: could not fetch users",
     "dontHaveAccount": "Don't have an account? ",
     "signUpHere": "Sign Up here",
     "userList": "User List",
@@ -108,5 +109,20 @@
   "profilePicAlt": "Profile picture",
   "profileError": "Error loading profile",
   "postsBy": "Posts by"
- }
+ },
+ "usersPage": {
+   "loading": "Loading...",
+   "accessDenied": "Access Denied",
+   "loadingUsers": "Loading users...",
+   "manageUsers": "Manage Users",
+   "username": "Username",
+   "fullName": "Full Name",
+   "email": "Email",
+   "role": "Role",
+   "bio": "Bio",
+   "notAvailable": "Not Available",
+   "user": "User",
+   "noBio": "No Bio",
+   "fetchError": "Failed to fetch users."
+  }
 }

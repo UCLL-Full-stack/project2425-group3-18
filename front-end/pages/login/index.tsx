@@ -7,6 +7,9 @@ import { ErrorOutline } from '@mui/icons-material';
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -15,21 +18,11 @@ const LoginPage = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [users, setUsers] = useState<UserData[]>([]);
   const router = useRouter();
 
+  const { data: users, error: usersError } = useSWR<UserData[]>('/api/users', fetcher);
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const usersData = await UserService.getAllUsers();
-        setUsers(usersData);
-      } catch (error) {
-        console.error("Error fetching users", error);
-      }
-    };
-
-    fetchUsers();
-
     const isLoggedIn = sessionStorage.getItem("isLoggedIn");
     if (isLoggedIn === "true") {
       router.push("/");
@@ -166,13 +159,23 @@ const LoginPage = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
-              <tr key={user.email}>
-                <td>{user.email}</td>
-                <td>{user.profile ? user.profile.role : "No role available"}</td>
-                <td>{t("login.password")}</td>
+            {usersError ? (
+              <tr>
+                <td colSpan={3}>{t("login.errorFetchingUsers")}</td>
               </tr>
-            ))}
+            ) : !users ? (
+              <tr>
+                <td colSpan={3}>{t("login.loadingUsers")}</td>
+              </tr>
+            ) : (
+              users.map((user) => (
+                <tr key={user.email}>
+                  <td>{user.email}</td>
+                  <td>{user.profile ? user.profile.role : "No role available"}</td>
+                  <td>{t("login.password")}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

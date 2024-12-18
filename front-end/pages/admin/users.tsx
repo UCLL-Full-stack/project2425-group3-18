@@ -4,48 +4,40 @@ import Layout from "@/components/Layoutwrapper";
 import { UserData } from "@/types";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import useSWR from "swr";
 
 const UsersPage: React.FC = () => {
   const { t } = useTranslation();
-  const [users, setUsers] = useState<UserData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
-  const getAllUsers = async (): Promise<UserData[]> => {
-    try {
-      const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
-      const token = loggedInUser.token;
-      if (!token) {
-        throw new Error("No authentication token found");
-      }
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error fetching users:", errorData);
-        throw new Error(errorData.message || "Failed to fetch users");
-      }
-
-      const users = await response.json();
-      return users;
-    } catch (error) {
-      console.error("Error in getAllUsers function:", error);
-      throw error;
+  const fetchUsers = async (url: string): Promise<UserData[]> => {
+    const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
+    const token = loggedInUser.token;
+    if (!token) {
+      throw new Error("No authentication token found");
     }
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error fetching users:", errorData);
+      throw new Error(errorData.message || "Failed to fetch users");
+    }
+
+    const users = await response.json();
+    return users;
   };
 
   useEffect(() => {
     const checkAdminAccess = () => {
       const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
-      console.log("Logged In User:", loggedInUser);
       if (loggedInUser?.role === "Admin") {
         setIsAdmin(true);
       } else {
@@ -56,23 +48,10 @@ const UsersPage: React.FC = () => {
     checkAdminAccess();
   }, []);
 
-  useEffect(() => {
-    if (isAdmin === null) return;
-    if (isAdmin) {
-      const fetchUsers = async () => {
-        try {
-          const userData = await getAllUsers();
-          setUsers(userData);
-        } catch (error) {
-          setError("Failed to fetch users.");
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchUsers();
-    }
-  }, [isAdmin]);
+  const { data: users, error, isValidating } = useSWR<UserData[]>(
+    isAdmin ? `${process.env.NEXT_PUBLIC_API_URL}/users` : null,
+    fetchUsers
+  );
 
   if (isAdmin === null) {
     return <div>{t('usersPage.loading')}</div>;
@@ -82,12 +61,12 @@ const UsersPage: React.FC = () => {
     return <div>{t('usersPage.accessDenied')}</div>;
   }
 
-  if (loading) {
+  if (isValidating) {
     return <div>{t('usersPage.loadingUsers')}</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div>{t('usersPage.fetchError')}</div>;
   }
 
   return (
@@ -105,7 +84,7 @@ const UsersPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users?.map((user) => (
               <tr key={user.email}>
                 <td>{user.profile?.username || t('usersPage.notAvailable')}</td>
                 <td>{`${user.firstName} ${user.lastName}`}</td>
@@ -126,7 +105,7 @@ export const getServerSideProps = async (context: any) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      ...(await serverSideTranslations(locale ?? "en", ["common", "usersPage"])),
     },
   };
 };

@@ -6,6 +6,20 @@ import styles from "@/styles/postDetail/postDetail.module.css";
 import Layout from "@/components/Layoutwrapper";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import useSWR from "swr";
+
+const fetchPost = (postId: number) =>
+  fetch(`/api/posts/${postId}`)
+    .then((res) => res.json())
+    .catch((error) => {
+      console.error("Error fetching post data", error);
+      return null;
+    });
+
+const fetchComments = (postId: number) =>
+  sessionStorage.getItem(`comments-${postId}`)
+    ? JSON.parse(sessionStorage.getItem(`comments-${postId}`)!)
+    : [];
 
 const PostDetail: React.FC = () => {
   const { t } = useTranslation();
@@ -14,41 +28,22 @@ const PostDetail: React.FC = () => {
 
   const postIdAsNumber = postId ? Number(postId) : null;
 
-  const [post, setPost] = useState<any | null>(null);
-  const [comments, setComments] = useState<{ [key: number]: { text: string; rating: number }[] }>({});
+  const { data: post, error: postError } = useSWR(
+    postIdAsNumber ? `/api/posts/${postIdAsNumber}` : null,
+    () => fetchPost(postIdAsNumber!)
+  );
+
+  const { data: comments, error: commentsError } = useSWR(
+    postIdAsNumber ? `/api/comments/${postIdAsNumber}` : null,
+    () => fetchComments(postIdAsNumber!)
+  );
+
   const [showComments, setShowComments] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (postIdAsNumber) {
-      const fetchedPost = {
-        postId: postIdAsNumber,
-        title: "Social Media Post",
-        images: ["/img/posts/kot1.jpg"],
-        description: "A detailed description of the post content goes here. A few lines of text to explain the image."
-      };
-      setPost(fetchedPost);
-
-      const storedComments = sessionStorage.getItem(`comments-${postIdAsNumber}`);
-      if (storedComments) {
-        setComments(JSON.parse(storedComments));
-      }
-    }
-  }, [postIdAsNumber]);
-
   const handleAddComment = (postId: number, newComment: { text: string; rating: number }) => {
-    setComments((prevComments) => {
-      const updatedComments = { ...prevComments };
-      if (updatedComments[postId]) {
-        updatedComments[postId].push(newComment);
-      } else {
-        updatedComments[postId] = [newComment];
-      }
-
-      sessionStorage.setItem(`comments-${postId}`, JSON.stringify(updatedComments));
-
-      return updatedComments;
-    });
+    const updatedComments = [...(comments || []), newComment];
+    sessionStorage.setItem(`comments-${postId}`, JSON.stringify(updatedComments));
   };
 
   const toggleComments = () => {
@@ -69,8 +64,11 @@ const PostDetail: React.FC = () => {
     return totalRating / comments.length;
   };
 
-  const currentPostComments = postIdAsNumber ? comments[postIdAsNumber] || [] : [];
-  const averageRating = calculateAverageRating(currentPostComments);
+  const averageRating = calculateAverageRating(comments || []);
+
+  if (postError || commentsError) {
+    return <div>{t("errorFetchingData")}</div>;
+  }
 
   return (
     <Layout>
@@ -111,7 +109,7 @@ const PostDetail: React.FC = () => {
                 <CommentSection
                   postId={post.postId}
                   onAddComment={handleAddComment}
-                  comments={currentPostComments}
+                  comments={comments || []}
                 />
               </div>
             )}
@@ -130,14 +128,14 @@ const PostDetail: React.FC = () => {
   );
 };
 
-export const getServerSideProps = async (context:any) => {
-    const { locale } = context;
+export const getServerSideProps = async (context: any) => {
+  const { locale } = context;
 
-    return {
-        props: {
-            ...(await serverSideTranslations(locale ?? "en", ["common"])),
-        },
-    };
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 };
 
 export default PostDetail;
