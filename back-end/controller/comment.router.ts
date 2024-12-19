@@ -88,13 +88,7 @@ commentRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  */
 commentRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        if (!req.body.comment) {
-            return res.status(400).json({
-                status: 'error',
-                errorMessage: 'Missing comment data in request body',
-            });
-        }
-        const comment: CommentCreate = req.body.comment;
+        const comment: CommentCreate = req.body.commentCreate;
         const postId: number = req.body.postId;
         const createdComment = await commentService.createNewComment(comment, postId);
 
