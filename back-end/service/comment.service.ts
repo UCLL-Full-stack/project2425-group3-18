@@ -10,12 +10,12 @@ const getAllComments = (): Promise<Comment[]> => {
 };
 
 const createNewComment = async (
-    { text, username }: CommentCreate,
+    { text, rating, username }: CommentCreate,
     postId: number
 ): Promise<Comment> => {
     const post = await postService.getPostById(postId);
     const profile = await profileService.getProfileByUsername(username);
-    const comment = new Comment({ text, profile: profile, post });
+    const comment = new Comment({ text, rating, profile: profile, post });
     return await commentDb.createComment(comment);
 };
 

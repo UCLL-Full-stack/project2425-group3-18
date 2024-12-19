@@ -10,6 +10,7 @@ datasource db {
 model Comment {
   id        Int     @id @default(autoincrement())
   text      String
+  rating    Int
   postId    Int     
   profileId Int     
   post      Post    @relation(fields: [postId], references: [id])

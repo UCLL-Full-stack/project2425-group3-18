@@ -14,6 +14,9 @@
  *            profile:
  *              $ref: '#/components/schemas/Profile'
  *              description: The profile associated with this comment.
+ *            rating:
+ *              type: number
+ *              description: The rating a comment gives a post.
  */
 import express, { NextFunction, Request, Response } from 'express';
 import commentService from '../service/comment.service';
@@ -71,6 +74,8 @@ commentRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *                                      type: string
  *                                  username:
  *                                      type: string
+ *                                  rating:
+ *                                      type: number
  *                          postId:
  *                              type: number
  *          example:

@@ -6,12 +6,14 @@ enum role {
 
 type CommentInput = {
     text: string;
+    rating: number;
     post: PostInput;
     profile: ProfileInput;
 };
 
 type CommentCreate = {
     text: string;
+    rating: number;
     username: string;
 };
 

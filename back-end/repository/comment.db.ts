@@ -24,6 +24,7 @@ const createComment = async (comment: Comment): Promise<Comment> => {
         const commentPrisma = await database.comment.create({
             data: {
                 text: comment.getText(),
+                rating: comment.getRating(),
                 profile: {
                     connect: { id: comment.getProfile()?.getId() },
                 },

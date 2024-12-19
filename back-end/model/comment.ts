@@ -9,14 +9,22 @@ import { Post } from './post';
 export class Comment {
     private id?: number;
     private text: string;
+    private rating: number;
     private profile: Profile;
     private post: Post;
 
-    constructor(comment: { id?: number; text: string; profile: Profile; post: Post }) {
+    constructor(comment: {
+        id?: number;
+        text: string;
+        rating: number;
+        profile: Profile;
+        post: Post;
+    }) {
         this.id = comment.id;
         this.text = this.validateText(comment.text);
         this.profile = comment.profile;
         this.post = comment.post;
+        this.rating = comment.rating;
     }
 
     private validateText(text: string): string {
@@ -36,6 +44,14 @@ export class Comment {
 
     setText(text: string): void {
         this.text = this.validateText(text);
+    }
+
+    getRating(): number {
+        return this.rating;
+    }
+
+    setRating(rating: number): void {
+        this.rating = rating;
     }
 
     getProfile(): Profile {
@@ -62,12 +78,17 @@ export class Comment {
         id,
         text,
         profile,
+        rating,
         post,
-    }: CommentPrisma & { profile: ProfilePrisma; post: PostPrisma & { profile: ProfilePrisma | null } }) {
+    }: CommentPrisma & {
+        profile: ProfilePrisma;
+        post: PostPrisma & { profile: ProfilePrisma | null };
+    }) {
         return new Comment({
             id,
             text,
-            profile: Profile.from(profile), 
+            rating,
+            profile: Profile.from(profile),
             post: Post.from(post),
         });
     }

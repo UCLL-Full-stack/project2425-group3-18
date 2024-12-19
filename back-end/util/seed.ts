@@ -59,7 +59,7 @@ async function main() {
                     username: 'DaanGamemeneer',
                     bio: 'just a user',
                     role: 'User',
-                    posts: {
+                    posts: { 
                         create: [
                             {
                                 description: 'I like my new kot',
@@ -69,6 +69,7 @@ async function main() {
                                         {
                                             text: 'wow cool ',
                                             profileId: user1.id,
+                                            rating: 4,
                                         },
                                     ],
                                 },
