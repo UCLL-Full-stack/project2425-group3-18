@@ -63,7 +63,6 @@ type LocationInput = {
     city: string;
     street: string;
     housenumber: number;
-    kot: KotInput;
 };
 
 export {

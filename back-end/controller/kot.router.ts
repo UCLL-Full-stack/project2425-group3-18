@@ -19,9 +19,22 @@
  *              items:
  *                $ref: '#/components/schemas/Profile'
  *              description: List of profiles associated with the kot.
+ *      Location:
+ *          type: object
+ *          properties:
+ *            city:
+ *              type: string
+ *              description: The city/town of the location.
+ *            street:
+ *              type: string
+ *              description: The street of the location.
+ *            housenumber:
+ *              type: number
+ *              description: The housenumber of the location.
  */
 import express, { NextFunction, Request, Response } from 'express';
 import kotService from '../service/kot.service';
+import { KotInput } from '../types';
 const kotRouter = express.Router();
 /**
  * @swagger
@@ -89,7 +102,39 @@ kotRouter.get('/:username', async (req: Request, res: Response, next: NextFuncti
     try {
         const koten = await kotService.getKotenByUsername(String(req.params.username));
         res.status(200).json(koten);
-    } catch (error) {}
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /koten/create:
+ *  post:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Create a new kot.
+ *      tags:
+ *          - Koten
+ *      requestBody:
+ *          description: Data required to create a kot.
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Kot'    
+ */
+kotRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const kot: KotInput = req.body.kot;
+        const createdKot = await kotService.createKot(kot);
+        res.status(200).json({
+            message: 'Kot created succesfully',
+            kot: createdKot,
+        });
+    } catch (error) {
+        next(error);
+    }
 });
 
 export { kotRouter };

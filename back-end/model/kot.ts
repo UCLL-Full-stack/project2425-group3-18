@@ -7,14 +7,14 @@ import {
 } from '@prisma/client';
 export class Kot {
     private id?: number;
-    private location: Location | null;
+    private location: Location;
     private price: number;
     private surfaceSpace: number;
     private profiles: Profile[];
 
     constructor(kot: {
         id?: number;
-        location: Location | null;
+        location: Location;
         price: number;
         surfaceSpace: number;
         profiles: Profile[];
@@ -44,7 +44,7 @@ export class Kot {
         return this.id;
     }
 
-    getLocation(): Location | null {
+    getLocation(): Location {
         return this.location;
     }
 
@@ -71,7 +71,7 @@ export class Kot {
         this.surfaceSpace = this.validateSurfaceSpace(surfaceSpace);
     }
 
-    getProfile(): Profile[] {
+    getProfiles(): Profile[] {
         return this.profiles;
     }
 
@@ -92,10 +92,10 @@ export class Kot {
         price,
         surfaceSpace,
         profiles,
-    }: KotPrisma & { location?: LocationPrisma; profiles: ProfilePrisma[] }) {
+    }: KotPrisma & { location: LocationPrisma; profiles: ProfilePrisma[] }) {
         return new Kot({
             id,
-            location: location ? Location.from(location) : null,
+            location: Location.from(location),
             price,
             surfaceSpace,
             profiles: profiles.map((profile) => Profile.from(profile)),
