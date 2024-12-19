@@ -95,7 +95,7 @@ it('should throw an error if profile with username already exists when creating 
 
     await expect(
         profileService.createProfile(profileInput, 'user1@example.com')
-    ).rejects.toThrowError('Profile with username user1 already exists.');
+    ).rejects.toThrow('Profile with username user1 already exists.');
 });
 
 it('should delete profile', async () => {
