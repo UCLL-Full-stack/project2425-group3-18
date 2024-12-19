@@ -122,7 +122,7 @@ kotRouter.get('/:username', async (req: Request, res: Response, next: NextFuncti
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/Kot'    
+ *                      $ref: '#/components/schemas/Kot'
  */
 kotRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -132,6 +132,47 @@ kotRouter.post('/create', async (req: Request, res: Response, next: NextFunction
             message: 'Kot created succesfully',
             kot: createdKot,
         });
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /koten/{kotId}/{username}:
+ *  put:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Add a profile to a kot.
+ *      tags:
+ *          - Koten
+ *      parameters:
+ *          - in: path
+ *            name: kotId
+ *            required: true
+ *            schema:
+ *              type: number
+ *            description: The id of the kot where the profile needs to be added.
+ *          - in: path
+ *            name: username
+ *            required: true
+ *            schema:   
+ *              type: string
+ *            description: The username of the profile that needs to added to the kot.
+ *      responses:
+ *          200:
+ *              description: The kot with it's added users.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Kot'
+ */
+kotRouter.put('/:kotId/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const kotId = Number(req.params.kotId);
+        const username = String(req.params.username);
+        const kot = await kotService.addProfileToKot(username, kotId);
+        res.status(200).json(kot);
     } catch (error) {
         next(error);
     }

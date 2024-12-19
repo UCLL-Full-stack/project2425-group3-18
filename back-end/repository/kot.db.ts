@@ -1,4 +1,6 @@
+import { triggerAsyncId } from 'async_hooks';
 import { Kot } from '../model/kot';
+import { Profile } from '../model/profile';
 import database from './prisma/database';
 
 const getAllKoten = async (): Promise<Kot[]> => {
@@ -64,8 +66,33 @@ const createKot = async (kot: Kot): Promise<Kot> => {
     }
 };
 
+const addProfileToKot = async (profileId: number, kotId: number): Promise<Kot> => {
+    try {
+        const kotPrisma = await database.kot.update({
+            where: {
+                id: kotId,
+            },
+            data: {
+                profiles: {
+                    connect: {
+                        id: profileId,
+                    },
+                },
+            },
+            include: {
+                location: true,
+                profiles: true,
+            },
+        });
+        return Kot.from(kotPrisma);
+    } catch (error) {
+        throw new Error('Database error adding profile to kot.');
+    }
+};
+
 export default {
     getAllKoten,
     getAllKotenByProfile,
     createKot,
+    addProfileToKot,
 };
