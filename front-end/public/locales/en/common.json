@@ -117,7 +117,8 @@
   "bio": "Bio",
   "profilePicAlt": "Profile picture",
   "profileError": "Error loading profile",
-  "postsBy": "Posts by"
+  "postsBy": "Posts by",
+  "kotenListTitle": "Your koten: "
  },
  "usersPage": {
    "adminPanel": "Admin Panel",

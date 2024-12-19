@@ -117,7 +117,8 @@
     "bio": "Biografie",
     "profilePicAlt": "Profielafbeelding",
     "profileError": "Fout bij het laden van het profiel",
-    "postsBy": "Berichten van"
+    "postsBy": "Berichten van",
+    "kotenListTitle": "Jouw koten:"
   },
   "usersPage": {
     "adminPanel": "Admin Paneel",
