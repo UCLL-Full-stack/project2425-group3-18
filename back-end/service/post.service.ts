@@ -3,6 +3,7 @@ import { Post } from '../model/post';
 import postDb from '../repository/post.db';
 import { PostInput } from '../types';
 import profileService from './profile.service';
+import commentService from './comment.service';
 
 const getAllPosts = (): Promise<Post[]> => {
     return postDb.getAllPosts();

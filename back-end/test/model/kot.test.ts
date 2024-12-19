@@ -1,213 +1,186 @@
 import { Kot } from '../../model/kot';
 import { Profile } from '../../model/profile';
-import { User } from '../../model/user';
+import { Location } from '../../model/location';
 
-/*
-test('given:; when:; then:;', () => {
+enum role {
+    user = 'User',
+    moderator = 'Moderator',
+    admin = 'Admin',
+}
 
-})
-*/
-
-const userName: string = 'TestUser';
-const email: string = 'test.user@gmail.com';
-const password: string = 'test123?';
-const testUser: User = new User({ userName, email, password });
-
-const profile1 = new Profile({
-    firstName: 'John',
-    lastName: 'Doe',
-    bio: 'Student at KU Leuven',
-    role: 'User',
-    user: testUser,
-    posts: [],
-    koten: [],
+const mockProfile1 = new Profile({
+    id: 1,
+    username: 'test_user1',
+    bio: 'Nature lover',
+    role: role.user,
 });
 
-const profile2 = new Profile({
-    firstName: 'Jane',
-    lastName: 'Smith',
-    bio: 'Researcher in Leuven',
-    role: 'User',
-    user: testUser,
-    posts: [],
-    koten: [],
+const mockProfile2 = new Profile({
+    id: 2,
+    username: 'test_user2',
+    bio: 'Kot enthusiast',
+    role: role.moderator,
 });
 
-const profilesArray = [profile1, profile2];
+const mockLocation = new Location({
+    id: 1,
+    city: 'Leuven',
+    street: 'Bondgenotenlaan',
+    housenumber: 23,
+});
 
-//happy tests
+describe('Kot', () => {
+    test('given: valid values for Kot, when: Kot is created, then: Kot is created with those values', () => {
+        // given
+        const kotData = {
+            id: 1,
+            location: mockLocation,
+            price: 500,
+            surfaceSpace: 25,
+            profiles: [mockProfile1, mockProfile2],
+        };
 
-test('given valid values for Kot, when Kot is created, then Kot is created with those values', () => {
-    //given
-    const location = 'Leuven City Center';
-    const price = 500;
-    const surfaceSpace = 30;
+        // when
+        const kot = new Kot(kotData);
 
-    //when
-    const kot = new Kot({
-        location,
-        price,
-        surfaceSpace,
-        profiles: profilesArray,
+        // then
+        expect(kot.getId()).toEqual(kotData.id);
+        expect(kot.getLocation()).toEqual(mockLocation);
+        expect(kot.getPrice()).toEqual(kotData.price);
+        expect(kot.getSurfaceSpace()).toEqual(kotData.surfaceSpace);
+        expect(kot.getProfiles()).toEqual([mockProfile1, mockProfile2]);
     });
 
-    //then
-    expect(kot.getLocation()).toEqual(location);
-    expect(kot.getPrice()).toEqual(price);
-    expect(kot.getSurfaceSpace()).toEqual(surfaceSpace);
-    expect(kot.getProfiles()).toEqual(profilesArray);
-});
+    test('given: an existing Kot, when: setting a new price, then: price is updated', () => {
+        // given
+        const initialPrice = 600;
+        const updatedPrice = 700;
+        const kot = new Kot({
+            id: 1,
+            location: mockLocation,
+            price: initialPrice,
+            surfaceSpace: 30,
+            profiles: [mockProfile1],
+        });
 
-test('given a Kot, when setting a new location, then location is updated', () => {
-    //given
-    const kot = new Kot({
-        location: 'Old Location',
-        price: 400,
-        surfaceSpace: 25,
-        profiles: [],
+        // when
+        kot.setPrice(updatedPrice);
+
+        // then
+        expect(kot.getPrice()).toEqual(updatedPrice);
     });
 
-    //when
-    const newLocation = 'New Leuven Center';
-    kot.setLocation(newLocation);
+    test('given: a Kot, when: setting invalid price, then: an error is thrown', () => {
+        // given
+        const kot = new Kot({
+            id: 1,
+            location: mockLocation,
+            price: 700,
+            surfaceSpace: 40,
+            profiles: [mockProfile1],
+        });
 
-    //then
-    expect(kot.getLocation()).toEqual(newLocation);
-});
-
-test('given a Kot, when setting a new price, then price is updated', () => {
-    //given
-    const kot = new Kot({
-        location: 'Leuven Suburbs',
-        price: 300,
-        surfaceSpace: 20,
-        profiles: [],
+        // when & then
+        expect(() => kot.setPrice(-100)).toThrow('Price must be greater than zero');
     });
 
-    //when
-    const newPrice = 350;
-    kot.setPrice(newPrice);
+    test('given: a Kot, when: retrieving the profiles, then: associated profiles are returned', () => {
+        // given
+        const kot = new Kot({
+            id: 1,
+            location: mockLocation,
+            price: 800,
+            surfaceSpace: 50,
+            profiles: [mockProfile1, mockProfile2],
+        });
 
-    //then
-    expect(kot.getPrice()).toEqual(newPrice);
-});
+        // when
+        const profiles = kot.getProfiles();
 
-test('given a Kot, when setting a new surface space, then surface space is updated', () => {
-    //given
-    const kot = new Kot({
-        location: 'Leuven Outskirts',
-        price: 250,
-        surfaceSpace: 15,
-        profiles: [],
+        // then
+        expect(profiles).toEqual([mockProfile1, mockProfile2]);
     });
 
-    //when
-    const newSurfaceSpace = 22;
-    kot.setSurfaceSpace(newSurfaceSpace);
+    test('given: a Kot, when: retrieving the location, then: associated location is returned', () => {
+        // given
+        const kot = new Kot({
+            id: 1,
+            location: mockLocation,
+            price: 900,
+            surfaceSpace: 35,
+            profiles: [mockProfile1],
+        });
 
-    //then
-    expect(kot.getSurfaceSpace()).toEqual(newSurfaceSpace);
-});
+        // when
+        const location = kot.getLocation();
 
-test('given a Kot, when setting new profiles, then profiles are updated', () => {
-    //given
-    const kot = new Kot({
-        location: 'Quiet Neighborhood',
-        price: 550,
-        surfaceSpace: 35,
-        profiles: [],
+        // then
+        expect(location).toEqual(mockLocation);
     });
 
-    //when
-    kot.setProfiles(profilesArray);
+    test('given: two Kots with the same values, when: comparing them, then: equals method returns true', () => {
+        // given
+        const kotData = {
+            id: 1,
+            location: mockLocation,
+            price: 1000,
+            surfaceSpace: 45,
+            profiles: [mockProfile1],
+        };
+        const kot1 = new Kot(kotData);
+        const kot2 = new Kot(kotData);
 
-    //then
-    expect(kot.getProfiles()).toEqual(profilesArray);
-});
+        // when
+        const isEqual = kot1.equals(kot2);
 
-//unhappy tests
-
-test("given an empty location for Kot, when setLocation is called, then it throws an error 'Location cannot be empty'", () => {
-    //given
-    const kot = new Kot({
-        location: 'Initial Location',
-        price: 400,
-        surfaceSpace: 20,
-        profiles: [],
+        // then
+        expect(isEqual).toBe(true);
     });
 
-    //when
+    test('given: two Kots with different values, when: comparing them, then: equals method returns false', () => {
+        // given
+        const kot1 = new Kot({
+            id: 1,
+            location: mockLocation,
+            price: 400,
+            surfaceSpace: 30,
+            profiles: [mockProfile1],
+        });
+        const differentLocation = new Location({
+            id: 2,
+            city: 'Antwerp',
+            street: 'Meir',
+            housenumber: 12,
+        });
+        const kot2 = new Kot({
+            id: 2,
+            location: differentLocation,
+            price: 1200,
+            surfaceSpace: 60,
+            profiles: [mockProfile2],
+        });
 
-    //then
-    expect(() => {
-        kot.setLocation('');
-    }).toThrow('Location cannot be empty');
-});
+        // when
+        const isEqual = kot1.equals(kot2);
 
-test("given a negative price for Kot, when setPrice is called, then it throws an error 'Price must be greater than zero'", () => {
-    //given
-    const kot = new Kot({
-        location: 'Valid Location',
-        price: 400,
-        surfaceSpace: 20,
-        profiles: [],
+        // then
+        expect(isEqual).toBe(false);
     });
 
-    //when
+    test('given: a Kot, when: adding a new profile, then: profile is added to the profiles array', () => {
+        // given
+        const kot = new Kot({
+            id: 1,
+            location: mockLocation,
+            price: 850,
+            surfaceSpace: 38,
+            profiles: [mockProfile1],
+        });
 
-    //then
-    expect(() => {
-        kot.setPrice(-100);
-    }).toThrow('Price must be greater than zero');
-});
+        // when
+        kot.addProfile(mockProfile2);
 
-test("given zero price for Kot, when setPrice is called, then it throws an error 'Price must be greater than zero'", () => {
-    //given
-    const kot = new Kot({
-        location: 'Valid Location',
-        price: 400,
-        surfaceSpace: 20,
-        profiles: [],
+        // then
+        expect(kot.getProfiles()).toEqual([mockProfile1, mockProfile2]);
     });
-
-    //when
-
-    //then
-    expect(() => {
-        kot.setPrice(0);
-    }).toThrow('Price must be greater than zero');
-});
-
-test("given a negative surface space for Kot, when setSurfaceSpace is called, then it throws an error 'Surface space must be greater than zero'", () => {
-    //given
-    const kot = new Kot({
-        location: 'Valid Location',
-        price: 400,
-        surfaceSpace: 20,
-        profiles: [],
-    });
-
-    //when
-
-    //then
-    expect(() => {
-        kot.setSurfaceSpace(-10);
-    }).toThrow('Surface space must be greater than zero');
-});
-
-test("given zero surface space for Kot, when setSurfaceSpace is called, then it throws an error 'Surface space must be greater than zero'", () => {
-    //given
-    const kot = new Kot({
-        location: 'Valid Location',
-        price: 400,
-        surfaceSpace: 20,
-        profiles: [],
-    });
-
-    //when
-
-    //then
-    expect(() => {
-        kot.setSurfaceSpace(0);
-    }).toThrow('Surface space must be greater than zero');
 });

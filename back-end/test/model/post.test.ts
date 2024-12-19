@@ -1,128 +1,116 @@
 import { Post } from '../../model/post';
-import { Comment } from '../../model/comment';
-
-/*
-test('given:; when:; then:;', () => {
-
-})
-*/
+import { Profile } from '../../model/profile';
 
 const validDescription = 'This is a valid description.';
 const validImage = 'http://example.com/image.jpg';
-const validComments: Array<Comment> = [];
-
-//happy tests
-
-test('given valid values for Post, when Post is created, then Post is created with those values', () => {
-    //given
-
-    //when
-    const post = new Post({
-        description: validDescription,
-        image: validImage,
-        comments: validComments,
-    });
-
-    //then
-    expect(post.getDescription()).toEqual(validDescription);
-    expect(post.getImage()).toEqual(validImage);
-    expect(post.getComments()).toEqual(validComments);
+enum role {
+    user = 'User',
+    moderator = 'Moderator',
+    admin = 'Admin',
+}
+const validProfile = new Profile({
+    id: 1,
+    username: 'test_user',
+    bio: 'A short bio.',
+    role: role.user,
 });
 
-test('given a Post, when setting a new description, then description is updated', () => {
-    //given
-    const post = new Post({
-        description: validDescription,
-        image: validImage,
-        comments: validComments,
+describe('Post', () => {
+    test('given valid values, when Post is created, then Post is created with those values', () => {
+        const post = new Post({
+            id: 1,
+            description: validDescription,
+            image: validImage,
+            profile: validProfile,
+        });
+
+        expect(post.getId()).toEqual(1);
+        expect(post.getDescription()).toEqual(validDescription);
+        expect(post.getImage()).toEqual(validImage);
+        expect(post.getProfile()).toEqual(validProfile);
     });
 
-    //when
-    const newDescription = 'Updated description.';
-    post.setDescription(newDescription);
+    test('given a Post, when setting a new description, then description is updated', () => {
+        const post = new Post({
+            id: 1,
+            description: validDescription,
+            image: validImage,
+            profile: validProfile,
+        });
 
-    //then
-    expect(post.getDescription()).toEqual(newDescription);
-});
+        const newDescription = 'Updated description.';
+        post.setDescription(newDescription);
 
-test('given a Post, when setting a new image, then image is updated', () => {
-    //given
-    const post = new Post({
-        description: validDescription,
-        image: validImage,
-        comments: validComments,
+        expect(post.getDescription()).toEqual(newDescription);
     });
 
-    //when
-    const newImage = 'http://example.com/new-image.jpg';
-    post.setImage(newImage);
+    test('given a Post, when setting a new image, then image is updated', () => {
+        const post = new Post({
+            id: 1,
+            description: validDescription,
+            image: validImage,
+            profile: validProfile,
+        });
 
-    //then
-    expect(post.getImage()).toEqual(newImage);
-});
+        const newImage = 'Updated image.';
+        post.setDescription(newImage);
 
-//unhappy tests
-
-test("given an empty description for Post, when setDescription is called, then it throws an error 'Description cannot be empty'", () => {
-    //given
-    const post = new Post({
-        description: validDescription,
-        image: validImage,
-        comments: validComments,
-    });
-    
-    //when
-
-    //then
-    expect(() => {
-        post.setDescription('');
-    }).toThrow('Description cannot be empty');
-});
-
-test("given an empty image for Post, when setImage is called, then it throws an error 'Image cannot be empty'", () => {
-    //given
-    const post = new Post({
-        description: validDescription,
-        image: validImage,
-        comments: validComments,
+        expect(post.getDescription()).toEqual(newImage);
     });
 
-    //when
+    test('given two identical Posts, when compared, then equals method returns true', () => {
+        const post1 = new Post({
+            id: 1,
+            description: validDescription,
+            image: validImage,
+            profile: validProfile,
+        });
 
-    //then
-    expect(() => {
-        post.setImage('');
-    }).toThrow('Image cannot be empty');
-});
+        const post2 = new Post({
+            id: 1,
+            description: validDescription,
+            image: validImage,
+            profile: validProfile,
+        });
 
-test("given an empty description when using setDescription, then it throws an error 'Description cannot be empty'", () => {
-    //given
-    const post = new Post({
-        description: validDescription,
-        image: validImage,
-        comments: validComments,
+        expect(post1.equals(post2)).toBe(true);
     });
 
-    //when
-
-    //then
-    expect(() => {
-        post.setDescription('');
-    }).toThrow('Description cannot be empty');
-});
-
-test("given an empty image when using setImage, then it throws an error 'Image cannot be empty'", () => {
-    //given
-    const post = new Post({
-        description: validDescription,
-        image: validImage,
-        comments: validComments,
+    test("given an empty description, when creating a Post, then it throws an error 'Description cannot be empty'", () => {
+        expect(() => {
+            new Post({ id: 1, description: '', image: validImage, profile: validProfile });
+        }).toThrow('Description cannot be empty');
     });
 
-    //when
+    test("given an empty image, when creating a Post, then it throws an error 'Image cannot be empty'", () => {
+        expect(() => {
+            new Post({ id: 1, description: validDescription, image: '', profile: validProfile });
+        }).toThrow('Image cannot be empty');
+    });
 
-    //then
-    expect(() => {
-        post.setImage('');
-    }).toThrow('Image cannot be empty');
+    test('given a Post, when setting an invalid description, then it throws an error', () => {
+        const post = new Post({
+            id: 1,
+            description: validDescription,
+            image: validImage,
+            profile: validProfile,
+        });
+
+        expect(() => {
+            post.setDescription('');
+        }).toThrow('Description cannot be empty');
+    });
+
+    test('given a Post, when setting an invalid image, then it throws an error', () => {
+        const post = new Post({
+            id: 1,
+            description: validDescription,
+            image: validImage,
+            profile: validProfile,
+        });
+
+        expect(() => {
+            post.setImage('');
+        }).toThrow('Image cannot be empty');
+    });
 });

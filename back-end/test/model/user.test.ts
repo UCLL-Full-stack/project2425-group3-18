@@ -1,165 +1,166 @@
-import te from 'date-fns/esm/locale/te/index.js';
-import { Kot } from '../../model/kot';
-import { Post } from '../../model/post';
-import { Profile } from '../../model/profile';
 import { User } from '../../model/user';
+import { Profile } from '../../model/profile';
 
-/*
-test('given:; when:; then:;', () => {
+enum role {
+    user = 'User',
+    moderator = 'Moderator',
+    admin = 'Admin',
+}
 
-})
-*/
+test('given valid user data, when user is created, then user is successfully created', () => {
+    // given
+    const userName = 'TestUser';
+    const email = 'test.user@gmail.com';
+    const password = 'test123?';
 
-const posts: Array<Post> = [];
-const koten: Array<Kot> = [];
+    // when
+    const testUser = new User({
+        firstName: 'Test',
+        lastName: 'User',
+        email,
+        password,
+    });
 
-//happy tests
-
-test('given: all fields valid values; when: user is created; then: user is created;', () => {
-    //given
-    const userName: string = 'TestUser';
-    const email: string = 'test.user@gmail.com';
-    const password: string = 'test123?';
-
-    //when
-    const testUser: User = new User({ userName, email, password });
-
-    //then
-    expect(testUser.getUserName()).toEqual(userName);
+    // then
+    expect(testUser.getFirstName()).toEqual('Test');
+    expect(testUser.getLastName()).toEqual('User');
     expect(testUser.getEmail()).toEqual(email);
     expect(testUser.getPassword()).toEqual(password);
-    expect(testUser.getProfile()).toEqual(null);
+    expect(testUser.getProfile()).toEqual(undefined);
 });
 
-test('given: a user; when: profile is updated; then: profile is;', () => {
-    //given
-    const userName: string = 'TestUser';
-    const email: string = 'test.user@gmail.com';
-    const password: string = 'test123?';
-    const testUser: User = new User({ userName, email, password });
-
-    //when
-    const profile: Profile = new Profile({
-        firstName: 'test',
-        lastName: 'user',
-        bio: 'I am a test user',
-        role: 'User',
-        user: testUser,
-        posts: posts,
-        koten: koten,
+test('given a user, when profile is set, then user profile is updated', () => {
+    // given
+    const testUser = new User({
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test.user@gmail.com',
+        password: 'test123?',
     });
+
+    const profile = new Profile({
+        username: 'TestUserProfile',
+        bio: 'Test bio',
+        role: role.user,
+    });
+
+    // when
     testUser.setProfile(profile);
 
-    //then
-    expect(testUser.getUserName()).toEqual(userName);
-    expect(testUser.getEmail()).toEqual(email);
-    expect(testUser.getPassword()).toEqual(password);
+    // then
     expect(testUser.getProfile()).toEqual(profile);
 });
 
-test('given: a user; when: updating username field with valid username; then: username field is updated;', () => {
-    //given
-    const userName: string = 'TestUser';
-    const email: string = 'test.user@gmail.com';
-    const password: string = 'test123?';
-    const testUser: User = new User({ userName, email, password });
-
-    //when
-    const newUserName: string = 'newUserName';
-    testUser.setUserName(newUserName);
-
-    //then
-    expect(testUser.getUserName()).toEqual(newUserName);
-});
-
-test('given: a user; when: updating email field with valid email; then: email field is updated', () => {
+test('given a user, when username is updated, then username is updated correctly', () => {
     // given
-    const userName: string = 'TestUser';
-    const email: string = 'test.user@gmail.com';
-    const password: string = 'test123?';
-    const testUser: User = new User({ userName, email, password });
+    const testUser = new User({
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test.user@gmail.com',
+        password: 'test123?',
+    });
 
     // when
-    const newEmail: string = 'new.email@gmail.com';
-    testUser.setEmail(newEmail);
+    const newUserName = 'UpdatedUserName';
+    testUser.setFirstName(newUserName);
 
     // then
-    expect(testUser.getEmail()).toEqual(newEmail);
+    expect(testUser.getFirstName()).toEqual(newUserName);
 });
 
-test('given: a user; when: updating password field with valid password; then: password field is updated', () => {
+test('given a user, when password is updated, then password is updated correctly', () => {
     // given
-    const userName: string = 'TestUser';
-    const email: string = 'test.user@gmail.com';
-    const password: string = 'test123?';
-    const testUser: User = new User({ userName, email, password });
+    const testUser = new User({
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test.user@gmail.com',
+        password: 'test123?',
+    });
 
     // when
-    const newPassword: string = 'newTest123!';
+    const newPassword = 'newPassword123!';
     testUser.setPassword(newPassword);
 
     // then
     expect(testUser.getPassword()).toEqual(newPassword);
 });
 
-//unhappy tests
+test('given invalid username (empty), when user is created, then error is thrown', () => {
+    // given
+    const userName = '   ';
+    const email = 'test.user@gmail.com';
+    const password = 'test123?';
 
-test('given: all field valid except username; when: user is created; then: error is thrown', () => {
-    //given
-    const userName: string = '    ';
-    const email: string = 'test.user@gmail.com';
-    const password: string = 'test123?';
-
-    //when
-    const createNewUser = () => {
-        new User({ userName, email, password });
+    // when
+    const createUser = () => {
+        new User({
+            firstName: userName,
+            lastName: 'User',
+            email,
+            password,
+        });
     };
 
-    //then
-    expect(createNewUser).toThrow('UserName cannot be empty');
+    // then
+    expect(createUser).toThrow('Name cannot be empty');
 });
 
-test('given: all field valid except email; when: user is created; then: error is thrown', () => {
-    //given
-    const userName: string = 'TestUser';
-    const email: string = '        ';
-    const password: string = 'test123?';
+test('given invalid email (empty), when user is created, then error is thrown', () => {
+    // given
+    const userName = 'TestUser';
+    const email = '    ';
+    const password = 'test123?';
 
-    //when
-    const createNewUser = () => {
-        new User({ userName, email, password });
+    // when
+    const createUser = () => {
+        new User({
+            firstName: 'Test',
+            lastName: 'User',
+            email,
+            password,
+        });
     };
 
-    //then
-    expect(createNewUser).toThrow('Email cannot be empty');
+    // then
+    expect(createUser).toThrow('Email cannot be empty');
 });
 
-test('given: all field valid except password; when: user is created; then: error is thrown', () => {
-    //given
-    const userName: string = 'TestUser';
-    const email: string = 'test.user@gmail.com';
-    const password: string = '                                              ';
+test('given invalid email (invalid format), when user is created, then error is thrown', () => {
+    // given
+    const userName = 'TestUser';
+    const email = 'invalidemail';
+    const password = 'test123?';
 
-    //when
-    const createNewUser = () => {
-        new User({ userName, email, password });
+    // when
+    const createUser = () => {
+        new User({
+            firstName: 'Test',
+            lastName: 'User',
+            email,
+            password,
+        });
     };
 
-    //then
-    expect(createNewUser).toThrow('Password cannot be empty');
+    // then
+    expect(createUser).toThrow('Email is not valid');
 });
 
-test('given: all field valid except email; when: user is created; then: error is thrown', () => {
-    //given
-    const userName: string = 'TestUser';
-    const email: string = 'ILoveTesting';
-    const password: string = 'test123?';
+test('given invalid password (empty), when user is created, then error is thrown', () => {
+    // given
+    const userName = 'TestUser';
+    const email = 'test.user@gmail.com';
+    const password = '    ';
 
-    //when
-    const createNewUser = () => {
-        new User({ userName, email, password });
+    // when
+    const createUser = () => {
+        new User({
+            firstName: 'Test',
+            lastName: 'User',
+            email,
+            password,
+        });
     };
 
-    //then
-    expect(createNewUser).toThrow('Email is not valid');
+    // then
+    expect(createUser).toThrow('Password cannot be empty');
 });
