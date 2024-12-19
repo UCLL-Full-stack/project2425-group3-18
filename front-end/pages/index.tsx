@@ -13,13 +13,12 @@ const MainPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
-    const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
-    if (!loggedInUser.token) {
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+
+    if (isLoggedIn !== "true") {
       router.push("/login");
     }
-  }, [router]);
 
-  useEffect(() => {
     const { query } = router;
     if (query.search) {
       setSearchQuery(query.search as string);

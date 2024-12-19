@@ -27,7 +27,7 @@ const getAllUsers = async (): Promise<UserData[]> => {
   }
 };
 
-const loginUser = async (user: User) => {
+const loginUser = async (user: Partial<User>) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
     method: "POST",
     headers: {
