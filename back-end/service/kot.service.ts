@@ -2,7 +2,7 @@ import { Kot } from '../model/kot';
 import { Location } from '../model/location';
 import { Profile } from '../model/profile';
 import kotDb from '../repository/kot.db';
-import { KotInput } from '../types';
+import { KotCreationInput, KotInput } from '../types';
 import profileService from './profile.service';
 
 const getAllKoten = (): Promise<Kot[]> => {
@@ -17,25 +17,24 @@ const getKotenByUsername = async (username: string): Promise<Kot[]> => {
     return await kotDb.getAllKotenByProfile({ id });
 };
 
-const createKot = async ({ location, price, surfaceSpace, profiles }: KotInput): Promise<Kot> => {
+const createKot = async ({
+    location,
+    price,
+    surfaceSpace,
+    username,
+}: KotCreationInput): Promise<Kot> => {
+    console.log(location);
     const loc = new Location({
         city: location.city,
         street: location.street,
         housenumber: location.housenumber,
     });
 
-    if (!profiles) {
-        throw new Error('Please add an array of profiles related to the kot.');
-    }
-
     const arr: Profile[] = [];
-    profiles.forEach(async (profile) => {
-        const p = await profileService.getProfileByUsername(profile.username);
-        arr.push(p);
-    });
+    const profile = await profileService.getProfileByUsername(username);
+    arr.push(profile)
 
     const kot = new Kot({ location: loc, price, surfaceSpace, profiles: arr });
-
     return await kotDb.createKot(kot);
 };
 

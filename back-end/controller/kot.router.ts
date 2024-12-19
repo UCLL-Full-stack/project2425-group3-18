@@ -31,10 +31,25 @@
  *            housenumber:
  *              type: number
  *              description: The housenumber of the location.
+ *      KotCreationInput:
+ *          type: object
+ *          properties:
+ *            location:
+ *              $ref: '#/components/schemas/Location'
+ *              description: The location of the kot.
+ *            price:
+ *              type: number
+ *              description: The price of the kot.
+ *            surfaceSpace:
+ *              type: number
+ *              description: The surface space of the kot in square meters.
+ *            username:
+ *              type: string
+ *              description: The username of the profile related to the kot.
  */
 import express, { NextFunction, Request, Response } from 'express';
 import kotService from '../service/kot.service';
-import { KotInput } from '../types';
+import { KotCreationInput } from '../types';
 const kotRouter = express.Router();
 /**
  * @swagger
@@ -122,11 +137,21 @@ kotRouter.get('/:username', async (req: Request, res: Response, next: NextFuncti
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/Kot'
+ *                      type: object
+ *                      properties:
+ *                          kot:
+ *                              $ref: '#/components/schemas/KotCreationInput'
+ *      responses:
+ *          200:
+ *              description: The created kot.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Kot'
  */
 kotRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const kot: KotInput = req.body.kot;
+        const kot: KotCreationInput = req.body.kot;
         const createdKot = await kotService.createKot(kot);
         res.status(200).json({
             message: 'Kot created succesfully',
@@ -156,7 +181,7 @@ kotRouter.post('/create', async (req: Request, res: Response, next: NextFunction
  *          - in: path
  *            name: username
  *            required: true
- *            schema:   
+ *            schema:
  *              type: string
  *            description: The username of the profile that needs to added to the kot.
  *      responses:

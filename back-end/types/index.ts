@@ -32,6 +32,13 @@ type KotInput = {
     profiles?: ProfileInput[];
 };
 
+type KotCreationInput = {
+    location: LocationInput;
+    price: number;
+    surfaceSpace: number;
+    username: string;
+};
+
 type ProfileInput = {
     username: string;
     bio: string;
@@ -75,4 +82,5 @@ export {
     AuthenticationResponse,
     PostId,
     CommentCreate,
+    KotCreationInput,
 };
