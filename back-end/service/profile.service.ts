@@ -25,7 +25,7 @@ const createProfile = async (
         throw new Error(`Profile with username ${username} already exists.`);
     }
     const user = await userService.getUserByEmail(email);
-    const profile = new Profile({ username, bio, role });
+    const profile = new Profile({ username, bio, role});
     return await profileDb.createProfile(profile, user);
 };
 
@@ -39,11 +39,17 @@ const deleteProfile = async (username: string): Promise<Profile> => {
     }
 };
 
-const makeModerator = async (username: string): Promise<Profile> => {
+const makeModerator = async (username: string, role: string): Promise<Profile> => {
+    if (role !== 'Admin') {
+        throw new Error('You must be an admin to be allowed to use this function.');
+    }
     return await profileDb.makeModerator({ username });
 };
 
-const makeUser = async (username: string): Promise<Profile> => {
+const makeUser = async (username: string, role: string): Promise<Profile> => {
+    if (role !== 'Admin') {
+        throw new Error('You must be an admin to be allowed to use this function.');
+    }
     return await profileDb.makeUser({ username });
 };
 

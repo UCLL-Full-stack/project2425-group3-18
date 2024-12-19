@@ -18,7 +18,7 @@
  */
 import express, { Request, Response, NextFunction } from 'express';
 import profileService from '../service/profile.service';
-import { ProfileInput } from '../types';
+import { ProfileInput} from '../types';
 const profileRouter = express.Router();
 
 /**
@@ -195,7 +195,7 @@ profileRouter.delete('/:username', async (req: Request, res: Response, next: Nex
 
 /**
  * @swagger
- * /profiles/moderator/{username}: 
+ * /profiles/moderator/{username}:
  *  put:
  *      security:
  *          - bearerAuth: []
@@ -221,17 +221,19 @@ profileRouter.put(
     '/moderator/:username',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const profile = await profileService.makeModerator(String(req.params.username));
+            const request = req as Request & { auth: { username: string; role: string } };
+            const { role } = request.auth;
+            const profile = await profileService.makeModerator(String(req.params.username), role);
             res.status(200).json(profile);
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 );
 
 /**
  * @swagger
- * /profiles/user/{username}: 
+ * /profiles/user/{username}:
  *  put:
  *      security:
  *          - bearerAuth: []
@@ -253,16 +255,15 @@ profileRouter.put(
  *                      schema:
  *                          $ref: '#/components/schemas/Profile'
  */
-profileRouter.put(
-    '/user/:username',
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const profile = await profileService.makeUser(String(req.params.username));
-            res.status(200).json(profile);
-        } catch (error) {
-            next(error)
-        }
+profileRouter.put('/user/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { username: string; role: string } };
+        const { role } = request.auth;
+        const profile = await profileService.makeUser(String(req.params.username), role);
+        res.status(200).json(profile);
+    } catch (error) {
+        next(error);
     }
-);
+});
 
 export { profileRouter };

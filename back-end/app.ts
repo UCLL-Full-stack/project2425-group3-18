@@ -10,9 +10,11 @@ import { postRouter } from './controller/post.router';
 import { userRouter } from './controller/user.router';
 import { profileRouter } from './controller/profile.router';
 import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
 
 const app = express();
 
+app.use(helmet())
 app.use(
     expressjwt({
         secret: process.env.JWT_SECRET || 'default_secret',
