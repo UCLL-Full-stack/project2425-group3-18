@@ -1,3 +1,5 @@
+import { Profile } from "@/types";
+
 const getProfileByUsername = async (username: string) => {
   const loggedInUserString = sessionStorage.getItem("loggedInUser");
 
@@ -85,8 +87,82 @@ const getProfileByUsername = async (username: string) => {
     return await response.json();
   };
 
+  const updateModeratorToUser = async (username: string): Promise<Profile> => {
+    try {
+      const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
+      const token = loggedInUser.token;
+  
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+  
+      const updatedProfile = {
+        username,
+      };
+  
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/user/${username}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedProfile),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error updating user:", errorData);
+        throw new Error(errorData.message || "Failed to update user");
+      }
+  
+      const updatedUserProfile: Profile = await response.json();
+      return updatedUserProfile;
+    } catch (error) {
+      console.error("Error in updateUser function:", error);
+      throw error;
+    }
+  };
+
+  const updateUserToModerator = async (username: string): Promise<Profile> => {
+    try {
+      const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
+      const token = loggedInUser.token;
+  
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+  
+      const updatedProfile = {
+        username,
+      };
+  
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/moderator/${username}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedProfile),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error updating user to moderator:", errorData);
+        throw new Error(errorData.message || "Failed to update user to moderator");
+      }
+  
+      const updatedUserProfile: Profile = await response.json();
+      return updatedUserProfile;
+    } catch (error) {
+      console.error("Error in updateUserToModerator function:", error);
+      throw error;
+    }
+  };  
+
   export const ProfileService = {
     getProfileByUsername,
     //createProfile,
     deleteProfileByUsername,
+    updateModeratorToUser,
+    updateUserToModerator
 };

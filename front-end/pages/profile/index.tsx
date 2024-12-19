@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import useSWR from "swr";
 import Head from "next/head";
@@ -7,7 +7,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { ProfileService } from "@/services/ProfileService";
 import Layout from "@/components/layout/Layoutwrapper";
 import ContentGrid from "@/components/contentGrid/ContentGrid";
-import { useRouter } from "next/router";
+import { kotService } from "@/services/KotService";
 
 const fetchProfile = async () => {
   try {
@@ -33,20 +33,42 @@ const fetchProfile = async () => {
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
-  const router = useRouter();
-  const { query } = router;
+  const [username, setUsername] = useState<string | undefined>();
+  const [koten, setKoten] = useState<any[]>([]);
+  const [showKoten, setShowKoten] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const { data: profile, error, isLoading } = useSWR("userProfile", fetchProfile);
+  // Fetch logged-in user's profile and set username
+  useEffect(() => {
+    const loggedInUserString = sessionStorage.getItem("loggedInUser");
+    if (loggedInUserString) {
+      const loggedInUser = JSON.parse(loggedInUserString);
+      setUsername(loggedInUser.username);
+    }
+  }, []);
+
+  const { data: profile, error: profileError, isLoading } = useSWR("userProfile", fetchProfile);
+
+  // Handle fetching koten
+  const handleShowKoten = async () => {
+    if (!username) return;
+
+    try {
+      const fetchedKoten = await kotService.getKotenByUsername(username);
+      setKoten(fetchedKoten);
+      setShowKoten(!showKoten); // Toggle visibility
+    } catch (error) {
+      setError("Failed to fetch koten");
+    }
+  };
 
   if (isLoading) {
     return <div>{t('profilePage.loading')}</div>;
   }
 
-  if (error || !profile) {
+  if (profileError || !profile) {
     return <div>{t('profilePage.profileError')}</div>;
   }
-
-  const searchQuery = Array.isArray(query.search) ? query.search[0] : query.search || "";
 
   return (
     <>
@@ -68,13 +90,42 @@ const ProfilePage: React.FC = () => {
                 <p><strong>{t('profilePage.role')}:</strong> {profile.role}</p>
                 <p><strong>{t('profilePage.bio')}:</strong> {profile.bio}</p>
               </div>
+
+              {/* Button to toggle koten visibility */}
+              <div className={styles.kotenButtonSection}>
+                <button 
+                  className={styles.kotenButton} 
+                  onClick={handleShowKoten}
+                >
+                  {showKoten ? t("profilePage.hideKotenButton") : t("profilePage.showKotenButton")}
+                </button>
+
+                {error && <p className={styles.error}>{error}</p>}
+
+                {showKoten && koten.length > 0 && (
+                  <div className={styles.kotenList}>
+                    <h3>{t('profilePage.kotenListTitle')}</h3>
+                    <ul>
+                      {koten.map((kot) => (
+                        <li key={kot.id}>
+                          <p>{kot.location.city}, {kot.location.street} {kot.location.housenumber}</p>
+                          <p>Price: €{kot.price}</p>
+                          <p>Surface Space: {kot.surfaceSpace} m²</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {showKoten && koten.length === 0 && <p>{t('profilePage.noKoten')}</p>}
+              </div>
             </div>
           </div>
         </div>
 
         <div className={styles.postsSection}>
           <h2>{t('profilePage.postsBy')} {profile.username}</h2>
-          <ContentGrid username={profile.username} searchQuery={searchQuery} />
+          <ContentGrid searchQuery={""} username={profile.username} />
         </div>
       </Layout>
     </>
