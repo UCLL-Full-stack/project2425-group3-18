@@ -101,4 +101,39 @@ commentRouter.post('/create', async (req: Request, res: Response, next: NextFunc
     }
 });
 
+/**
+ * @swagger
+ * /comments/post/{postId}:
+ *  get:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Get all comments related to a post.
+ *      tags:
+ *          - Comments
+ *      parameters:
+ *          - in: path
+ *            name: postId
+ *            schema:
+ *              type: number
+ *              required: true
+ *              description: The post id of the post related to the comments.
+ *      responses:
+ *          200:
+ *              description: An array of comment objects.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Comment'
+ */
+commentRouter.get('/post/:postId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const comments = await commentService.getAllPostComments(Number(req.params.postId));
+        res.status(200).json(comments);
+    } catch (error) {
+        next(error)
+    }
+});
+
 export { commentRouter };

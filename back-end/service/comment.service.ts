@@ -1,5 +1,6 @@
 import { Comment } from '../model/comment';
 import commentDb from '../repository/comment.db';
+import postDb from '../repository/post.db';
 import { CommentCreate, CommentInput } from '../types';
 import postService from './post.service';
 import profileService from './profile.service';
@@ -31,9 +32,17 @@ const deleteAllProfileComments = async (username: string): Promise<string> => {
     return `${count} comments were deleted.`;
 };
 
+const getAllPostComments = async (postId: number): Promise<Comment[]> => {
+    if (!(await postDb.getPostById({ id: postId }))) {
+        throw new Error(`Post with id ${postId} does not exist`);
+    }
+    return await commentDb.getAllPostComments(postId);
+};
+
 export default {
     getAllComments,
     createNewComment,
     getCommentsByUsername,
     deleteAllProfileComments,
+    getAllPostComments,
 };

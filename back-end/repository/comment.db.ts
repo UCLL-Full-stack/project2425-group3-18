@@ -73,9 +73,31 @@ const deleteAllProfileComments = async (username: string): Promise<number> => {
     }
 };
 
+const getAllPostComments = async (postId: number): Promise<Comment[]> => {
+    try {
+        const commentsPrisma = await database.comment.findMany({
+            where: {
+                postId,
+            },
+            include: {
+                profile: true,
+                post: {
+                    include: {
+                        profile: true,
+                    },
+                },
+            },
+        });
+        return commentsPrisma.map((commentPrisma) => Comment.from(commentPrisma));
+    } catch (error) {
+        throw new Error('Database error finding all comments related to a post.');
+    }
+};
+
 export default {
     getAllComments,
     createComment,
     getAllCommentsByProfile,
     deleteAllProfileComments,
+    getAllPostComments,
 };
