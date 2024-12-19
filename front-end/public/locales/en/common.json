@@ -59,6 +59,7 @@
     "error": "Failed to load posts."
   },
   "addPost": {
+    "headTitle": "Make a Post",
     "title": "Create a New Post",
     "description": "Description",
     "descriptionPlaceholder": "Enter the post description",
@@ -79,7 +80,8 @@
     "no_comments": "No comments yet.",
     "add_comment_placeholder": "Add a comment...",
     "star": "Star",
-    "add_comment_button": "Add Comment"
+    "add_comment_button": "Add Comment",
+    "error_message": "Please enter a comment and select a rating"
   },
   "profileMenu": {
     "profilePicAlt": "Profile",
@@ -117,6 +119,7 @@
   "postsBy": "Posts by"
  },
  "usersPage": {
+   "adminPanel": "Admin Panel",
    "loading": "Loading...",
    "accessDenied": "Access Denied",
    "loadingUsers": "Loading users...",
@@ -131,9 +134,11 @@
    "user": "User",
    "noBio": "No Bio",
    "fetchError": "Failed to fetch users.",
-   "delete": "Delete user"
+   "delete": "Delete user",
+   "makeModerator": "Make moderator"
   },
   "addKotPage": {
+    "headTitle": "Add a Kot",
     "addKotTitle": "Add a Kot",
     "cityLabel": "City",
     "streetLabel": "Street",
@@ -143,5 +148,8 @@
     "submitButton": "Submit",
     "surfaceSpaceError": "Surface space must be a positive number",
     "generalError": "An error occurred while adding the Kot. Please try again."
+  },
+  "postDetailPage": {
+    "title": "Post details"
   }
 }

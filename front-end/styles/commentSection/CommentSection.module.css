@@ -71,6 +71,12 @@
     gap: 5px;
 }
 
+.errorMessage {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

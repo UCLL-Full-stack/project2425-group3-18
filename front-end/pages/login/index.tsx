@@ -8,6 +8,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import useSWR from 'swr';
 import { UserService } from "@/services/UserService";
+import Head from "next/head";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -77,109 +78,115 @@ const LoginPage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>{t("login.login")}</h1>
+    <>
+      <Head>
+          <link rel="icon" href="/img/logo2.png" />
+          <title>Rate My Kot - {t("login.login")}</title>
+      </Head>
+      <div className={styles.container}>
+        <h1 className={styles.title}>{t("login.login")}</h1>
 
-      {errorMessage && (
-        <span
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "4px",
-            color: "red",
-          }}
-        >
-          <ErrorOutline fontSize="small" />
-          {errorMessage}
-        </span>
-      )}
+        {errorMessage && (
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              color: "red",
+            }}
+          >
+            <ErrorOutline fontSize="small" />
+            {errorMessage}
+          </span>
+        )}
 
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.inputGroup}>
-          <label>{t("login.email")}</label>
-          <input
-            type="email"
-            className={styles.input}
-            value={email}
-            onChange={handleInputChange(setEmail)}
-            placeholder={t("login.enterEmail")}
-            required
-          />
-        </div>
-
-        <div className={styles.inputGroup}>
-          <label>{t("login.password")}</label>
-          <div className={styles.passwordWrapper}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.inputGroup}>
+            <label>{t("login.email")}</label>
             <input
-              type={passwordVisible ? "text" : "password"}
+              type="email"
               className={styles.input}
-              value={password}
-              onChange={handleInputChange(setPassword)}
-              placeholder={t("login.enterPassword")}
+              value={email}
+              onChange={handleInputChange(setEmail)}
+              placeholder={t("login.enterEmail")}
               required
             />
-            <button
-              type="button"
-              className={styles.eyeButton}
-              onClick={() => setPasswordVisible((prev) => !prev)}
-            >
-              <img
-                src={"/img/eye-password-hide.svg"}
-                alt={t("login.togglePasswordVisibility")}
-                className={styles.eyeIcon}
-              />
-            </button>
           </div>
+
+          <div className={styles.inputGroup}>
+            <label>{t("login.password")}</label>
+            <div className={styles.passwordWrapper}>
+              <input
+                type={passwordVisible ? "text" : "password"}
+                className={styles.input}
+                value={password}
+                onChange={handleInputChange(setPassword)}
+                placeholder={t("login.enterPassword")}
+                required
+              />
+              <button
+                type="button"
+                className={styles.eyeButton}
+                onClick={() => setPasswordVisible((prev) => !prev)}
+              >
+                <img
+                  src={"/img/eye-password-hide.svg"}
+                  alt={t("login.togglePasswordVisibility")}
+                  className={styles.eyeIcon}
+                />
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className={styles.button}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? t("login.loggingIn") : t("login.loginButton")}
+          </button>
+        </form>
+
+        <div className={styles.signupLink}>
+          <p>
+            {t("login.dontHaveAccount")}
+            <Link href="/register">{t("login.signUpHere")}</Link>
+          </p>
         </div>
 
-        <button
-          type="submit"
-          className={styles.button}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? t("login.loggingIn") : t("login.loginButton")}
-        </button>
-      </form>
-
-      <div className={styles.signupLink}>
-        <p>
-          {t("login.dontHaveAccount")}
-          <Link href="/register">{t("login.signUpHere")}</Link>
-        </p>
-      </div>
-
-      <div className={styles.userTableContainer}>
-        <h2 id="UserListTitle">{t("login.userList")}</h2>
-        <table className={styles.userTable}>
-          <thead>
-            <tr>
-              <th>{t("login.emailColumn")}</th>
-              <th>{t("login.roleColumn")}</th>
-              <th>{t("login.passwordColumn")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {usersError ? (
+        <div className={styles.userTableContainer}>
+          <h2 id="UserListTitle">{t("login.userList")}</h2>
+          <table className={styles.userTable}>
+            <thead>
               <tr>
-                <td colSpan={3}>{t("login.errorFetchingUsers")}</td>
+                <th>{t("login.emailColumn")}</th>
+                <th>{t("login.roleColumn")}</th>
+                <th>{t("login.passwordColumn")}</th>
               </tr>
-            ) : !users ? (
-              <tr>
-                <td colSpan={3}>{t("login.loadingUsers")}</td>
-              </tr>
-            ) : (
-              users.map((user) => (
-                <tr key={user.email}>
-                  <td>{user.email}</td>
-                  <td>{user.profile ? user.profile.role : "No role available"}</td>
-                  <td>{t("login.password")}</td>
+            </thead>
+            <tbody>
+              {usersError ? (
+                <tr>
+                  <td colSpan={3}>{t("login.errorFetchingUsers")}</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : !users ? (
+                <tr>
+                  <td colSpan={3}>{t("login.loadingUsers")}</td>
+                </tr>
+              ) : (
+                users.map((user) => (
+                  <tr key={user.email}>
+                    <td>{user.email}</td>
+                    <td>{user.profile ? user.profile.role : "No role available"}</td>
+                    <td>{t("login.password")}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

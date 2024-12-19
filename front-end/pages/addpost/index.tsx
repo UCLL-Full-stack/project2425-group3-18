@@ -3,15 +3,16 @@ import styles from "@/styles/addpost/addpost.module.css";
 import selectImageButtonStyles from "@/styles/buttons/selectImageButton.module.css";
 import Layout from "@/components/Layoutwrapper";
 import { PostData } from "@/types";
-import PostService from "@/services/PostService";
-import UserService from "@/services/UserService";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import useSWR from "swr";
+import { PostService } from "@/services/PostService";
+import { ProfileService } from "@/services/ProfileService";
+import Head from "next/head";
 
 const fetchUserProfile = async (username: string) => {
   try {
-    const profile = await UserService.getProfileByUsername(username);
+    const profile = await ProfileService.getProfileByUsername(username);
     return profile;
   } catch (err) {
     throw new Error("Error fetching user profile");
@@ -85,6 +86,9 @@ const AddPost: React.FC = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Rate My Kot - {t("addPost.headTitle")}</title>
+      </Head>
       <div className={styles.container}>
         <h1 className={styles.title}>{t("addPost.title")}</h1>
         <form onSubmit={handleSubmit} className={styles.form}>

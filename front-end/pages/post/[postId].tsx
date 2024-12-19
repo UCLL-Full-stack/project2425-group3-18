@@ -7,14 +7,8 @@ import Layout from "@/components/Layoutwrapper";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import useSWR from "swr";
-
-const fetchPost = (postId: number) =>
-  fetch(`/api/posts/${postId}`)
-    .then((res) => res.json())
-    .catch((error) => {
-      console.error("Error fetching post data", error);
-      return null;
-    });
+import Head from "next/head";
+import { PostService } from "@/services/PostService";
 
 const fetchComments = (postId: number) =>
   sessionStorage.getItem(`comments-${postId}`)
@@ -30,7 +24,7 @@ const PostDetail: React.FC = () => {
 
   const { data: post, error: postError } = useSWR(
     postIdAsNumber ? `/api/posts/${postIdAsNumber}` : null,
-    () => fetchPost(postIdAsNumber!)
+    () => PostService.getPostById(postIdAsNumber!)
   );
 
   const { data: comments, error: commentsError } = useSWR(
@@ -38,16 +32,21 @@ const PostDetail: React.FC = () => {
     () => fetchComments(postIdAsNumber!)
   );
 
-  const [showComments, setShowComments] = useState<boolean>(false);
+  const initialShowComments = typeof window !== "undefined" ? sessionStorage.getItem(`showComments-${postIdAsNumber}`) === "true" : false;
+  
+  const [showComments, setShowComments] = useState<boolean>(initialShowComments);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const handleAddComment = (postId: number, newComment: { text: string; rating: number }) => {
     const updatedComments = [...(comments || []), newComment];
     sessionStorage.setItem(`comments-${postId}`, JSON.stringify(updatedComments));
+    router.reload();
   };
 
   const toggleComments = () => {
-    setShowComments((prev) => !prev);
+    const newState = !showComments;
+    setShowComments(newState);
+    sessionStorage.setItem(`showComments-${postIdAsNumber}`, newState ? "true" : "false");
   };
 
   const handleShareClick = () => {
@@ -70,61 +69,77 @@ const PostDetail: React.FC = () => {
     return <div>{t("errorFetchingData")}</div>;
   }
 
+  if (!post) {
+    return <div>{t("loadingPost")}</div>;
+  }
+
   return (
-    <Layout>
-      <div className={styles.detailView}>
-        {post && (
-          <div className={styles.postDetail_mainContent__N4m_W}>
-            <div className={styles.leftPanel}>
-              <div className={styles.imageContainer}>
-                <img src={post.images[0]} alt={post.title} className={styles.detailImage} />
-              </div>
-              <div className={styles.imageDescription}>
-                <h1 className={styles.title}>{post.title}</h1>
-                <div className={styles.ratingContainer}>
-                  {[...Array(5)].map((_, i) => (
-                    <img
-                      key={i}
-                      src="/img/star.webp"
-                      alt={`Star ${i + 1}`}
-                      className={i < Math.round(averageRating) ? styles.filledStar : styles.emptyStar}
-                    />
-                  ))}
+    <>
+      <Head>
+        <link rel="icon" href="/img/logo2.png" />
+        <title>Rate My Kot - {t("postDetailPage.title")}</title>
+      </Head>
+      <Layout>
+        <div className={styles.detailView}>
+          {post && (
+            <div className={styles.postDetail_mainContent__N4m_W}>
+              <div className={styles.leftPanel}>
+                <div className={styles.imageContainer}>
+                  <img src={post.image} alt={post.description} className={styles.detailImage} />
                 </div>
-                <p className={styles.description}>{post.description}</p>
+                <div className={styles.imageDescription}>
+                  <h1 className={styles.title}>{post.description}</h1>
+                  <div className={styles.ratingContainer}>
+                    {[...Array(5)].map((_, i) => (
+                      <img
+                        key={i}
+                        src="/img/star.webp"
+                        alt={`Star ${i + 1}`}
+                        className={i < Math.round(averageRating) ? styles.filledStar : styles.emptyStar}
+                      />
+                    ))}
+                  </div>
+                  <p className={styles.description}>{post.description}</p>
+
+                  <div className={styles.profileDetails}>
+                    <p><strong>{t("profilePage.username")}</strong>: {post.profile.username}</p>
+                    <p><strong>{t("profilePage.bio")}</strong>: {post.profile.bio}</p>
+                    <p><strong>{t("profilePage.role")}</strong>: {post.profile.role}</p>
+                  </div>
+                </div>
+
+                <div className={styles.iconContainer}>
+                  <button className={styles.iconButton} onClick={toggleComments}>
+                    <img src="/img/comment.png" alt="Comment" className={styles.icon} />
+                  </button>
+                  <button className={styles.iconButton} onClick={handleShareClick}>
+                    <img src="/img/share.webp" alt="Share" className={styles.icon} />
+                  </button>
+                </div>
               </div>
 
-              <div className={styles.iconContainer}>
-                <button className={styles.iconButton} onClick={toggleComments}>
-                  <img src="/img/comment.png" alt="Comment" className={styles.icon} />
-                </button>
-                <button className={styles.iconButton} onClick={handleShareClick}>
-                  <img src="/img/share.webp" alt="Share" className={styles.icon} />
-                </button>
-              </div>
+              {showComments && (
+                <div className={styles.rightPanel}>
+                  <CommentSection
+                    postId={postIdAsNumber!}
+                    onAddComment={handleAddComment}
+                    comments={comments || []}
+                  />
+                </div>
+              )}
             </div>
+          )}
 
-            {showComments && (
-              <div className={styles.rightPanel}>
-                <CommentSection
-                  postId={post.postId}
-                  onAddComment={handleAddComment}
-                  comments={comments || []}
-                />
-              </div>
-            )}
-          </div>
-        )}
-
-        {showModal && (
-          <ShareModal
-            postTitle={post.title}
-            postUrl={window.location.href}
-            onClose={closeModal}
-          />
-        )}
-      </div>
-    </Layout>
+          {showModal && (
+            <ShareModal
+              postTitle={post.description}
+              postUrl={window.location.href}
+              onClose={closeModal}
+            />
+          )}
+        </div>
+      </Layout>
+    </>
   );
 };
 

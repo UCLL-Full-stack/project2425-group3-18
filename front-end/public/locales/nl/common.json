@@ -59,6 +59,7 @@
     "error": "Fout bij het laden van berichten."
   },
   "addPost": {
+    "headTitle": "Maak een Bericht",
     "title": "Maak een nieuw bericht",
     "description": "Beschrijving",
     "descriptionPlaceholder": "Voer de berichtbeschrijving in",
@@ -79,7 +80,8 @@
     "no_comments": "Nog geen reacties.",
     "add_comment_placeholder": "Voeg een reactie toe...",
     "star": "Ster",
-    "add_comment_button": "Voeg reactie toe"
+    "add_comment_button": "Voeg reactie toe",
+    "error_message": "Voer een reactie in en kies een beoordeling"
   },
   "profileMenu": {
     "profilePicAlt": "Profiel",
@@ -117,6 +119,7 @@
     "postsBy": "Berichten van"
   },
   "usersPage": {
+    "adminPanel": "Admin Paneel",
     "loading": "Laden...",
     "accessDenied": "Toegang geweigerd",
     "loadingUsers": "Gebruikers laden...",
@@ -131,9 +134,11 @@
     "user": "Gebruiker",
     "noBio": "Geen biografie",
     "fetchError": "Fout bij het ophalen van gebruikers.",
-    "delete": "Verwijder gebruiker"
+    "delete": "Verwijder gebruiker",
+    "makeModerator": "Maak moderator"
   },
   "addKotPage": {
+    "headTitle": "Maak een Post",
     "addKotTitle": "Voeg een Kot Toe",
     "cityLabel": "Stad",
     "streetLabel": "Straat",
@@ -143,5 +148,8 @@
     "submitButton": "Indienen",
     "surfaceSpaceError": "Oppervlakte moet een positief getal zijn",
     "generalError": "Er is een fout opgetreden bij het toevoegen van het Kot. Probeer het opnieuw."
+  },
+  "postDetailPage": {
+    "title": "Bericht details"
   }
 }
