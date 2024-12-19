@@ -1,89 +1,83 @@
 .commentSection {
-    width: 90%;
-    margin-top: 10px;
-    margin-right: 2rem;
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.3s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    max-height: 80vh;
-    overflow: hidden;
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
 }
 
-.commentList {
-    flex-grow: 1;
-    margin-bottom: 1rem;
-    overflow-y: auto;
-    max-height: 400px;
+.commentSection h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
 }
 
-.commentItem {
-    padding: 0.5rem;
-    border-bottom: 1px solid #ddd;
+.commentsList {
+  margin-bottom: 2rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.comment {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.commentContent {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.commentAuthor {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.commentAuthor strong {
+  font-weight: bold;
+  color: #333;
+}
+
+.commentAuthor span {
+  font-style: italic;
 }
 
 .commentInput {
-    width: 95%;
-    height: 50px;
-    padding: 0.5rem;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    resize: none;
-    font-size: 14px;
+  display: flex;
+  flex-direction: column;
 }
 
-.addButton {
-    margin-top: 10px;
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
+.textarea {
+  width: 100%;
+  height: 100px;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  resize: none;
 }
 
-.ratingContainer {
-    display: flex;
-    gap: 5px;
-    margin-top: 10px;
+.submitButton {
+  align-self: flex-start;
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.filledStar {
-    width: 20px;
-    height: 20px;
-    margin-right: 2px;
-    filter: brightness(1);
+.submitButton:hover {
+  background-color: #0056b3;
 }
 
-.emptyStar {
-    width: 20px;
-    height: 20px;
-    margin-right: 2px;
-    filter: brightness(0.5);
-}
-
-.rating {
-    display: flex;
-    gap: 5px;
-}
-
-.errorMessage {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.error {
+  color: #e74c3c;
+  font-weight: bold;
 }
