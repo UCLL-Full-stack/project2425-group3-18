@@ -1,16 +1,12 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "@/styles/login/Login.module.css";
-import { User, UserData } from "@/types";
+import { User, UserData, UserData2 } from "@/types";
 import { ErrorOutline } from '@mui/icons-material';
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import useSWR from 'swr';
-import { UserService } from "@/services/UserService";
 import Head from "next/head";
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -21,7 +17,60 @@ const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
 
-  const { data: users, error: usersError } = useSWR<UserData[]>('/api/users', fetcher);
+  const users: UserData2[] = [
+    {
+      id: 7,
+      firstName: "Thomas",
+      lastName: "Van den houdt",
+      email: "thomas.vandenhoudt@gmail.com",
+      password: "thomas123",
+      profile: {
+        id: 7,
+        username: "Buuuldog",
+        bio: "just a user",
+        role: "User",
+      },
+    },
+    {
+      id: 8,
+      firstName: "Daan",
+      lastName: "Hoeven",
+      email: "daan.hoeven@gmail.com",
+      password: "daan123",
+      profile: {
+        id: 8,
+        username: "DaanGamemeneer",
+        bio: "just a user",
+        role: "User",
+      },
+    },
+    {
+      id: 9,
+      firstName: "Harry",
+      lastName: "Potter",
+      email: "koten.master@gmail.com",
+      password: "harry123",
+      profile: {
+        id: 9,
+        username: "Kotenmaster",
+        bio: "The admin of this site",
+        role: "Admin",
+      },
+    },
+    {
+      id: 10,
+      firstName: "Percy",
+      lastName: "Jackson",
+      email: "koten.moderator@gmail.com",
+      password: "percy123",
+      profile: {
+        id: 10,
+        username: "Kotenmoderator",
+        bio: "A moderator of this site",
+        role: "Moderator",
+      },
+    },
+  ];
 
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem("isLoggedIn");
@@ -43,14 +92,16 @@ const LoginPage = () => {
 
     try {
       const user: Partial<User> = { email, password };
-      const response = await UserService.loginUser(user as User);
+      const foundUser = users.find(
+        (user) => user.email === email && user.password === password
+      );
 
-      if (response?.token) {
+      if (foundUser) {
         sessionStorage.setItem(
           "authToken",
           JSON.stringify({
-            token: response.token,
-            fullname: `${response.firstName} ${response.lastName}`,
+            token: "fakeToken",
+            fullname: `${foundUser.firstName} ${foundUser.lastName}`,
             email,
           })
         );
@@ -80,8 +131,8 @@ const LoginPage = () => {
   return (
     <>
       <Head>
-          <link rel="icon" href="/img/logo2.png" />
-          <title>Rate My Kot - {t("login.login")}</title>
+        <link rel="icon" href="/img/logo2.png" />
+        <title>Rate My Kot - {t("login.login")}</title>
       </Head>
       <div className={styles.container}>
         <h1 className={styles.title}>{t("login.login")}</h1>
@@ -165,23 +216,13 @@ const LoginPage = () => {
               </tr>
             </thead>
             <tbody>
-              {usersError ? (
-                <tr>
-                  <td colSpan={3}>{t("login.errorFetchingUsers")}</td>
+              {users.map((user) => (
+                <tr key={user.email}>
+                  <td>{user.email}</td>
+                  <td>{user.profile ? user.profile.role : "No role available"}</td>
+                  <td>{user.password}</td>
                 </tr>
-              ) : !users ? (
-                <tr>
-                  <td colSpan={3}>{t("login.loadingUsers")}</td>
-                </tr>
-              ) : (
-                users.map((user) => (
-                  <tr key={user.email}>
-                    <td>{user.email}</td>
-                    <td>{user.profile ? user.profile.role : "No role available"}</td>
-                    <td>{t("login.password")}</td>
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
         </div>

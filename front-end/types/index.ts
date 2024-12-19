@@ -16,6 +16,20 @@ export interface UserData {
   };
 }
 
+export interface UserData2 {
+  id?:number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  profile: {
+    id?: number;
+    username: string;
+    bio: string;
+    role: string;
+  };
+}
+
 export interface Profile {
   username: string;
   bio: string;
