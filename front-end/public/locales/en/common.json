@@ -118,7 +118,8 @@
   "profilePicAlt": "Profile picture",
   "profileError": "Error loading profile",
   "postsBy": "Posts by",
-  "kotenListTitle": "Your koten: "
+  "kotenListTitle": "Your koten: ",
+  "showKotenButton": "Show koten"
  },
  "usersPage": {
    "adminPanel": "Admin Panel",

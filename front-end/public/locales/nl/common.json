@@ -118,7 +118,8 @@
     "profilePicAlt": "Profielafbeelding",
     "profileError": "Fout bij het laden van het profiel",
     "postsBy": "Berichten van",
-    "kotenListTitle": "Jouw koten:"
+    "kotenListTitle": "Jouw koten:",
+     "showKotenButton": "Toon koten"
   },
   "usersPage": {
     "adminPanel": "Admin Paneel",
