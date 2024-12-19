@@ -15,7 +15,7 @@ const createNewComment = async (
     const post = await postService.getPostById(postId);
     const profile = await profileService.getProfileByUsername(username);
     const comment = new Comment({ text, profile: profile, post });
-    return comment;
+    return await commentDb.createComment(comment);
 };
 
 const getCommentsByUsername = async (username: string): Promise<Comment[]> => {
