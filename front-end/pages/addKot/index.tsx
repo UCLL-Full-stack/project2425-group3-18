@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import styles from "@/styles/addKot/addKot.module.css";
 import { useTranslation } from "next-i18next";
-import Layout from "@/components/Layoutwrapper";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
+import Layout from "@/components/layout/Layoutwrapper";
 
 const AddKotPage: React.FC = () => {
   const { t } = useTranslation();

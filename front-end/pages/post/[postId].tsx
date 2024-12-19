@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import CommentSection from "../../components/CommentSection";
-import ShareModal from "../../components/SharePopup";
-import styles from "@/styles/postDetail/postDetail.module.css";
-import Layout from "@/components/Layoutwrapper";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import useSWR from "swr";
 import Head from "next/head";
 import { PostService } from "@/services/PostService";
+import { CommentService } from "@/services/CommentService";
+import Layout from "@/components/layout/Layoutwrapper";
+import CommentSection from "@/components/comment/CommentSection";
+import CommentForm from "@/components/comment/CommentForm";  
+import ShareModal from "@/components/popups/SharePopup";
+import styles from "@/styles/postDetail/postDetail.module.css";
 
 const fetchComments = (postId: number) =>
   sessionStorage.getItem(`comments-${postId}`)
@@ -33,15 +35,31 @@ const PostDetail: React.FC = () => {
   );
 
   const initialShowComments = typeof window !== "undefined" ? sessionStorage.getItem(`showComments-${postIdAsNumber}`) === "true" : false;
-  
+
   const [showComments, setShowComments] = useState<boolean>(initialShowComments);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const handleAddComment = (postId: number, newComment: { text: string; rating: number }) => {
-    const updatedComments = [...(comments || []), newComment];
-    sessionStorage.setItem(`comments-${postId}`, JSON.stringify(updatedComments));
-    router.reload();
-  };
+  const handleAddComment = async (text: string, rating: number, username: string) => {
+    try {
+      const commentRequestBody = {
+        commentCreate: {
+          text,
+          username,
+        },
+        postId: postIdAsNumber!,
+      };
+  
+      const newComment = await CommentService.createComment(commentRequestBody);
+  
+      const updatedComments = [...(comments || []), newComment];
+  
+      sessionStorage.setItem(`comments-${postIdAsNumber}`, JSON.stringify(updatedComments));
+  
+      router.reload();
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+    }
+  };  
 
   const toggleComments = () => {
     const newState = !showComments;
@@ -122,9 +140,10 @@ const PostDetail: React.FC = () => {
                 <div className={styles.rightPanel}>
                   <CommentSection
                     postId={postIdAsNumber!}
-                    onAddComment={handleAddComment}
-                    comments={comments || []}
-                  />
+                    comments={comments || []} onAddComment={function (postId: number, newComment: { text: string; rating: number; }): void {
+                      throw new Error("Function not implemented.");
+                    } }                  />
+                  <CommentForm onAddComment={handleAddComment} />
                 </div>
               )}
             </div>

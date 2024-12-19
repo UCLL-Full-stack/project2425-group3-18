@@ -56,7 +56,8 @@
   },
   "contentGrid": {
     "loading": "Berichten laden...",
-    "error": "Fout bij het laden van berichten."
+    "error": "Fout bij het laden van berichten.",
+    "noPostsFound": "Geen berichten gevonden"
   },
   "addPost": {
     "headTitle": "Maak een Bericht",

@@ -56,7 +56,8 @@
   },
   "contentGrid": {
     "loading": "Loading posts...",
-    "error": "Failed to load posts."
+    "error": "Failed to load posts.",
+    "noPostsFound": "No posts found"
   },
   "addPost": {
     "headTitle": "Make a Post",

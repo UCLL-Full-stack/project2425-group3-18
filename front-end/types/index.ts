@@ -53,3 +53,32 @@ export interface DeletePostButtonProps {
   postId: number;
   onDelete: () => void;
 }
+
+export interface Post {
+  id: number;
+  description: string;
+  image: string;
+  profile: Profile;
+}
+
+export interface Comment {
+  id: number;
+  text: string;
+  profile: {
+    username: string;
+    bio: string;
+    role: string;
+  };
+}
+
+export interface CommentRequestBody {
+  commentCreate: {
+    text: string;
+    username: string;
+  },
+  postId: number;
+};
+
+export interface ContentGridProps {
+  searchQuery?: string;
+}

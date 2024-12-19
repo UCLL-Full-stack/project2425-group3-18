@@ -1,7 +1,7 @@
 import React from "react";
+import styles from "@/styles/layoutWrapper/layoutWrapper.module.css";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import styles from "@/styles/layoutWrapper/layoutWrapper.module.css";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
