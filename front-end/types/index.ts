@@ -56,6 +56,7 @@ export interface Post {
 }
 
 export interface Comment {
+  rating: number;
   id: number;
   text: string;
   profile: {
@@ -69,6 +70,7 @@ export interface CommentRequestBody {
   commentCreate: {
     text: string;
     username: string;
+    rating: number;
   };
   postId: number;
 };
@@ -78,7 +80,7 @@ export interface ContentGridProps {
 }
 
 export interface Location {
-  id: number;
+  id?: number;
   city: string;
   street: string;
   housenumber: number;

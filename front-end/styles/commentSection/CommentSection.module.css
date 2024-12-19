@@ -81,3 +81,20 @@
   color: #e74c3c;
   font-weight: bold;
 }
+
+.star {
+  width: 24px;
+  height: 24px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.ratingSection {
+  margin-top: 10px;
+  display: flex;
+}
+
+.commentRating {
+  display: flex;
+  margin-top: 5px;
+}

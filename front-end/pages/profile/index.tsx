@@ -38,7 +38,6 @@ const ProfilePage: React.FC = () => {
   const [showKoten, setShowKoten] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch logged-in user's profile and set username
   useEffect(() => {
     const loggedInUserString = sessionStorage.getItem("loggedInUser");
     if (loggedInUserString) {
@@ -49,14 +48,13 @@ const ProfilePage: React.FC = () => {
 
   const { data: profile, error: profileError, isLoading } = useSWR("userProfile", fetchProfile);
 
-  // Handle fetching koten
   const handleShowKoten = async () => {
     if (!username) return;
 
     try {
       const fetchedKoten = await kotService.getKotenByUsername(username);
       setKoten(fetchedKoten);
-      setShowKoten(!showKoten); // Toggle visibility
+      setShowKoten(!showKoten);
     } catch (error) {
       setError("Failed to fetch koten");
     }
@@ -91,7 +89,6 @@ const ProfilePage: React.FC = () => {
                 <p><strong>{t('profilePage.bio')}:</strong> {profile.bio}</p>
               </div>
 
-              {/* Button to toggle koten visibility */}
               <div className={styles.kotenButtonSection}>
                 <button 
                   className={styles.kotenButton} 

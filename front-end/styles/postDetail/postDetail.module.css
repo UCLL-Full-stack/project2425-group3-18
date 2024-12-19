@@ -55,7 +55,6 @@
     justify-content: center;
   }
   
-  /* Button styling */
   .commentButton,
   .shareButton {
     background-color: #007bff;
@@ -132,3 +131,48 @@
     margin-top: 20px;
   }
   
+.ratingStars {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.star {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.star:hover {
+  transform: scale(1.1);
+  opacity: 1 !important;
+}
+
+.star.active {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.ratingStars .star {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.star-1 {
+  opacity: 0.3;
+}
+.star-2 {
+  opacity: 0.6;
+}
+.star-3 {
+  opacity: 0.9;
+}
+.star-4 {
+  opacity: 1;
+}
+.star-5 {
+  opacity: 1;
+}

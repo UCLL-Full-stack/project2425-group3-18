@@ -27,7 +27,6 @@ const getAllUsers = async (): Promise<UserData[]> => {
   }
 };
 
-// Login user
 const loginUser = async (user: User) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, {
     method: "POST",
@@ -49,13 +48,11 @@ const loginUser = async (user: User) => {
   return userData;
 };
 
-// Register user
 const registerUserWithProfile = async (
   user: User,
   profile: Profile
 ) => {
   try {
-    // Step 1: Create the user
     const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/create`, {
       method: "POST",
       headers: {
@@ -71,7 +68,6 @@ const registerUserWithProfile = async (
 
     const createdUser = await userResponse.json();
 
-    // Step 2: Create the profile associated with the user
     const profileResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/profiles/create`, {
       method: "POST",
       headers: {
@@ -87,7 +83,6 @@ const registerUserWithProfile = async (
 
     const createdProfile = await profileResponse.json();
 
-    // Return both user and profile data
     return { user: createdUser, profile: createdProfile };
   } catch (error) {
     console.error("Error registering user and creating profile:", error);

@@ -7,17 +7,14 @@ import useSWR from "swr";
 import PostCard from "./PostCard";
 import { PostService } from "@/services/PostService";
 
-// Fetch posts, optionally filtering by the search query and username
 const fetchPosts = async (username: string | undefined, searchQuery: string | undefined) => {
   try {
     let fetchedPosts = await PostService.getAllPosts();
 
-    // Filter posts by logged-in user if username is provided
     if (username) {
       fetchedPosts = fetchedPosts.filter((post: any) => post.profile.username === username);
     }
 
-    // If there's a search query, filter the posts based on description or username
     if (searchQuery && searchQuery.trim() !== "") {
       fetchedPosts = fetchedPosts.filter((post: any) =>
         post.profile.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -25,7 +22,6 @@ const fetchPosts = async (username: string | undefined, searchQuery: string | un
       );
     }
 
-    // Add an id to each post if it doesn't already exist
     const postsWithIds = fetchedPosts.map((post: any, index: number) => ({
       ...post,
       id: post.id || index + 1,

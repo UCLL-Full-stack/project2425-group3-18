@@ -102,7 +102,8 @@
     "navlink1": "Home",
     "navlink2": "Berichten",
     "navlink3": "Profiel",
-    "navlink4": "Instellingen"
+    "navlink4": "Instellingen",
+    "viewKotenButton": "Bekijk Alle Koten" 
   },
   "profilePage": {
     "profileOf": "Profiel van",
@@ -119,7 +120,8 @@
     "profileError": "Fout bij het laden van het profiel",
     "postsBy": "Berichten van",
     "kotenListTitle": "Jouw koten:",
-     "showKotenButton": "Toon koten"
+    "showKotenButton": "Toon koten",
+    "hideKotenButton": "Verstop koten"
   },
   "usersPage": {
     "adminPanel": "Admin Paneel",
@@ -159,7 +161,7 @@
   "title": "Koten",
   "price": "Prijs",
   "surfaceSpace": "Oppervlakte",
-  "profilesTitle": "Eigenaar Profielen"
-}
-
+  "profilesTitle": "Eigenaar Profielen",
+  "claimKotButton": "Ik woon hier ook!"
+  }
 }

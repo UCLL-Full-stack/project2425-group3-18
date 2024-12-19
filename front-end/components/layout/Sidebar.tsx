@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import styles from '@/styles/sidebar/sidebar.module.css';
-import styles2 from "@/styles/buttons/viewKotenButton.module.css"
+import styles from '../../styles/sidebar/sidebar.module.css';
+import styles2 from "../../styles/buttons/viewKotenButton.module.css";
 import { useTranslation } from "next-i18next";
 
 const Sidebar: React.FC = () => {
