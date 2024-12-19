@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
-    "start": "nodemon -L app.ts --delay 3",
+    "start": "npm run dev",
     "test": "jest"
   },
   "dependencies": {
