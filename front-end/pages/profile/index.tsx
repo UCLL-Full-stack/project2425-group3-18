@@ -3,10 +3,11 @@ import { useTranslation } from "next-i18next";
 import useSWR from "swr";
 import Head from "next/head";
 import styles from "@/styles/profile/Profile.module.css";
-import LayoutWrapper from "@/components/Layoutwrapper";
-import ContentGrid from "@/components/ContentGrid";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { ProfileService } from "@/services/ProfileService";
+import Layout from "@/components/layout/Layoutwrapper";
+import ContentGrid from "@/components/contentGrid/ContentGrid";
+import { useRouter } from "next/router";
 
 const fetchProfile = async () => {
   try {
@@ -32,6 +33,8 @@ const fetchProfile = async () => {
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
+  const router = useRouter();
+  const { query } = router;
 
   const { data: profile, error, isLoading } = useSWR("userProfile", fetchProfile);
 
@@ -43,6 +46,8 @@ const ProfilePage: React.FC = () => {
     return <div>{t('profilePage.profileError')}</div>;
   }
 
+  const searchQuery = Array.isArray(query.search) ? query.search[0] : query.search || "";
+
   return (
     <>
       <Head>
@@ -50,7 +55,7 @@ const ProfilePage: React.FC = () => {
         <title>Rate My Kot - {profile.username}</title>
       </Head>
 
-      <LayoutWrapper>
+      <Layout>
         <div className={styles.profileContainer}>
           <h1>{t('profilePage.profileOf')} {profile.username}</h1>
           <div className={styles.grid}>
@@ -69,9 +74,9 @@ const ProfilePage: React.FC = () => {
 
         <div className={styles.postsSection}>
           <h2>{t('profilePage.postsBy')} {profile.username}</h2>
-          <ContentGrid username={profile.username} />
+          <ContentGrid username={profile.username} searchQuery={searchQuery} />
         </div>
-      </LayoutWrapper>
+      </Layout>
     </>
   );
 };

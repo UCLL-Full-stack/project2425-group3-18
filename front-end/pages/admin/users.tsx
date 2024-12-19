@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from "@/styles/admin/Users.module.css";
-import Layout from "@/components/Layoutwrapper";
 import { UserData } from "@/types";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -8,6 +7,7 @@ import useSWR, { mutate } from "swr";
 import { ProfileService } from "@/services/ProfileService";
 import { UserService } from "@/services/UserService";
 import Head from "next/head";
+import Layout from "@/components/layout/Layoutwrapper";
 
 const UsersPage: React.FC = () => {
   const { t } = useTranslation();

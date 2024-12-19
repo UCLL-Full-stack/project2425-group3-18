@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styles from "@/styles/addpost/addpost.module.css";
 import selectImageButtonStyles from "@/styles/buttons/selectImageButton.module.css";
-import Layout from "@/components/Layoutwrapper";
 import { PostData } from "@/types";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -9,6 +8,7 @@ import useSWR from "swr";
 import { PostService } from "@/services/PostService";
 import { ProfileService } from "@/services/ProfileService";
 import Head from "next/head";
+import Layout from "@/components/layout/Layoutwrapper";
 
 const fetchUserProfile = async (username: string) => {
   try {
@@ -60,7 +60,7 @@ const AddPost: React.FC = () => {
 
       const postData: PostData = {
         description,
-        image: images && images.length > 0 ? URL.createObjectURL(images[0]) : "", // Use the first image
+        image: images && images.length > 0 ? URL.createObjectURL(images[0]) : "",
         profile: {
           username: profile?.username || "Unknown",
           bio: profile?.bio || "No bio available",
