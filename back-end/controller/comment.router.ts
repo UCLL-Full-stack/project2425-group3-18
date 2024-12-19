@@ -85,7 +85,7 @@ commentRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *                  application/json:
  *                      schema:
  *                          $ref: '#/components/schemas/Comment'
- */     
+ */
 commentRouter.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (!req.body.comment) {
@@ -95,14 +95,16 @@ commentRouter.post('/create', async (req: Request, res: Response, next: NextFunc
             });
         }
         const comment: CommentCreate = req.body.comment;
-        const postId: number = req.body.email;
+        const postId: number = req.body.postId;
         const createdComment = await commentService.createNewComment(comment, postId);
 
         res.status(200).json({
             message: 'Comment has been created succesfully',
             comment: createdComment,
         });
-    } catch (error) {}
+    } catch (error) {
+        next(error);
+    }
 });
 
 export { commentRouter };
