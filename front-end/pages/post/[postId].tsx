@@ -1,165 +1,96 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import useSWR from "swr";
-import Head from "next/head";
-import { PostService } from "@/services/PostService";
-import { CommentService } from "@/services/CommentService";
-import Layout from "@/components/layout/Layoutwrapper";
-import CommentSection from "@/components/comment/CommentSection";
-import CommentForm from "@/components/comment/CommentForm";  
-import ShareModal from "@/components/popups/SharePopup";
-import styles from "@/styles/postDetail/postDetail.module.css";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { PostService } from '@/services/PostService';
+import { PostData } from '@/types'; 
+import styles from '@/styles/postDetail/postDetail.module.css';
+import ShareModal from '@/components/popups/SharePopup';
+import Layout from '@/components/layout/Layoutwrapper';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
+import CommentSection from '@/components/comment/CommentSection';
 
-const fetchComments = (postId: number) =>
-  sessionStorage.getItem(`comments-${postId}`)
-    ? JSON.parse(sessionStorage.getItem(`comments-${postId}`)!)
-    : [];
-
-const PostDetail: React.FC = () => {
+const PostDetail = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { postId } = router.query;
+  const [post, setPost] = useState<PostData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const [isCommentSectionOpen, setIsCommentSectionOpen] = useState<boolean>(false);
 
-  const postIdAsNumber = postId ? Number(postId) : null;
-
-  const { data: post, error: postError } = useSWR(
-    postIdAsNumber ? `/api/posts/${postIdAsNumber}` : null,
-    () => PostService.getPostById(postIdAsNumber!)
-  );
-
-  const { data: comments, error: commentsError } = useSWR(
-    postIdAsNumber ? `/api/comments/${postIdAsNumber}` : null,
-    () => fetchComments(postIdAsNumber!)
-  );
-
-  const initialShowComments = typeof window !== "undefined" ? sessionStorage.getItem(`showComments-${postIdAsNumber}`) === "true" : false;
-
-  const [showComments, setShowComments] = useState<boolean>(initialShowComments);
-  const [showModal, setShowModal] = useState<boolean>(false);
-
-  const handleAddComment = async (text: string, rating: number, username: string) => {
-    try {
-      const commentRequestBody = {
-        commentCreate: {
-          text,
-          username,
-        },
-        postId: postIdAsNumber!,
+  useEffect(() => {
+    if (postId) {
+      const fetchPostDetail = async () => {
+        setLoading(true);
+        try {
+          const fetchedPost = await PostService.getPostById(Number(postId));
+          setPost(fetchedPost);
+          setLoading(false);
+        } catch (err) {
+          setError("Failed to fetch post details.");
+          setLoading(false);
+        }
       };
-  
-      const newComment = await CommentService.createComment(commentRequestBody);
-  
-      const updatedComments = [...(comments || []), newComment];
-  
-      sessionStorage.setItem(`comments-${postIdAsNumber}`, JSON.stringify(updatedComments));
-  
-      router.reload();
-    } catch (error) {
-      console.error("Failed to add comment:", error);
+      fetchPostDetail();
     }
-  };  
+  }, [postId]);
 
-  const toggleComments = () => {
-    const newState = !showComments;
-    setShowComments(newState);
-    sessionStorage.setItem(`showComments-${postIdAsNumber}`, newState ? "true" : "false");
+  const handleCommentClick = () => {
+    setIsCommentSectionOpen(!isCommentSectionOpen);
   };
 
   const handleShareClick = () => {
-    setShowModal(true);
+    setIsShareModalOpen(true);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
+  const handleCloseShareModal = () => {
+    setIsShareModalOpen(false);
   };
 
-  const calculateAverageRating = (comments: { text: string; rating: number }[]) => {
-    if (!comments.length) return 0;
-    const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
-    return totalRating / comments.length;
-  };
-
-  const averageRating = calculateAverageRating(comments || []);
-
-  if (postError || commentsError) {
-    return <div>{t("errorFetchingData")}</div>;
+  if (loading) {
+    return <p className={styles.loading}>Loading...</p>;
   }
 
-  if (!post) {
-    return <div>{t("loadingPost")}</div>;
+  if (error) {
+    return <p className={styles.error}>{error}</p>;
   }
 
-  return (
-    <>
-      <Head>
-        <link rel="icon" href="/img/logo2.png" />
-        <title>Rate My Kot - {t("postDetailPage.title")}</title>
-      </Head>
+  if (post) {
+    return (
       <Layout>
-        <div className={styles.detailView}>
-          {post && (
-            <div className={styles.postDetail_mainContent__N4m_W}>
-              <div className={styles.leftPanel}>
-                <div className={styles.imageContainer}>
-                  <img src={post.image} alt={post.description} className={styles.detailImage} />
-                </div>
-                <div className={styles.imageDescription}>
-                  <h1 className={styles.title}>{post.description}</h1>
-                  <div className={styles.ratingContainer}>
-                    {[...Array(5)].map((_, i) => (
-                      <img
-                        key={i}
-                        src="/img/star.webp"
-                        alt={`Star ${i + 1}`}
-                        className={i < Math.round(averageRating) ? styles.filledStar : styles.emptyStar}
-                      />
-                    ))}
-                  </div>
-                  <p className={styles.description}>{post.description}</p>
-
-                  <div className={styles.profileDetails}>
-                    <p><strong>{t("profilePage.username")}</strong>: {post.profile.username}</p>
-                    <p><strong>{t("profilePage.bio")}</strong>: {post.profile.bio}</p>
-                    <p><strong>{t("profilePage.role")}</strong>: {post.profile.role}</p>
-                  </div>
-                </div>
-
-                <div className={styles.iconContainer}>
-                  <button className={styles.iconButton} onClick={toggleComments}>
-                    <img src="/img/comment.png" alt="Comment" className={styles.icon} />
-                  </button>
-                  <button className={styles.iconButton} onClick={handleShareClick}>
-                    <img src="/img/share.webp" alt="Share" className={styles.icon} />
-                  </button>
-                </div>
-              </div>
-
-              {showComments && (
-                <div className={styles.rightPanel}>
-                  <CommentSection
-                    postId={postIdAsNumber!}
-                    comments={comments || []} onAddComment={function (postId: number, newComment: { text: string; rating: number; }): void {
-                      throw new Error("Function not implemented.");
-                    } }                  />
-                  <CommentForm onAddComment={handleAddComment} />
-                </div>
-              )}
-            </div>
-          )}
-
-          {showModal && (
+        <div className={styles.postDetail}>
+          <div className={styles.imageContainer}>
+            <img src={post.image} alt={post.description} />
+          </div>
+          <h1>{post.profile.username}</h1>
+          <div className={styles.profile}>
+            <p><strong>{post.description}</strong></p>
+          </div>
+          <div className={styles.buttons}>
+            <button onClick={handleCommentClick} className={styles.button}>
+              <img src="/img/comment.png" alt="Comment" />
+            </button>
+            <button onClick={handleShareClick} className={styles.button}>
+              <img src="/img/share.webp" alt="Share" />
+            </button>
+          </div>
+          
+          {isShareModalOpen && (
             <ShareModal
               postTitle={post.description}
               postUrl={window.location.href}
-              onClose={closeModal}
+              onClose={handleCloseShareModal}
             />
           )}
+
+          {isCommentSectionOpen && <CommentSection postId={Number(postId)} />}
         </div>
       </Layout>
-    </>
-  );
+    );
+  }
+
+  return null;
 };
 
 export const getServerSideProps = async (context: any) => {

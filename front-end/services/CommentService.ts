@@ -9,7 +9,7 @@ const getCommentsByPostId = async (postId: number): Promise<Comment[]> => {
       throw new Error("No authentication token found");
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments/${postId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/comments/post/${postId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
