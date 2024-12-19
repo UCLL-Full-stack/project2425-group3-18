@@ -4,6 +4,7 @@ import styles from "@/styles/addKot/addKot.module.css";
 import { useTranslation } from "next-i18next";
 import Layout from "@/components/Layoutwrapper";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 
 const AddKotPage: React.FC = () => {
   const { t } = useTranslation();
@@ -37,6 +38,9 @@ const AddKotPage: React.FC = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Rate My Kot - {t("addKot.headTitle")}</title>
+      </Head>
     <div className={styles.container}>
       <h1 className={styles.title}>{t("addKotPage.addKotTitle")}</h1>
 

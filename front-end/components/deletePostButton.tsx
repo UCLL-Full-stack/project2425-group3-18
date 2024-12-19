@@ -1,8 +1,8 @@
 import React, { forwardRef } from "react";
-import PostService from "@/services/PostService";
 import styles from "@/styles/buttons/deletePostButton.module.css";
 import { useTranslation } from "next-i18next";
 import { DeletePostButtonProps } from "@/types";
+import { PostService } from "@/services/PostService";
 
 const DeletePostButton = forwardRef<HTMLButtonElement, DeletePostButtonProps>(
   ({ postId, onDelete }, ref) => {

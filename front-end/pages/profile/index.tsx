@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import useSWR from "swr";
+import Head from "next/head";
 import styles from "@/styles/profile/Profile.module.css";
 import LayoutWrapper from "@/components/Layoutwrapper";
 import ContentGrid from "@/components/ContentGrid";
@@ -43,28 +44,35 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <LayoutWrapper>
-      <div className={styles.profileContainer}>
-        <h1>{t('profilePage.profileOf')} {profile.username}</h1>
-        <div className={styles.grid}>
-          <div className={styles.card}>
-            <div className={styles.profilePic}>
-              <img src="/img/profilepic.png" alt={t('profilePage.profilePicAlt')} />
-            </div>
-            <div className={styles.profileDetails}>
-              <p><strong>{t('profilePage.username')}:</strong> {profile.username}</p>
-              <p><strong>{t('profilePage.role')}:</strong> {profile.role}</p>
-              <p><strong>{t('profilePage.bio')}:</strong> {profile.bio}</p>
+    <>
+      <Head>
+        <link rel="icon" href="/img/logo2.png" />
+        <title>Rate My Kot - {profile.username}</title>
+      </Head>
+
+      <LayoutWrapper>
+        <div className={styles.profileContainer}>
+          <h1>{t('profilePage.profileOf')} {profile.username}</h1>
+          <div className={styles.grid}>
+            <div className={styles.card}>
+              <div className={styles.profilePic}>
+                <img src="/img/profilepic.png" alt={t('profilePage.profilePicAlt')} />
+              </div>
+              <div className={styles.profileDetails}>
+                <p><strong>{t('profilePage.username')}:</strong> {profile.username}</p>
+                <p><strong>{t('profilePage.role')}:</strong> {profile.role}</p>
+                <p><strong>{t('profilePage.bio')}:</strong> {profile.bio}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className={styles.postsSection}>
-        <h2>{t('profilePage.postsBy')} {profile.username}</h2>
-        <ContentGrid username={profile.username} />
-      </div>
-    </LayoutWrapper>
+        <div className={styles.postsSection}>
+          <h2>{t('profilePage.postsBy')} {profile.username}</h2>
+          <ContentGrid username={profile.username} />
+        </div>
+      </LayoutWrapper>
+    </>
   );
 };
 

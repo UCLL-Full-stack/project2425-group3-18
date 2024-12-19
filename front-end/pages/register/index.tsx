@@ -4,6 +4,7 @@ import { ErrorOutline } from '@mui/icons-material';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { UserService } from '@/services/UserService';
+import Head from 'next/head';
 
 const RegisterForm = () => {
   const { t } = useTranslation();
@@ -13,7 +14,6 @@ const RegisterForm = () => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
-  const [role, setRole] = useState('User');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -53,6 +53,8 @@ const RegisterForm = () => {
 
       validateEmail(email);
 
+      const role = 'User';
+
       await UserService.registerUserWithProfile(
         {
           firstName,
@@ -77,105 +79,100 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>{t('register.title')}</h1>
-      {error && (
-        <span
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            color: 'red',
-          }}
-        >
-          <ErrorOutline fontSize="small" />
-          {error}
-        </span>
-      )}
-      <form className={styles.form} onSubmit={handleRegister}>
-        <div className={styles.inputGroup}>
-          <label>{t('register.firstName')}</label>
-          <input
-            type="text"
-            className={styles.input}
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>{t('register.lastName')}</label>
-          <input
-            type="text"
-            className={styles.input}
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>{t('register.email')}</label>
-          <input
-            type="email"
-            className={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>{t('register.password')}</label>
-          <div className={styles.passwordWrapper}>
-            <input
-              type={passwordVisible ? 'text' : 'password'}
-              className={styles.input}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button
-              type="button"
-              className={styles.eyeButton}
-              onClick={() => setPasswordVisible(!passwordVisible)}
-            >
-              <img src="/img/eye-password-hide.svg" alt={t('register.togglePasswordVisibility')} />
-            </button>
-          </div>
-        </div>
-        <div className={styles.inputGroup}>
-          <label>{t('register.username')}</label>
-          <input
-            type="text"
-            className={styles.input}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>{t('register.bio')}</label>
-          <textarea
-            className={styles.input}
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-          />
-        </div>
-        <div className={styles.inputGroup}>
-          <label>{t('register.role')}</label>
-          <select
-            className={styles.input}
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
+    <>
+      <Head>
+        <link rel="icon" href="/img/logo2.png" />
+        <title>Rate My Kot - {t("register.title")}</title>
+      </Head>
+      <div className={styles.container}>
+        <h1 className={styles.title}>{t('register.title')}</h1>
+        {error && (
+          <span
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              color: 'red',
+            }}
           >
-            <option value="User">{t('register.user')}</option>
-            <option value="Admin">{t('register.admin')}</option>
-          </select>
+            <ErrorOutline fontSize="small" />
+            {error}
+          </span>
+        )}
+        <form className={styles.form} onSubmit={handleRegister}>
+          <div className={styles.inputGroup}>
+            <label>{t('register.firstName')}</label>
+            <input
+              type="text"
+              className={styles.input}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label>{t('register.lastName')}</label>
+            <input
+              type="text"
+              className={styles.input}
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label>{t('register.email')}</label>
+            <input
+              type="email"
+              className={styles.input}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label>{t('register.password')}</label>
+            <div className={styles.passwordWrapper}>
+              <input
+                type={passwordVisible ? 'text' : 'password'}
+                className={styles.input}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className={styles.eyeButton}
+                onClick={() => setPasswordVisible(!passwordVisible)}
+              >
+                <img src="/img/eye-password-hide.svg" alt={t('register.togglePasswordVisibility')} />
+              </button>
+            </div>
+          </div>
+          <div className={styles.inputGroup}>
+            <label>{t('register.username')}</label>
+            <input
+              type="text"
+              className={styles.input}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label>{t('register.bio')}</label>
+            <textarea
+              className={styles.input}
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+            />
+          </div>
+
+          <button type="submit" className={styles.button} disabled={isSubmitting}>
+            {isSubmitting ? t('register.registering') : t('register.register')}
+          </button>
+        </form>
+
+        <div className={styles.loginLink}>
+          <p>{t('register.alreadyHaveAccount')} <a href="/login">{t('register.loginHere')}</a></p>
         </div>
-
-        <button type="submit" className={styles.button} disabled={isSubmitting}>
-          {isSubmitting ? t('register.registering') : t('register.register')}
-        </button>
-      </form>
-
-      <div className={styles.loginLink}>
-        <p>{t('register.alreadyHaveAccount')} <a href="/login">{t('register.loginHere')}</a></p>
       </div>
-    </div>
+    </>
   );
 };
 

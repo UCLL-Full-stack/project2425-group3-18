@@ -94,6 +94,37 @@ const getPostsByUsername = async (username: string): Promise<PostData[]> => {
   }
 };
 
+const getPostById = async (id: number): Promise<PostData> => {
+  try {
+    const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
+    const token = loggedInUser.token;
+
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error fetching post by ID:", errorData);
+      throw new Error(errorData.message || "Failed to retrieve post by ID");
+    }
+
+    const post: PostData = await response.json();
+    return post;
+  } catch (error) {
+    console.error("Error in getPostById function:", error);
+    throw error;
+  }
+};
+
 const deletePost = async (id: number) => {
   try {
     const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
@@ -130,6 +161,7 @@ export const PostService = {
   createPost,
   getAllPosts,
   getPostsByUsername,
+  getPostById,
   deletePost,
 };
 
