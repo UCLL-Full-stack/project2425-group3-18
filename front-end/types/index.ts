@@ -1,20 +1,21 @@
 export interface User {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-  }
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 
 export interface UserData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    profile: {
-      username: string;
-      bio: string;
-      role: string;
-    };
+  firstName: string;
+  lastName: string;
+  email: string;
+  profile: {
+    username: string;
+    bio: string;
+    role: string;
+  };
 }
+
 export interface Profile {
   username: string;
   bio: string;
@@ -68,7 +69,7 @@ export interface CommentRequestBody {
   commentCreate: {
     text: string;
     username: string;
-  },
+  };
   postId: number;
 };
 
@@ -77,23 +78,22 @@ export interface ContentGridProps {
 }
 
 export interface Location {
+  id: number;
   city: string;
   street: string;
   housenumber: number;
 }
 
-export interface Profile {
-  username: string;
-  bio: string;
-  role: string;
+export interface Kot {
+  id: number;
+  location: Location;
+  price: number;
+  surfaceSpace: number;
+  profiles: Profile[];
 }
 
 export interface KotData {
-  location: {
-    city: string;
-    street: string;
-    housenumber: number;
-  };
+  location: Location;
   price: number;
   surfaceSpace: number;
 }

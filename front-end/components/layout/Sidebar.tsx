@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styles from '@/styles/sidebar/sidebar.module.css';
+import styles2 from "@/styles/buttons/viewKotenButton.module.css"
 import { useTranslation } from "next-i18next";
 
 const Sidebar: React.FC = () => {
@@ -14,10 +15,13 @@ const Sidebar: React.FC = () => {
                 </Link>
             </div>
             <ul className={styles.navList}>
-                <li>{t('sidebar.navlink1')}</li>
-                <li>{t('sidebar.navlink2')}</li>
-                <li>{t('sidebar.navlink3')}</li>
-                <li>{t('sidebar.navlink4')}</li>
+                <li className={styles2.viewKotenButton}>
+                    <Link href="/koten">
+                        <button className={styles2.viewKotButton}>
+                            {t('sidebar.viewKotenButton')}
+                        </button>
+                    </Link>
+                </li>
             </ul>
         </nav>
     );

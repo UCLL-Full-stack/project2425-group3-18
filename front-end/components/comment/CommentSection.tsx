@@ -39,7 +39,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     if (!newComment.trim()) return;
 
     const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
-    const username = loggedInUser.username;
+    const username = loggedInUser.username || "Anonymous";
 
     const commentData: CommentRequestBody = {
       postId,
@@ -70,7 +70,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
           {comments.map((comment) => (
             <div key={comment.id} className={styles.comment}>
               <div className={styles.commentAuthor}>
-                <strong>{comment.profile.username}</strong>
+                <strong>{comment.profile ? comment.profile.username : "Anonymous"}</strong>
               </div>
               <p className={styles.commentContent}>{comment.text}</p>
             </div>

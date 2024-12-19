@@ -154,5 +154,12 @@
   },
   "postDetailPage": {
     "title": "Bericht details"
-  }
+  },
+  "kotenPage": {
+  "title": "Koten",
+  "price": "Prijs",
+  "surfaceSpace": "Oppervlakte",
+  "profilesTitle": "Eigenaar Profielen"
+}
+
 }

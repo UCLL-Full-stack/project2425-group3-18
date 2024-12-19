@@ -105,40 +105,40 @@
     "navlink4": "Settings"
   },
   "profilePage": {
-  "profileOf": "Profile of",
-  "loading": "Loading...",
-  "accessDenied": "Access Denied",
-  "loadingUsers": "Loading users...",
-  "manageUsers": "Manage Users",
-  "username": "Username",
-  "fullName": "Full Name",
-  "email": "Email",
-  "role": "Role",
-  "bio": "Bio",
-  "profilePicAlt": "Profile picture",
-  "profileError": "Error loading profile",
-  "postsBy": "Posts by",
-  "kotenListTitle": "Your koten: ",
-  "showKotenButton": "Show koten"
- },
- "usersPage": {
-   "adminPanel": "Admin Panel",
-   "loading": "Loading...",
-   "accessDenied": "Access Denied",
-   "loadingUsers": "Loading users...",
-   "manageUsers": "Manage Users",
-   "username": "Username",
-   "fullName": "Full Name",
-   "email": "Email",
-   "role": "Role",
-   "bio": "Bio",
-   "actions": "Actions",
-   "notAvailable": "Not Available",
-   "user": "User",
-   "noBio": "No Bio",
-   "fetchError": "Failed to fetch users.",
-   "delete": "Delete user",
-   "makeModerator": "Make moderator"
+    "profileOf": "Profile of",
+    "loading": "Loading...",
+    "accessDenied": "Access Denied",
+    "loadingUsers": "Loading users...",
+    "manageUsers": "Manage Users",
+    "username": "Username",
+    "fullName": "Full Name",
+    "email": "Email",
+    "role": "Role",
+    "bio": "Bio",
+    "profilePicAlt": "Profile picture",
+    "profileError": "Error loading profile",
+    "postsBy": "Posts by",
+    "kotenListTitle": "Your koten: ",
+    "showKotenButton": "Show koten"
+  },
+  "usersPage": {
+    "adminPanel": "Admin Panel",
+    "loading": "Loading...",
+    "accessDenied": "Access Denied",
+    "loadingUsers": "Loading users...",
+    "manageUsers": "Manage Users",
+    "username": "Username",
+    "fullName": "Full Name",
+    "email": "Email",
+    "role": "Role",
+    "bio": "Bio",
+    "actions": "Actions",
+    "notAvailable": "Not Available",
+    "user": "User",
+    "noBio": "No Bio",
+    "fetchError": "Failed to fetch users.",
+    "delete": "Delete user",
+    "makeModerator": "Make moderator"
   },
   "addKotPage": {
     "headTitle": "Add a Kot",
@@ -154,5 +154,11 @@
   },
   "postDetailPage": {
     "title": "Post details"
+  },
+  "kotenPage": {
+    "title": "Koten",
+    "price": "Price",
+    "surfaceSpace": "Surface Space",
+    "profilesTitle": "Owner Profiles"
   }
 }

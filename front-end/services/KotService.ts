@@ -75,7 +75,39 @@ const getKotenByUsername = async (username: string): Promise<any> => {
   }
 };
 
+const getAllKoten = async (): Promise<any> => {
+  try {
+    const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser") || "{}");
+    const token = loggedInUser.token;
+
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/koten`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error fetching koten:", errorData);
+      throw new Error(errorData.message || "Failed to fetch koten");
+    }
+
+    const result = await response.json();
+    return result;
+
+  } catch (error) {
+    console.error("Error in getAllKoten function:", error);
+    throw error;
+  }
+};
+
 export const kotService = {
   addKot,
   getKotenByUsername,
+  getAllKoten
 };
