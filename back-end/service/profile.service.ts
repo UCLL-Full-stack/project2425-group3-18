@@ -39,11 +39,19 @@ const deleteProfile = async (username: string): Promise<Profile> => {
     }
 };
 
+const makeModerator = async (username: string): Promise<Profile> => {
+    return await profileDb.makeModerator({ username });
+};
 
+const makeUser = async (username: string): Promise<Profile> => {
+    return await profileDb.makeUser({ username });
+};
 
 export default {
     getAllProfiles,
     createProfile,
     getProfileByUsername,
     deleteProfile,
+    makeUser,
+    makeModerator,
 };

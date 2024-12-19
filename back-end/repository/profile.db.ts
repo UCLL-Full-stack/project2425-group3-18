@@ -53,8 +53,39 @@ const deleteProfile = async ({ username }: { username: string }): Promise<Profil
         });
         return Profile.from(deleteProfile);
     } catch (error) {
-        console.log(error)
-        throw new Error('Database error deleting profile', );
+        throw new Error('Database error deleting profile');
+    }
+};
+
+const makeModerator = async ({ username }: { username: string }): Promise<Profile> => {
+    try {
+        const profilePrisma = await database.profile.update({
+            where: {
+                username: username,
+            },
+            data: {
+                role: 'Moderator',
+            },
+        });
+        return Profile.from(profilePrisma);
+    } catch (error) {
+        throw new Error('Database error updating user to moderator.');
+    }
+};
+
+const makeUser = async ({ username }: { username: string }): Promise<Profile> => {
+    try {
+        const profilePrisma = await database.profile.update({
+            where: {
+                username: username,
+            },
+            data: {
+                role: 'User',
+            },
+        });
+        return Profile.from(profilePrisma);
+    } catch (error) {
+        throw new Error('Database error updating moderator to user.');
     }
 };
 
@@ -63,4 +94,6 @@ export default {
     createProfile,
     getProfileByUsername,
     deleteProfile,
+    makeModerator,
+    makeUser,
 };

@@ -193,4 +193,76 @@ profileRouter.delete('/:username', async (req: Request, res: Response, next: Nex
     }
 });
 
+/**
+ * @swagger
+ * /profiles/moderator/{username}: 
+ *  put:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Update a user to be a moderator as an admin.
+ *      tags:
+ *          - Profiles
+ *      parameters:
+ *          - in: path
+ *            name: username
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The username of the profile that needs to be updated.
+ *      responses:
+ *          200:
+ *              description: An updated profile object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Profile'
+ */
+profileRouter.put(
+    '/moderator/:username',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const profile = await profileService.makeModerator(String(req.params.username));
+            res.status(200).json(profile);
+        } catch (error) {
+            next(error)
+        }
+    }
+);
+
+/**
+ * @swagger
+ * /profiles/user/{username}: 
+ *  put:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Update a moderator to be a user as an admin.
+ *      tags:
+ *          - Profiles
+ *      parameters:
+ *          - in: path
+ *            name: username
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The username of the profile that needs to be updated.
+ *      responses:
+ *          200:
+ *              description: An updated profile object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Profile'
+ */
+profileRouter.put(
+    '/user/:username',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const profile = await profileService.makeUser(String(req.params.username));
+            res.status(200).json(profile);
+        } catch (error) {
+            next(error)
+        }
+    }
+);
+
 export { profileRouter };
