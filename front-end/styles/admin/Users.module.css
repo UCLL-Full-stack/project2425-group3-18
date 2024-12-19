@@ -1,18 +1,26 @@
+/* General container for users page */
 .usersContainer {
   padding: 40px;
   font-family: Arial, sans-serif;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Heading styling */
 .usersContainer h1 {
   font-size: 32px;
   margin-bottom: 30px;
+  color: #333;
 }
 
+/* Table styling */
 .usersTable {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
 }
 
 .usersTable th,
@@ -20,17 +28,24 @@
   padding: 12px 15px;
   text-align: left;
   border: 1px solid #ddd;
+  font-size: 14px;
+  color: #555;
 }
 
+/* Table header styling */
 .usersTable th {
   background-color: #f4f4f4;
   font-weight: bold;
+  text-transform: uppercase;
+  color: #333;
 }
 
+/* Hover effect for rows */
 .usersTable tr:hover {
   background-color: #f1f1f1;
 }
 
+/* Dropdown button styling */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -39,24 +54,40 @@
 .dropdownButton {
   background-color: #007bff;
   color: white;
-  padding: 10px;
+  padding: 10px 15px;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .dropdownButton:hover {
   background-color: #0056b3;
 }
 
+/* Dropdown content container */
 .dropdownContent {
   display: none;
   position: absolute;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   min-width: 160px;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
+  border-radius: 4px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  opacity: 0;  /* Initially hidden */
+  transition: opacity 0.3s ease;  /* Smooth transition */
 }
 
+/* Show dropdown when dropdown button is focused or hovered */
+.dropdown:hover .dropdownContent,
+.dropdown:focus-within .dropdownContent {
+  display: block;
+  opacity: 1; /* Make the dropdown fully visible */
+}
+
+/* Dropdown button actions */
 .dropdownContent button {
   color: black;
   padding: 12px 16px;
@@ -66,12 +97,46 @@
   background: none;
   border: none;
   text-align: left;
+  cursor: pointer;
 }
 
+/* Hover effect for dropdown buttons */
 .dropdownContent button:hover {
   background-color: #f1f1f1;
 }
 
-.dropdown:hover .dropdownContent {
-  display: block;
+/* Styling for action buttons to make them distinct */
+.dropdownContent button:nth-child(1) {
+  background-color: #28a745;
+  color: white;
+}
+
+.dropdownContent button:nth-child(1):hover {
+  background-color: #dc3545;
+}
+
+.dropdownContent button:nth-child(2) {
+  background-color: #218838;
+  color: white;
+}
+
+.dropdownContent button:nth-child(2):hover {
+  background-color: #c82333;
+}
+
+/* Responsiveness for mobile and smaller screens */
+@media screen and (max-width: 768px) {
+  .usersContainer {
+    padding: 20px;
+  }
+
+  .usersTable th, .usersTable td {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .dropdownButton {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
 }

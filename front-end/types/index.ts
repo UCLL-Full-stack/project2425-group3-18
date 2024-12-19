@@ -41,13 +41,6 @@ export interface ContentGridProps {
   username?: string;
   filterByUsername?: boolean;
 }
-export interface KotData {
-  city: string;
-  street: string;
-  housenumber: string;
-  price: string;
-  surfaceSpace: string;
-}
 
 export interface DeletePostButtonProps {
   postId: number;
@@ -81,4 +74,32 @@ export interface CommentRequestBody {
 
 export interface ContentGridProps {
   searchQuery?: string;
+}
+
+export interface Location {
+  city: string;
+  street: string;
+  housenumber: number;
+}
+
+export interface Profile {
+  username: string;
+  bio: string;
+  role: string;
+}
+
+export interface KotData {
+  location: {
+    city: string;
+    street: string;
+    housenumber: number;
+  };
+  price: number;
+  surfaceSpace: number;
+}
+
+export interface PostCardProps {
+  post: any;
+  username: string | undefined;
+  onClick: (postId: number) => void;
 }

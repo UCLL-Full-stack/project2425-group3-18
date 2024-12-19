@@ -1,12 +1,7 @@
 import React from "react";
 import styles from "@/styles/contentGrid/contentGrid.module.css";
 import PostSettings from "./PostSettings";
-
-interface PostCardProps {
-  post: any;
-  username: string | undefined;
-  onClick: (postId: number) => void;
-}
+import { PostCardProps } from "@/types";
 
 const PostCard: React.FC<PostCardProps> = ({ post, username, onClick }) => {
   return (
@@ -15,7 +10,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, username, onClick }) => {
       <h3>{post.profile.username}</h3>
       <p>{post.description}</p>
 
-      {post.profile.username === username && (
+      {/* Check if username is provided and whether it matches the post's username */}
+      {username && post.profile.username === username && (
         <PostSettings postId={post.id} />
       )}
     </div>

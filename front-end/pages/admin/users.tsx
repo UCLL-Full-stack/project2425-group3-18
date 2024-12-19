@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styles from "@/styles/admin/Users.module.css";
-import { UserData } from "@/types";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { Profile, UserData } from "@/types";
 import { useTranslation } from "next-i18next";
 import useSWR, { mutate } from "swr";
 import { ProfileService } from "@/services/ProfileService";
 import { UserService } from "@/services/UserService";
 import Head from "next/head";
 import Layout from "@/components/layout/Layoutwrapper";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const UsersPage: React.FC = () => {
   const { t } = useTranslation();
@@ -77,17 +77,23 @@ const UsersPage: React.FC = () => {
     }
   };
 
-  const handleRoleChange = async (email: string, newRole: string) => {
+  const handleMakeModerator = async (username: string) => {
     try {
-      const confirmation = window.confirm(
-        t("usersPage.confirmRoleChange", { newRole })
-      );
-      if (confirmation) {
-        alert(t("usersPage.roleChangeSuccess"));
-        mutate(`${process.env.NEXT_PUBLIC_API_URL}/users`);
-      }
+      await ProfileService.updateUserToModerator(username); // Now using the correct service function
+      mutate(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+      alert(t("usersPage.makeModeratorSuccess"));
     } catch (error) {
-      alert(t("usersPage.roleChangeError"));
+      alert(t("usersPage.makeModeratorError"));
+      console.error(error);
+    }
+  };
+
+  const handleMakeUser = async (username: string) => {
+    try {
+      await ProfileService.updateModeratorToUser(username);
+      mutate(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+    } catch (error) {
+      alert(t("usersPage.makeUserError"));
       console.error(error);
     }
   };
@@ -123,7 +129,7 @@ const UsersPage: React.FC = () => {
               <th>{t("usersPage.email")}</th>
               <th>{t("usersPage.role")}</th>
               <th>{t("usersPage.bio")}</th>
-              {isAdmin && <th>{t("usersPage.actions")}</th>}
+              <th>{t("usersPage.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -134,45 +140,53 @@ const UsersPage: React.FC = () => {
                 <td>{user.email}</td>
                 <td>{user.profile?.role || t("usersPage.user")}</td>
                 <td>{user.profile?.bio || t("usersPage.noBio")}</td>
-                {isAdmin && user.profile?.role !== "Admin" && (
-                  <td>
+                <td>
+                  {user.profile?.role === "User" && (
                     <div className={styles.dropdown}>
                       <button className={styles.dropdownButton}>
                         {t("usersPage.actions")}
                       </button>
                       <div className={styles.dropdownContent}>
-                        {user.profile?.role !== "Moderator" && (
-                          <button
-                            onClick={() =>
-                              handleDelete(
-                                user.profile?.username || "",
-                                user.email || ""
-                              )
-                            }
-                          >
-                            {t("usersPage.delete")}
-                          </button>
+                        {isAdmin && (
+                          <>
+                            <button
+                              onClick={() =>
+                                handleDelete(user.profile?.username || "", user.email || "")
+                              }
+                            >
+                              {t("usersPage.delete")}
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleMakeModerator(user.profile?.username || "")
+                              }
+                            >
+                              {t("usersPage.makeModerator")}
+                            </button>
+                          </>
                         )}
-                        <button
-                          onClick={() =>
-                            handleRoleChange(
-                              user.email || "",
-                              user.profile?.role === "Moderator"
-                                ? "User"
-                                : "Moderator"
-                            )
-                          }
-                        >
-                          {t(
-                            user.profile?.role === "Moderator"
-                              ? "usersPage.makeUser"
-                              : "usersPage.makeModerator"
-                          )}
-                        </button>
                       </div>
                     </div>
-                  </td>
-                )}
+                  )}
+                  {user.profile?.role === "Moderator" && (
+                    <div className={styles.dropdown}>
+                      <button className={styles.dropdownButton}>
+                        {t("usersPage.actions")}
+                      </button>
+                      <div className={styles.dropdownContent}>
+                        {isAdmin && (
+                          <button
+                            onClick={() =>
+                              handleMakeUser(user.profile?.username || "")
+                            }
+                          >
+                            {t("usersPage.makeUser")}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -187,7 +201,7 @@ export const getServerSideProps = async (context: any) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? "en", ["common", "usersPage"])),
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
     },
   };
 };

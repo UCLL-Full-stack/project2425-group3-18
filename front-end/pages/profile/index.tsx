@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import useSWR from "swr";
 import Head from "next/head";
@@ -7,7 +7,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { ProfileService } from "@/services/ProfileService";
 import Layout from "@/components/layout/Layoutwrapper";
 import ContentGrid from "@/components/contentGrid/ContentGrid";
-import { useRouter } from "next/router";
 
 const fetchProfile = async () => {
   try {
@@ -33,8 +32,16 @@ const fetchProfile = async () => {
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
-  const router = useRouter();
-  const { query } = router;
+  const [username, setUsername] = useState<string | undefined>();
+
+  // Fetch logged-in user's profile and set username
+  useEffect(() => {
+    const loggedInUserString = sessionStorage.getItem("loggedInUser");
+    if (loggedInUserString) {
+      const loggedInUser = JSON.parse(loggedInUserString);
+      setUsername(loggedInUser.username);
+    }
+  }, []);
 
   const { data: profile, error, isLoading } = useSWR("userProfile", fetchProfile);
 
@@ -45,8 +52,6 @@ const ProfilePage: React.FC = () => {
   if (error || !profile) {
     return <div>{t('profilePage.profileError')}</div>;
   }
-
-  const searchQuery = Array.isArray(query.search) ? query.search[0] : query.search || "";
 
   return (
     <>
@@ -74,7 +79,7 @@ const ProfilePage: React.FC = () => {
 
         <div className={styles.postsSection}>
           <h2>{t('profilePage.postsBy')} {profile.username}</h2>
-          <ContentGrid username={profile.username} searchQuery={searchQuery} />
+          <ContentGrid searchQuery={""} username={profile.username} />
         </div>
       </Layout>
     </>
